@@ -1,0 +1,36 @@
+import { Contact } from "./contact";
+import { ELObject } from "./elobject";
+
+
+export abstract class Device extends ELObject {
+    //#region consructor 
+
+    constructor() {
+        super()
+    }
+    //#endregion
+   
+    readonly inContact: Contact = new Contact(this)
+    
+    //#region Mark
+
+    private _mark: string = ''
+    public get mark(): string {
+        return this._mark
+    }
+    public set mark(v: string) {
+        if (this.setDataFromDB(v)) {
+            this._mark = v;
+        } else {
+            console.log("Не удалось получить данные SetDataFromDB")
+        }
+
+    }
+
+    //#endregion 
+
+
+    abstract setDataFromDB(mark: string): boolean
+
+
+}
