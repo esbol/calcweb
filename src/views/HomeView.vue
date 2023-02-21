@@ -2,7 +2,7 @@
   <div class="header">header</div>
   <div class="main" :class="{sidehidden: sideShow===false, sideshow : sideShow===true}">
     <SideBar :show="sideShow" />
-    <TableScheme :panel="selectedPanel"  />
+    <MainSection :panel="selectedPanel" /> 
   </div>
   <div class="footer">footer</div>
 </template>
@@ -11,12 +11,10 @@
 import { ref, provide, watch } from 'vue'
 import { Panel } from '@/models/panel'
 import { Feeder } from '@/models/feeder'
-import { Consumer } from '@/models/consumer'
 import { reactive } from '@vue/reactivity';
 
-import TableScheme from '@/components/tablescheme/TableScheme.vue'
-
 import SideBar from '@/components/sidebar/SideBar.vue';
+import MainSection from '@/components/mainsection/MainSection.vue';
 
 const panelsArray: Array<Panel> = []
 const panel1 = new Panel()
@@ -34,7 +32,7 @@ const sideShow = ref(true)
 const panels = reactive(panelsArray)
 // const selectedFeederId = ref(0)
 const selectedFeeder= ref(new Feeder())
-const selectedPanel= ref(new Panel())
+const selectedPanel= ref(panel1)
 provide('panels', panels)
 // provide('selectedPanelId', selectedPanelId)
 // provide('selectedFeederId', selectedFeederId)

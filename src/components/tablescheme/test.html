@@ -1,23 +1,46 @@
 <!DOCTYPE html>
 <html>
- <head>
-  <meta charset="utf-8">
-  <title>Ширина таблицы</title>
+<head>
+  <meta charset="UTF-8">
+  <title>Пример разметки</title>
   <style>
-   table {
-    width: 100%; /* Ширина таблицы в процентах */
-   }
-   .col1 {
-    width: 100px; /* Ширина ячейки */
-   }
+    html, body {
+      height: 100%; /* установка высоты на 100% */
+      margin: 0;
+      padding: 0;
+    }
+    #main {
+      height: 100%;
+      background-color: lightblue;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between; /* помещение блоков сверху и снизу */
+    }
+    #top {
+      background-color: yellow;
+      height: 50px;
+    }
+    #bottom {
+      background-color: orange;
+      height: 50px;
+    }
+    .content{
+      height: 1800px;
+      background: red;
+    }
+    .middle{
+      overflow-y: scroll;
+    }
   </style>
- </head>
- <body>
-  <table border="1">
-   <tr>
-    <td class="col1">Колонка 1</td>
-    <td class="col2">Колонка 2</td>
-   </tr>
-  </table>
- </body>
+</head>
+<body>
+  <div id="main">
+    <div id="top"></div>
+    <div class="middle">
+      <div class="content">
+asfdasdf
+    </div></div>
+    <div id="bottom"></div>
+  </div>
+</body>
 </html>

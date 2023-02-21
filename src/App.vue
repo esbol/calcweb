@@ -15,6 +15,8 @@ import HomeView from './views/HomeView.vue';
   grid-template-rows: auto 1fr auto;
   min-height: 100vh;
   overflow: hidden;
+  box-sizing: border-box;
+  font-family:Arial, Helvetica, sans-serif
 }
 
 

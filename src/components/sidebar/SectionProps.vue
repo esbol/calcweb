@@ -11,8 +11,10 @@
             <tr>
 
                 <td>Расчетная мощность, кВт</td>
-                <td>
-                    {{ section.calculationModes[0].installPower}}
+                <td><NumberInput
+                :input-value="section.calculationModes[0].installPower"
+                :can-edite="false"
+                 />
                 </td>
             </tr>
 

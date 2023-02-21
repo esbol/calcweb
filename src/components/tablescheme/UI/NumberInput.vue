@@ -21,6 +21,8 @@ function selectAll(target: HTMLInputElement) {
 
 <style scoped>
 input {
+    width: 100%;
+    box-sizing: border-box;
     display: block;
     background: transparent;
     cursor: pointer;
