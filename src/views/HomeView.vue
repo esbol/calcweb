@@ -21,34 +21,26 @@ const panel1 = new Panel()
 const panel2 = new Panel()
 panel1.nameOfPlane = 'ШР-1'
 panel2.nameOfPlane = 'ШР-2'
-const feeder = new Feeder()
-panel1.feeders.push(feeder)
+
+panel1.addFeeder()
 panelsArray.push(panel1)
 panelsArray.push(panel2)
 
 const sideShow = ref(true)
 
-// const selectedPanelId = ref(0)
+
 const panels = reactive(panelsArray)
-// const selectedFeederId = ref(0)
-const selectedFeeder= ref(new Feeder())
-const selectedPanel= ref(panel1)
+
+const selectedFeeder= ref(undefined)
+const selectedPanel = ref(panel1)
 provide('panels', panels)
-// provide('selectedPanelId', selectedPanelId)
-// provide('selectedFeederId', selectedFeederId)
+
 provide('selectedFeeder', selectedFeeder)
 provide('selectedPanel', selectedPanel)
 
-console.log(selectedPanel.value.nameOfPlane);
 
-// watch(selectedPanel, (selPan:Panel, prevSel )=>{
-//   if(selPan.id !== prevSel.Id) {
-//     selectedFeederId.value = 0
-//     selectedFeeder.value = null
-//     console.log('change panel sel to name=' + selPanId);
-    
-//   }
-// })
+
+
 </script>
 
 <style>

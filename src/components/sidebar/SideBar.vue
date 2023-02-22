@@ -4,7 +4,7 @@
     <div class="side-container" :class="{ show: show }">
         <div class="wrapper" v-if="show">
             <PanelBrowser />
-             <SectionProps :section="selectedFeeder.sConsumer === null ? new SectionLine() : selectedFeeder.sConsumer" />
+             <SectionProps v-if="selectedFeeder !== undefined" :section="selectedFeeder.sConsumer" />
         </div>
        
     </div>
@@ -20,8 +20,8 @@ import PanelBrowser from "./PanelBrowser.vue";
 import SectionProps from "./SectionProps.vue";
 
 const panels: Array<Panel> = inject('panels', new Array<Panel>())
-// const selectedPanel = inject('selectedPanel', 0)
-const selectedFeeder: Feeder = inject('selectedFeeder', new Feeder())
+
+const selectedFeeder: Feeder | undefined  = inject('selectedFeeder')
 
 // let selectedFeeder = computed(() => {
 //     const selPan = panels.find(p=> p.id===selectedPanelId)

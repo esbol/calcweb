@@ -20,10 +20,10 @@ const selectedPanel = inject('selectedPanel', new Panel())
 <style scoped>
 .pprops-container{
     display: flex;
-
+box-sizing: border-box;
     height: 200px;
     background-color: wite;
-    padding: 5px;
+        margin-top: 5px;
 }
 .sp {
     margin-left: 5px;

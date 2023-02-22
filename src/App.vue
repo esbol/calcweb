@@ -19,7 +19,10 @@ import HomeView from './views/HomeView.vue';
   font-family:Arial, Helvetica, sans-serif
 }
 
-
+*{
+  box-sizing: border-box;
+  font-size: small;
+}
 nav {
   padding: 0;
 }

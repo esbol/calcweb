@@ -1,9 +1,10 @@
 
 <template>
     <div class="table-container">
+    <PanelPowers :panel="panel" class="panelPowers"/>
         <div class="table-header">
             <table>
-                <col width="150px">
+                
                 <col width="40px">
                 <col width="80px">
                 <col width="40px">
@@ -23,7 +24,6 @@
                 <col width="150px">
                 <thead>
                     <tr class="trh1">
-                        <th rowspan="2">Распределительное<br />устройство</th>
                         <th colspan="3">Аппарат отходящей линии</th>
                         <th colspan="3">Участок сети 1<br />Кабель, провод</th>
                         <th colspan="3">Пусковой аппарат</th>
@@ -54,7 +54,7 @@
         </div>
         <div class="table-body">
             <table>
-                <col width="150px">
+             
                 <col width="40px">
                 <col width="80px">
                 <col width="40px">
@@ -75,7 +75,7 @@
                 <tbody>
                     <tr class="b_bottom" v-for="feeder in panel.feeders" :key="feeder.id"
                         :class="{ selected: selectedFeeder === feeder }" @click="selectedFeeder = feeder">
-                        <td></td>
+                       
                         <td>1</td>
                         <td><select class="my-select" v-model="feeder.consumer.colPhase">
                                 <option>1</option>
@@ -132,6 +132,7 @@ import { inject, ref, provide } from 'vue';
 import { TypesBySP } from '@/models/normativs';
 import TextInput from './UI/TextInput.vue';
 import NumberInput from './UI/NumberInput.vue';
+import PanelPowers from './PanelPowers.vue';
 
 //#region setupdata
 const props = defineProps({
@@ -143,12 +144,12 @@ const props = defineProps({
 
 
 function addFeeder(): void {
-    const feeder = new Feeder()
-    props.panel.feeders.push(feeder)
+
+    props.panel.addFeeder()
 }
 
 const hoverFeederId = ref(0)
-const selectedFeeder = inject('selectedFeeder', new Feeder())
+const selectedFeeder: Feeder | undefined = inject('selectedFeeder')
 provide('typesBySP', TypesBySP)
 //#endregion
 
@@ -157,7 +158,7 @@ provide('typesBySP', TypesBySP)
 
 </script>
 
-<style >
+<style scoped>
 .my-select {
     table-layout: fixed;
     width: 100%;
@@ -222,17 +223,25 @@ th {
     display: grid;
     width: 1200px;
     grid-template-rows: auto 1fr auto;
+    grid-template-columns: auto 1fr;
     /* background: white; */
     box-shadow: 0 0 15px rgb(226, 226, 226);
     margin: 5px;
     padding: 0;
+    box-sizing: border-box;
 }
-
+.panelPowers{
+    grid-column: 1;
+    grid-row-start: 1;
+    grid-row-end: 4;
+}
 .table-header {
     width: min-content;
+    grid-column: 2;
 }
 
 .table-body {
+    grid-column: 2;
     width: 1200px;
     height: 400px;
     overflow-y: auto;
@@ -241,6 +250,7 @@ th {
 }
 
 .buttons-row {
+    grid-column: 2;
     height: 50px;
 
   margin-top: 5px;

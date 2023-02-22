@@ -1,3 +1,4 @@
+import { Breaker } from './breaker';
 import { Consumer } from "./consumer";
 import { Contact } from "./contact";
 import { CalculationMode } from "./calculationmode";
@@ -21,7 +22,7 @@ export class SectionLine {
     //#endregion
 
     //#region description
-    private _description : string = '';
+    private _description : string = '132';
     public get description() : string {
         return this._description;
     }
@@ -75,9 +76,6 @@ export class SectionLine {
     public get subConsumers(): Array<Consumer> {
         return this._subConsumers;
     }
-    public set subConsumers(v: Array<Consumer>) {
-        this._subConsumers = v;
-    }
     //#endregion
 
     //#region subDevices
@@ -85,29 +83,32 @@ export class SectionLine {
     public get subDevices(): Array<Device> {
         return this._subDevices;
     }
-    public set subDevices(v: Array<Device>) {
-        this._subDevices = v;
+    //#endregion
+
+    //#region subSections
+    private _subSections: Array<SectionLine> = new Array<SectionLine>();
+    public get subSections(): Array<SectionLine> {
+        return this._subSections;
     }
     //#endregion
 
 
-
     public calc(){
-        this.subDevices = this.getSubDevices()
-        this.subConsumers = this.getSubConsumers()
+        this.setSubSections()
+        this.setSubDevices()
+        this.setSubConsumers()
         this.setCalculationModes()
         this.setConsumersToCalcModes()
-
 
         this.calculationModes.forEach(m =>{
             m.calc()
         } )
-     
-      
+        this._subSections.forEach(s=> s.calc)
     }
 
-    public getSubDevices(): Array<Device> {
-        const devlist = new Array<Device>()
+    public setSubDevices(): void {
+        this._subDevices.splice(0, this._subDevices.length)
+        const devlist = this._subDevices
         const endContact = this.endContact
 
         if(endContact !== null)recurcy(endContact)
@@ -123,31 +124,39 @@ export class SectionLine {
                 }
             })
         }
-        return devlist
+        return 
     }
 
-    public getSubConsumers(): Array<Consumer> {
-        const conslist = new Array<Consumer>()
+    public setSubConsumers(): void {
+        this._subConsumers.splice(0, this._subConsumers.length)
+        const conslist = this._subConsumers
        
         this.subDevices.forEach(d=>{
-            if(d instanceof Device && conslist.includes(d as Consumer) === false){
+            if(d instanceof Consumer && conslist.includes(d as Consumer) === false){
                 conslist.push(d as Consumer)
             }
+            
         })
        
-        return conslist
+
+        return
     }
 
     public setCalculationModes(): void {
         //режимы каждого приемника
         const modes: string[] = [];
-        this.subConsumers.forEach(c=>{
-            c.calculationModes.forEach(m =>{
-                if(modes.includes(m) === false){
-                    modes.push(m.toLowerCase())
-                }
+        if(this.subConsumers.length > 0){
+            
+            this.subConsumers.forEach(c => {
+                c.calculationModes.forEach(m => {
+                    if (modes.includes(m) === false) {
+                        modes.push(m.toLowerCase())
+                    }
+                })
             })
-        })
+
+        }
+        
             
         //добавляем отсутсвующие
         modes.forEach(m=>{
@@ -207,5 +216,20 @@ export class SectionLine {
         }
         contact.addSection(this)
         this.endContact = contact
+    }
+
+    private setSubSections(): void{
+        this._subSections.splice(0, this._subSections.length)
+        const subSec = this._subSections
+
+        if (this._endContact !== null) recurcy(this._endContact)
+        function recurcy(endContact: Contact): void{
+            endContact.getSlaveSections().forEach(s=>{
+                if(subSec.includes(s) === false){
+                    subSec.push(s)
+                }
+              if(s.endContact !== null)  recurcy(s.endContact)
+            })
+        }
     }
 }

@@ -17,7 +17,7 @@ const panel = inject('selectedPanel', new Panel())
 
 <style scoped>
 .spprops-container {
-    height: 200px;
+    height: 100%;
     width: 300px;
     background-color: white;
     box-shadow: 0 0 5px gray;

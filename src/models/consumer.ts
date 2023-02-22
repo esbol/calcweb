@@ -10,6 +10,7 @@ import { calcCurrentByInstallPower, calcQPower, calcSPower } from './formuls/cal
 export class Consumer extends Device{
     constructor() {
         super()
+        this.description = 'consumer'
     }
 
     //#region calculationModes
