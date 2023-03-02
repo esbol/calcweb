@@ -31,15 +31,16 @@ export class Panel extends Device {
 
 
     public calc(){
-        this.uniteSection.calc()
+     
         this.feeders.forEach(f=>{
             f.calc()
         })
+       // this.uniteSection.calc()
     }
 
     public addFeeder(){
       
-        this._feeders.push(new Feeder(this.outContact))
+        this._feeders.push(new Feeder(this, this.outContact))
     
     }
 }

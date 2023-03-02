@@ -1,15 +1,19 @@
+import { Cables } from './bd/cables';
+import { Breakers } from './bd/breakers';
 import { Contact } from './contact';
 import { Contactor } from './contactor';
 import { Breaker } from "./breaker";
 import { Consumer } from "./consumer";
 
 import { SectionLine } from "./sectionline";
+import { Panel } from './panel';
 
 export class Feeder {
     
-    constructor(connectContact: Contact){
+    constructor(panel: Panel, connectContact: Contact){
 
-        this._breaker = new Breaker()
+        this._breaker = new Breaker(Breakers[0].mark)
+        this._breaker.nameOfPlane ='QF' + (panel.feeders.length + 1).toString()
         this._sBreaker = new SectionLine()
         this._sBreaker.nameOfPlane = 'sBreaker'
         this._sBreaker.setStartContact(connectContact)
@@ -20,6 +24,7 @@ export class Feeder {
 
         this._sConsumer.setEndContact(consumer.inContact)
         this._sConsumer.nameOfPlane = 'sConsumer'
+        this._sConsumer.cable.mark = Cables[0].mark
         this._sConsumer.setStartContact(this._breaker.outContact)
     }
   
@@ -102,14 +107,24 @@ export class Feeder {
 
         if(this.consumer !== null) this.consumer.calc()
 
-        if (this.breaker !== null) this.breaker.calc()
+        if (this.sConsumer !== null) this.sConsumer.calc()
+       
+        
 
         if (this.contactor !== null) this.contactor.calc()
+        if (this.sContactor !== null) this.sContactor.calc()
+        if (this.breaker !== null) this.breaker.calc()
 
-        if(this.sConsumer!== null) this.sConsumer.calc()
-       
         if(this.sBreaker !== null) this.sBreaker.calc()
 
-        if(this.sContactor !== null) this.sContactor.calc()
+        let brCur = this.sConsumer.modeMax.current
+        if (this._breaker !== null)
+        {
+            brCur = this._breaker.nominalCurrent
+        } 
+        this.sConsumer.cable.calc(this.sConsumer, brCur)
+
+        
+        
     }
 }

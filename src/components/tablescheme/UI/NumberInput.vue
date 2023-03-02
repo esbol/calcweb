@@ -30,6 +30,7 @@ input {
     padding-left: 5px;
     padding-bottom: 1px;
     color: var(--row-text-color);
+    text-align: center;
 }
 
 input:focus {

@@ -16,9 +16,11 @@ export abstract class ELObject {
 
     
     public set colPhase(v : number) {
-        if(v === 1) this.voltage = 220
-        if(v=== 3) this.voltage = 380
+        if(v == 1) this.voltage = 220
+        if(v == 3) this.voltage = 380
         this._colPhase = v;
+        
+        
     }
     
     
@@ -31,6 +33,7 @@ export abstract class ELObject {
 
     constructor() { }
 
+    abstract setDataFromDB(mark: string): boolean
 }
 
 

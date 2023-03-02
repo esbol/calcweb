@@ -5,8 +5,8 @@ export class Contactor extends CommutateApparate {
         return true
     }
 
-    constructor() {
-        super()
+    constructor(mark: string) {
+        super(mark)
     }
 
 }

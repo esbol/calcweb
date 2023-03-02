@@ -1,5 +1,6 @@
 <template>
     <div class="section-container">
+        <h3>Участок сети 1</h3>
         <table>
             <tr>
                 <td>Обозначение</td>
@@ -10,14 +11,43 @@
             </tr>
             <tr>
 
-                <td>Расчетная мощность, кВт</td>
-                <td><NumberInput
-                :input-value="section.calculationModes[0].installPower"
-                :can-edite="false"
-                 />
+                <td>Pуст</td>
+                <td>
+                    <NumberInput :input-value="section.calculationModes[0].installPower" :can-edite="false" />
+                </td>
+            </tr>
+            <tr>
+
+                <td>Рр</td>
+                <td>
+                    <NumberInput :input-value="section.calculationModes[0].ratedPower" :can-edite="false" />
                 </td>
             </tr>
 
+            <tr>
+
+                <td><strong>Кабель</strong></td>
+                <td>
+                </td>
+            </tr>
+             <tr>
+                    <td>Марка</td>
+                    <td>
+                        <TextInput :input-value="section.cable.mark" :can-edite="true" />
+                    </td>
+                </tr>
+                  <tr>
+                        <td>Макс.ток</td>
+                        <td>
+                            <NumberInput :input-value="section.cable.maxCurrent" :can-edite="false" />
+                        </td>
+                    </tr>
+                      <tr>
+                            <td>Сечение</td>
+                            <td>
+                                <NumberInput :input-value="section.cable.square" :can-edite="false" />
+                            </td>
+                        </tr>
         </table>
     </div>
 </template>

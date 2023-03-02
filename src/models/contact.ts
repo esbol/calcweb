@@ -3,6 +3,9 @@ import { Device } from "./device"
 import { SectionLine } from "./sectionline";
 
 export class Contact extends ELObject{
+    setDataFromDB(mark: string): boolean {
+        return true
+    }
     readonly ownDevice: Device
    
     constructor(device: Device){

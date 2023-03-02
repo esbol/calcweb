@@ -1,14 +1,14 @@
 
 <template>
     <div class="table-container">
-    <PanelPowers :panel="panel" class="panelPowers"/>
+        <PanelPowers :panel="panel" class="panelPowers" />
         <div class="table-header">
             <table>
-                
+
                 <col width="40px">
                 <col width="80px">
                 <col width="40px">
-                <col width="80px">
+                <col width="100px">
                 <col width="80px">
                 <col width="40px">
                 <col width="40px">
@@ -54,11 +54,11 @@
         </div>
         <div class="table-body">
             <table>
-             
+
                 <col width="40px">
                 <col width="80px">
                 <col width="40px">
-                <col width="80px">
+                <col width="100px">
                 <col width="80px">
                 <col width="40px">
                 <col width="40px">
@@ -75,39 +75,42 @@
                 <tbody>
                     <tr class="b_bottom" v-for="feeder in panel.feeders" :key="feeder.id"
                         :class="{ selected: selectedFeeder === feeder }" @click="selectedFeeder = feeder">
-                       
-                        <td>1</td>
-                        <td><select class="my-select" v-model="feeder.consumer.colPhase">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
+
+                        <td>{{ feeder.breaker?.nameOfPlane }}</td>
+                        <td><select v-if="feeder.breaker !== null" class="my-select" v-model="feeder.breaker.mark">
+                                <option v-for="breaker in Breakers">{{ breaker.mark }}</option>
                             </select></td>
+                        <td>
+                            <div v-if="feeder.breaker !== null">{{ feeder.breaker.nominalCurrent }}</div>
+                        </td>
+
+                        <CablePipeCells :section="feeder.sContactor == null ? feeder.sConsumer : feeder.sContactor" />
+
+
                         <td>1</td>
                         <td>1</td>
                         <td>1</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>1</td>
+                        <CablePipeCells v-if="feeder.sContactor != null" :section="feeder.sConsumer" />
+                        <td v-else></td>
+                        <td></td>
+                        <td></td>
+
 
                         <td>
                             <NumberInput :input-value="feeder.consumer.installPower" :can-edite="true"
                                 @focusout="feeder.consumer.installPower = parseFloat($event.target.value)" />
                         </td>
-                        <td>1</td>
                         <td><select class="my-select" v-model="feeder.consumer.colPhase">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                            </select>
+                                <option v-for="colPhase in ColPhases">{{ colPhase }}</option>
+
+                            </select></td>
+                        <td>
+                            <NumberInput :input-value="feeder.consumer.cosf" :can-edite="true"
+                                @focusout="feeder.consumer.cosf = parseFloat($event.target.value)" />
                         </td>
                         <td>{{ feeder.consumer.current.toFixed(2).toString() }}</td>
                         <td>
-                            <TextInput :input-value="feeder.consumer.description"
-                                @focusout="feeder.consumer.description = $event.target.value" :can-edite="true" />
+                            <DecriptionCell :consumer="feeder.consumer" />
                         </td>
                     </tr>
                 </tbody>
@@ -129,10 +132,14 @@ import MyButton from '@/components/tablescheme/UI/MyButton.vue'
 import { Feeder } from '@/models/feeder'
 import { Panel } from "@/models/panel"
 import { inject, ref, provide } from 'vue';
-import { TypesBySP } from '@/models/normativs';
+import { TypesBySP, ColPhases } from '@/models/normativs';
 import TextInput from './UI/TextInput.vue';
 import NumberInput from './UI/NumberInput.vue';
 import PanelPowers from './PanelPowers.vue';
+import { Breakers } from '@/models/bd/breakers'
+import DecriptionCell from './cells/DecriptionCell.vue';
+import { Cables, ICable } from '@/models/bd/cables'
+import CablePipeCells from './cells/CablePipeCells.vue';
 
 //#region setupdata
 const props = defineProps({
@@ -141,6 +148,7 @@ const props = defineProps({
         required: true
     }
 })
+
 
 
 function addFeeder(): void {
@@ -190,7 +198,8 @@ provide('typesBySP', TypesBySP)
 td {
 
     height: 50px;
-    vertical-align: bottom;
+    vertical-align: bottom !important;
+    ;
     padding-bottom: 5px;
 }
 
@@ -221,7 +230,7 @@ th {
 
 .table-container {
     display: grid;
-    width: 1200px;
+    width: 1300px;
     grid-template-rows: auto 1fr auto;
     grid-template-columns: auto 1fr;
     /* background: white; */
@@ -230,11 +239,13 @@ th {
     padding: 0;
     box-sizing: border-box;
 }
-.panelPowers{
+
+.panelPowers {
     grid-column: 1;
     grid-row-start: 1;
     grid-row-end: 4;
 }
+
 .table-header {
     width: min-content;
     grid-column: 2;
@@ -246,30 +257,35 @@ th {
     height: 400px;
     overflow-y: auto;
     overflow-x: hidden;
- background: white;
+    background: white;
 }
 
 .buttons-row {
     grid-column: 2;
     height: 50px;
 
-  margin-top: 5px;
+    margin-top: 5px;
 }
 
 * {
     --row-text-color: rgb(76, 76, 76);
     --row-bg-color: transparent;
-    --row-bg-selected-color: rgb(177, 227, 246);
-    --row-bg-hover-color: rgb(227, 242, 249);
+    --row-bg-selected-color: #eeeeee;
+    --row-bg-hover-color: #f5f5f5;
     --row-border-vertical-color: rgb(179, 179, 179);
     --row-border-color: 1px solid rgb(219, 219, 219);
 }
 
 table>tbody>tr:hover {
     background: var(--row-bg-hover-color);
+
 }
 
 .selected {
-    background: var(--row-bg-selected-color);
+    background: var(--row-bg-selected-color) !important;
+
+    font-size: 20px;
 }
+
+option {}
 </style>

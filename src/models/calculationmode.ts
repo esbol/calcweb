@@ -1,13 +1,22 @@
+import { SectionLine } from './sectionline';
 
 import { Consumer } from './consumer';
 import { GroupBySP } from './groupbysp';
 import { calcCurrentBySPower } from './formuls/calcpowers'
 
 export class CalculationMode {
-    constructor(name: string){
+    constructor(name: string, section: SectionLine){
         this.name = name
+        this._section = section
     }
    
+    //#region section
+    private _section: SectionLine;
+    public get section(): SectionLine {
+        return this._section;
+    }
+    //#endregion
+
     //#region name
     private _name : string = 'Normal';
     public get name() : string {
@@ -98,27 +107,7 @@ export class CalculationMode {
     public set currentA(v: number) { this._currentA = v; }
     //#endregion
 
-    //#region voltage
-    private _voltage : number = 220;
-    public get voltage() : number {
-        return this._voltage;
-    }
-    public set voltage(v : number) {
-        this._voltage = v;
-    }
-    //#endregion
 
-    //#region colPhase
-    private _colPhase: number = 1
-    public set colPhase(v: number) {
-        if (v === 1) this.voltage = 220
-        if (v === 3) this.voltage = 380
-        this._colPhase = v;
-    }
-    public get colPhase(): number {
-        return this._colPhase
-    }
-    //#endregion
 
 
     public calc(){
@@ -152,54 +141,13 @@ export class CalculationMode {
             g.setConsumers(consumerlist)
         })
 
-
-
-        // //добавляем нагрузку на соответствующую группу или создаем новую
-        // this.consumers.forEach(c => {
-        //     let group = this.groupsBySPList.find(g=> g.groupName === c.groupNameBySP) 
-        //     if(group !== undefined){
-        //         if(group.consumers.includes(c) === false) group.consumers.push(c)
-        //     }else{
-        //         const newgroup = new GroupBySP()
-        //         newgroup.consumers.push(c)
-        //         newgroup.groupName = c.groupNameBySP
-        //         this.groupsBySPList.push(newgroup)
-        //     }
-        // });
-        // //список групп для удаления
-        // const forDel = new Array<GroupBySP>()
-        // this.groupsBySPList.forEach(g => {
-        //     const consumer = this.consumers.find(cons => cons.groupNameBySP === g.groupName)
-        //     if(consumer === undefined) forDel.push(g)
-        // })
-        // forDel.forEach(g=> this.groupsBySPList.splice(
-        //     forDel.indexOf(g), 1
-        // ))
-
-        // //список нагрузок для удаления
-        // this.groupsBySPList.forEach(g => {
-        //     const forDelCons = new Array<Consumer>()
-        //     g.consumers.forEach(c => {
-        //         if(this.consumers.includes(c) === false) forDelCons.push(c)
-        //     })
-        //     forDelCons.forEach(c => {
-        //         g.consumers.splice(
-        //             forDelCons.indexOf(c), 1
-        //         )
-        //     })
-        // })
-
-        // //удаляем дубликаты нагрузок
-        // this.groupsBySPList.forEach(g => {
-        //     const fordelcons = new Array<Consumer>()
-        //     g.consumers.forEach(c=>)
-        // })
     }
 
     private calcPowers(){
         this.installPower = 0
         this.ratedPower = 0
         this.ratedQPower = 0
+        this.ratedSPower = 0
 
         this.groupsBySPList.forEach(g=>{
             this.installPower += g.installPower
@@ -207,13 +155,15 @@ export class CalculationMode {
             this.ratedQPower += g.ratedQPower
         })
 
+        this.ratedSPower = Math.sqrt(this.ratedPower * this.ratedPower + this.ratedQPower * this.ratedQPower)
+
         if(this.ratedPower !== 0){
             this.tgf = this.ratedQPower / this.ratedPower
         }
 
-        this.cosf = Math.acos(this.tgf)
+        this.cosf = this.ratedPower / this.ratedSPower
 
-        this.current = calcCurrentBySPower(this.ratedSPower, this.voltage, this.colPhase)
+        this.current = calcCurrentBySPower(this.ratedSPower, this.section.voltage, this.section.colPhase)
     }
 
 }

@@ -30,7 +30,7 @@ export abstract class Device extends ELObject {
     //#endregion 
 
 
-    abstract setDataFromDB(mark: string): boolean
+   
 
 
 }

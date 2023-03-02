@@ -1,4 +1,4 @@
-import { CalculationModes } from './normativs';
+import { CalculationModesNames } from './normativs';
 
 import { Device } from "./device";
 import { calcCurrentByInstallPower, calcQPower, calcSPower } from './formuls/calcpowers';
@@ -14,7 +14,7 @@ export class Consumer extends Device{
     }
 
     //#region calculationModes
-    private _calculationModes: Array<string> = [CalculationModes[0]];
+    private _calculationModes: Array<string> = [CalculationModesNames[0]];
     public get calculationModes(): Array<string> {
         return this._calculationModes;
     }
@@ -71,7 +71,10 @@ export class Consumer extends Device{
     //#region cosf
     private _cosf: number = 0.93;
     public get cosf(): number { return this._cosf; }
-    public set cosf(v: number) { this._cosf = v; }
+    public set cosf(v: number) 
+    { 
+        this._cosf = v; 
+    }
     //#endregion
 
     //#region tgf
@@ -112,6 +115,11 @@ export class Consumer extends Device{
     public calc(){
         this.current = calcCurrentByInstallPower(this.installPower, this.voltage, this.colPhase, this.cosf)
         this.ratedPower = this.installPower
+
+        this._tgf = Math.tan(Math.acos(this.cosf))
+   
+
+
         this.ratedQPower = calcQPower(this.ratedPower, this.tgf)
         this.ratedSPower = calcSPower(this.ratedPower, this.ratedQPower)
     }
