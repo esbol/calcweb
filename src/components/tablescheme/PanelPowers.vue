@@ -35,10 +35,10 @@ table {
 }
 .pp-container {
     display: grid;
-    grid-template-rows: 152px 1fr;
+    grid-template-rows: 132px 1fr;
     height: 100%;
     width: 100px;
-    background-color: transparent;
+        background: #fafafa;
     color: rgb(76, 76, 76);
 }
 

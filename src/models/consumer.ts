@@ -11,6 +11,7 @@ export class Consumer extends Device{
     constructor() {
         super()
         this.description = 'consumer'
+        this._groupNameBySP = 'не указано'
     }
 
     //#region calculationModes

@@ -12,6 +12,7 @@ export class Panel extends Device {
         this.uniteSection.setEndContact(this.outContact)
         this.uniteSection.nameOfPlane = 'uniteSection'
         this.description = 'panel'
+       
     }
     readonly outContact: Contact = new Contact(this)
     //#region feeders
@@ -35,7 +36,7 @@ export class Panel extends Device {
         this.feeders.forEach(f=>{
             f.calc()
         })
-       // this.uniteSection.calc()
+        this.uniteSection.calc()
     }
 
     public addFeeder(){

@@ -11,7 +11,7 @@ export class SectionLine {
     constructor() {
         this.calculationModes.push(new CalculationMode(CalculationModesNames[0], this))
     }
-
+    id: number = Math.random()
     //#region colPhase
 
     private _colPhase: number = 1;

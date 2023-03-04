@@ -38,7 +38,7 @@ export class CalculationMode {
     //#endregion
 
     //#region groupsBySPList
-    private _groupsBySPList: Array<GroupBySP> = new Array<GroupBySP>()
+    private _groupsBySPList: Array<GroupBySP> = [ ]
     public get groupsBySPList(): Array<GroupBySP> {
         return this._groupsBySPList;
     }

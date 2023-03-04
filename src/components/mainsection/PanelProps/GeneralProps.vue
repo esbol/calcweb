@@ -22,8 +22,12 @@ import { Panel } from '@/models/panel';
 import { inject } from 'vue';
 
 
-const panel = inject('selectedPanel', new Panel())
-
+const props = defineProps({
+    panel: {
+        type: Panel,
+        required: true
+    }
+})
 </script>
 
 <style scoped>

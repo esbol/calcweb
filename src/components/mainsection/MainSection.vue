@@ -1,6 +1,6 @@
 <template>
     <div class="main-container">
-        <PanelProps />
+        <PanelProps :panel="panel" />
         <TableScheme :panel="panel" />
         
     </div>
@@ -28,12 +28,10 @@ const props = defineProps({
 <style >
 
 .main-container {
-
+    height: calc(100vh - 100px);
     display: grid;
     grid-template-rows: auto 1fr;
-
-    overflow-x: scroll;
-    overflow-y: hidden;
+    overflow: hidden;
     box-sizing: border-box;
 }
 </style>

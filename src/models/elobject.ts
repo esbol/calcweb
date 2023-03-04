@@ -9,7 +9,7 @@ export enum Phase {
 }
 
 export abstract class ELObject {
-    id: number = Date.now()
+    id: number = Math.random()
     nameOfPlane: string = ''
     voltage: number = 220
     private _colPhase: number = 1

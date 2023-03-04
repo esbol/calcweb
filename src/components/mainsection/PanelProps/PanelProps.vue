@@ -1,7 +1,7 @@
 <template>
     <div class="pprops-container">
-        <GeneralProps />
-        <SPProps class="sp" />
+        <GeneralProps :panel="panel" />
+        <SPProps :panel="panel" class="sp" />
     </div>
 </template>
 
@@ -12,9 +12,12 @@ import TableScheme from '../tablescheme/TableScheme.vue';
 import GeneralProps from './GeneralProps.vue';
 import SPProps from './SPProps.vue';
 
-const panels = inject('panels', new Array<Panel>())
-const selectedPanel = inject('selectedPanel', new Panel())
-
+const props = defineProps({
+    panel: {
+        type: Panel,
+        required: true
+    }
+})
 </script>
 
 <style scoped>

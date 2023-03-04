@@ -1,10 +1,11 @@
 <template>
   <div class="header">header</div>
-  <div class="main" :class="{sidehidden: sideShow===false, sideshow : sideShow===true}">
+  <!-- <div class="main" :class="{sidehidden: sideShow===false, sideshow : sideShow===true}">
     <SideBar :show="sideShow" />
-    <MainSection :panel="selectedPanel" /> 
-  </div>
-  <div class="footer">footer</div>
+    <MainSection :panel="selectedPanel" />  -->
+
+  <SVGScheme :panel="panel1"/>
+
 </template>
 
 <script setup lang="ts">
@@ -12,9 +13,7 @@ import { ref, provide, watch } from 'vue'
 import { Panel } from '@/models/panel'
 import { Feeder } from '@/models/feeder'
 import { reactive } from '@vue/reactivity';
-
-import SideBar from '@/components/sidebar/SideBar.vue';
-import MainSection from '@/components/mainsection/MainSection.vue';
+import SVGScheme from '@/components/SVGScheme.vue';
 
 const panelsArray: Array<Panel> = []
 const panel1 = new Panel()
@@ -71,7 +70,5 @@ provide('selectedPanel', selectedPanel)
     grid-template-columns: 250px auto;
 }
 
-.footer {
-  height: 50px;
-}
+
 </style>
