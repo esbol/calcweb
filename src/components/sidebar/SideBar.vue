@@ -31,7 +31,6 @@ const selectedFeeder: Feeder | undefined  = inject('selectedFeeder')
 
 const props = defineProps({
     show: Boolean,
-   
 })
 
 

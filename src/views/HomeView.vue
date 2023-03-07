@@ -1,19 +1,20 @@
 <template>
   <div class="header">header</div>
-  <!-- <div class="main" :class="{sidehidden: sideShow===false, sideshow : sideShow===true}">
+  <div class="main" :class="{ sidehidden: sideShow === false, sideshow: sideShow === true }">
     <SideBar :show="sideShow" />
-    <MainSection :panel="selectedPanel" />  -->
-
-  <SVGScheme :panel="panel1"/>
-
+    <DivScheme :panel="panel1" />
+  </div>
+  <div class="footer">footer</div>
 </template>
 
 <script setup lang="ts">
+import DivScheme from '@/components/DivScheme.vue';
 import { ref, provide, watch } from 'vue'
 import { Panel } from '@/models/panel'
 import { Feeder } from '@/models/feeder'
 import { reactive } from '@vue/reactivity';
 import SVGScheme from '@/components/SVGScheme.vue';
+import SideBar from '@/components/sidebar/SideBar.vue';
 
 const panelsArray: Array<Panel> = []
 const panel1 = new Panel()
@@ -30,7 +31,7 @@ const sideShow = ref(true)
 
 const panels = reactive(panelsArray)
 
-const selectedFeeder= ref(undefined)
+const selectedFeeder = ref(undefined)
 const selectedPanel = ref(panel1)
 provide('panels', panels)
 
@@ -57,18 +58,27 @@ provide('selectedPanel', selectedPanel)
   border-bottom: 1px solid rgb(198, 196, 196);
 }
 
-
+.footer {
+  height: 40px;
+  background: white;
+  border-top: 1px solid rgb(219, 219, 219);
+}
 .main {
   display: grid;
   width: 100%;
+  max-height: 100%;
   background: #f6f7f9;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+
 }
+
 .sidehidden {
-    grid-template-columns: 50px auto;
+  grid-template-columns: 50px auto;
 }
+
 .sideshow {
-    grid-template-columns: 250px auto;
+  grid-template-columns: 250px auto;
 }
-
-
 </style>
