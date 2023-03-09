@@ -1,50 +1,40 @@
 <template>
     <div class="row">
         <div class="name-prop">Обозначение</div>
-        <div class="prop-value">{{ section.nameOfPlane }}</div>
-    </div>
-    <div class="row">
-        <div class="name-prop">Длина</div>
-        <div class="prop-value">{{ section.length }}</div>
-    </div>
-    <div class="row">
-        <div class="name-prop">Кол. фаз</div>
-        <div class="prop-value">{{ section.colPhase }}</div>
-    </div>
-    <div class="row">
-        <div class="name-prop">Iрасч.</div>
-        <div class="prop-value">0</div>
-    </div>
-    <div class="row">
-        <div class="name-prop"><strong>Кабель</strong></div>
+        <div class="prop-value">{{ breaker.nameOfPlane }}</div>
     </div>
     <div class="row">
         <div class="name-prop">Марка</div>
-        <div class="prop-value">{{ section.cable.mark }}</div>
+        <div class="prop-value">{{ breaker.mark }}</div>
     </div>
     <div class="row">
-        <div class="name-prop">Количество жил</div>
-        <div class="prop-value">{{ section.cable.colCores }}</div>
+        <div class="name-prop">Кол. фаз</div>
+        <div class="prop-value">{{ breaker.colPhase }}</div>
+    </div>
+   
+    <div class="row">
+        <div class="name-prop">Iрасч.</div>
+        <div class="prop-value">{{ breaker.nominalCurrent }}</div>
     </div>
     <div class="row">
-        <div class="name-prop">Сечение</div>
-        <div class="prop-value">{{ section.cable.square }}</div>
+        <div class="name-prop">Iрасч.линии</div>
+        <div class="prop-value">0</div>
     </div>
     <div class="row">
-        <div class="name-prop">Допустимый ток</div>
-        <div class="prop-value">{{ section.cable.maxCurrent }}</div>
+        <div class="name-prop">Токовая хар-ка</div>
+        <div class="prop-value">С</div>
     </div>
+ 
 </template>
 
 <script setup lang="ts">
 
-
-import { SectionLine } from "@/models/sectionline";
+import { Breaker } from "@/models/breaker";
 
 
 const props = defineProps({
-    section: {
-        type: SectionLine,
+    breaker: {
+        type: Breaker,
         required: true
     }
 })

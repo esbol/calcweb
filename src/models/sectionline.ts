@@ -6,8 +6,20 @@ import { CalculationMode } from "./calculationmode";
 
 import { Device } from "./device";
 import { CableEnviroment, CalculationModesNames } from "./normativs";
+import { Panel } from './panel';
 
 export class SectionLine {
+    //#region supplyPanels
+    private _supplyPanels: Array<Panel> = [];
+    public get supplyPanels(): Array<Panel> {
+        return this._supplyPanels;
+    }
+    public set supplyPanels(v: Array<Panel>) {
+        this._supplyPanels = v;
+    }
+    //#endregion
+
+
     constructor() {
         this.calculationModes.push(new CalculationMode(CalculationModesNames[0], this))
     }
@@ -30,6 +42,15 @@ export class SectionLine {
     }
     //#endregion
 
+    //#region length
+    private _length: number = 0;
+    public get length(): number {
+        return this._length;
+    }
+    public set length(v: number) {
+        this._length = v;
+    }
+    //#endregion
 
     //#region description
     private _description: string = '132';

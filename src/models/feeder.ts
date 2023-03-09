@@ -15,15 +15,18 @@ export class Feeder {
         this._breaker = new Breaker(Breakers[0].mark)
         this._breaker.nameOfPlane ='QF' + (panel.feeders.length + 1).toString()
         this._sBreaker = new SectionLine()
-        this._sBreaker.nameOfPlane = 'sBreaker'
+        this._sBreaker.description = 'sBreaker'
         this._sBreaker.setStartContact(connectContact)
         this._sBreaker.setEndContact(this._breaker.inContact)
 
         const consumer = new Consumer()
         this._consumer = consumer
-
+        this._consumer.nameOfPlane = 'N' + (panel.feeders.length + 1).toString()
+        this._consumer.description = 'Наименование'
+        
         this._sConsumer.setEndContact(consumer.inContact)
-        this._sConsumer.nameOfPlane = 'sConsumer'
+        this._sConsumer.description = 'sConsumer'
+        this._sConsumer.nameOfPlane = 's' + (panel.feeders.length + 1).toString()
         this._sConsumer.cable.mark = Cables[0].mark
         this._sConsumer.setStartContact(this._breaker.outContact)
     }

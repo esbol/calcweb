@@ -1,7 +1,7 @@
 <template>
     <div class="a3-container" >
         <div class="innerFrame" >
-            N2
+           
         </div>
         <div class="stamp"></div>
     </div>

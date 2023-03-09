@@ -1,24 +1,44 @@
 <template>
     <div class="main-wrap" id="mainWrap">
-        <div id="divContainer" class="scheme-container">
+        <div id="divContainer" class="scheme-container" v-if="store.selectedPanel !=null">
         <A3 />
             <div class="inApparate">
-                <breaker />
+                <BreakerV v-if="store.selectedPanel.inApparate!= null" :breaker = store.selectedPanel.inApparate />
             </div>
-
+           
             <div class="shinaDiv">
-                <ShinaV :width="shinaWidth"/>
+               <BusV :width="shinaWidth" :bus="store.selectedPanel.bus" />
             </div>
 
-            <div class="feeders">
-                <div class="rows-container" v-for="feeder in pan.feeders" :key="feeder.id">
-                    <Fuse />
-                    <sectionLine />
-                    <contactor />
-                    <sectionLine />
-                    <Cons />
+            <div class="rows-container">
+                <div class="feeders" v-for="feeder in store.selectedPanel.feeders" :key="feeder.id">
+                   <BreakerV
+                   v-if="feeder.breaker != null" 
+                   :breaker="feeder.breaker"
+                    />
+                   <SectionV
+                   
+                   v-if="feeder.sContactor!= null"
+                   :section="feeder.sContactor" 
+                    />
+                   <ContactorV 
+                   v-if="feeder.contactor != null"
+                   :contactor="feeder.contactor"
+                   
+                   />
+                   <SectionV
+                   :section="feeder.sConsumer"
+                   
+                    />
+                   <ConsV 
+                    :consumer="feeder.consumer"
+                    
+                   />
                 </div>
-                <Plus @mclick="addFeeder" />
+                <div class="plus">
+                    <PlusV />
+                </div>
+            
             </div>
 
         </div>
@@ -27,68 +47,65 @@
 
 <script setup lang="ts">
 //#region import
-import ShinaV from './DivsScheme/verticals/ShinaV.vue'
+import BusV from './DivsScheme/verticals/BusV.vue'
+import ConsV from './DivsScheme/verticals/ConsV.vue'
+import ContactorV from './DivsScheme/verticals/ContactorV.vue'
+import SectionV from './DivsScheme/verticals/SectionV.vue'
+import PlusV from './DivsScheme/verticals/PlusV.vue'
+import BreakerV from './DivsScheme/verticals/BreakerV.vue'
+
 import A3 from './DivsScheme/A3.vue';
-import breaker from './DivsScheme/Breaker.vue';
-import Cons from './DivsScheme/Cons.vue';
-import Plus from './DivsScheme/Plus.vue';
-import contactor from './DivsScheme/Contactor.vue';
-import sectionLine from './DivsScheme/SectionLine.vue';
-import Shina from './DivsScheme/Shina.vue';
-import Fuse from './DivsScheme/Fuse.vue';
 import { reactive, ref, computed, onMounted, toRefs } from 'vue';
-import plus from './svg/plus.vue';
-import fuse from './svg/fuse.vue';
-import SectionLineView from './svg/SectionLineView.vue'
-import { Panel } from '@/models/panel';
-import { SectionLine } from '@/models/sectionline';
-import { Feeder } from '@/models/feeder';
-import { addScale } from './DivsScheme/pan.js'
+
+import { addScale } from './DivsScheme/pan'
+import { store } from '@/store/store'
 //#endregion
 
 onMounted(() => { addScale('mainWrap') })
 
-const props = defineProps({
-    panel: {
-        type: Panel,
-        required: true
-    }
-})
-const pan = ref(props.panel)
-
 const shinaWidth = computed(() => {
-    if (pan.value.feeders.length > 3) {
-        return pan.value.feeders.length * 80 + 50 + 'px'
+    if (store.selectedPanel != null){
+        if (store.selectedPanel.feeders.length > 2) {
+            return store.selectedPanel.feeders.length * 110 + 90 + 'px'
+        } else {
+            return '300px'
+        }
     } else {
-        return '300px'
-    }
+        return '300px'}
+   
 })
-
-
-function addFeeder() {
-    pan.value.addFeeder()
-
-}
 
 </script>
 
 <style>
+.plus {
+    margin-left: 20px;
+}
+.rows-container {
+    display: flex;
+    margin-left: 100px;
+}
 .shinaDiv{
-   
+     margin-left: 100px;
 }
 .inApparate {
     margin-top: 50px;
+    margin-left: 150px;
 }
 
-::selection {
+/* ::selection {
     user-select: none;
-}
+} */
 
-.rows-container {
+.feeders {
+    flex-grow: 0;
+
     display: flex;
+    flex-direction: column;
     align-items: center;
-    height: 80px;
-    border: 0px dashed gray;
+    width: 110px;
+    height: auto;
+    border: 0px dashed rgb(134, 73, 73);
 }
 
 :root {

@@ -3,8 +3,8 @@
         <div class="browser-header">
             <div class="header-title">Панели</div>
         </div>
-        <div @click="selectedPanel = panel" class="row-panel" :class="{ selected: selectedPanel === panel }"
-            v-for="panel in panels" :key="panel.id">
+        <div @click="store.selectedPanel = panel" class="row-panel" :class="{ selected: store.selectedPanel === panel }"
+            v-for="panel in store.panels" :key="panel.id">
             <div class="name-panel">{{ panel.nameOfPlane }}</div>
         </div>
     </div>
@@ -12,11 +12,9 @@
 
 <script setup lang="ts">
 
-import { Panel } from "@/models/panel";
-import { inject } from 'vue';
+import { store } from "@/store/store";
 
-const panels = inject('panels', new Array<Panel>())
-const selectedPanel = inject('selectedPanel', new Panel())
+
 </script>
 
 <style scoped>
@@ -29,35 +27,39 @@ const selectedPanel = inject('selectedPanel', new Panel())
 }
 .browser-header {
     display: flex;
-    height: 50px;
+    height: 35px;
     align-items: center;
+    border-bottom: 1px solid var(--main-border-color);
+    background-color: var(--sidebar-title-bg-color);
+    cursor: pointer;
 }
 
 .name-panel {
-    margin-left: 50px;
+    margin-left: 20px;
      font-size: 15px;
 }
 
 .row-panel {
     display: flex;
-    height: 50px;
+    height: 30px;
     width: 100%;
     justify-content: flex-start;
     align-items: center;
     cursor: pointer;
-    border-radius: 5px;
+ 
    
 }
 
 .selected {
-    background: var(--sidebar-selected-color);
-    color: white;
+   font-weight: bold;
+    color: var(--main-accent-color);
 }
 
 .container-broser {
     width: 100%;
     min-height: 200px;
-    background: rgb(242, 242, 242);
-    border-radius: 8px;
+    border: 1px solid var(--main-border-color);
+    border-top: none;
+    background: white;
 }
 </style>

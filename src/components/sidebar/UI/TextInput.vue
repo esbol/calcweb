@@ -3,7 +3,9 @@
     type="text"
     :value="inputValue" 
     :readonly="!canEdite" 
-    @focusout="$emit('focusout', $event)" />
+    @focusout="$emit('focusout', $event)"
+    @focus="selectAll($event.target as HTMLInputElement)"
+     />
 </template>
 
 <script setup lang="ts">
@@ -13,7 +15,10 @@ defineProps({
     canEdite: Boolean
 })
 
-defineEmits(['focusout'])
+function selectAll(target: HTMLInputElement) {
+    target.select()
+}
+
 
 </script>
 
@@ -26,7 +31,7 @@ input {
     box-sizing: border-box;
     display: block;
     background: transparent;
-    cursor: pointer;
+    box-shadow: -1px -1px 1px gray;
     border: none;
     padding: 5px;
     color: var(--row-text-color);

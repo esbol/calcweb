@@ -1,8 +1,9 @@
 <template>
   <div class="header">header</div>
   <div class="main" :class="{ sidehidden: sideShow === false, sideshow: sideShow === true }">
-    <SideBar :show="sideShow" />
-    <DivScheme :panel="panel1" />
+    <SideBar :show="sideShow"/>
+    <DivScheme v-if="store.selectedPanel != null"
+     />
   </div>
   <div class="footer">footer</div>
 </template>
@@ -11,32 +12,29 @@
 import DivScheme from '@/components/DivScheme.vue';
 import { ref, provide, watch } from 'vue'
 import { Panel } from '@/models/panel'
-import { Feeder } from '@/models/feeder'
-import { reactive } from '@vue/reactivity';
-import SVGScheme from '@/components/SVGScheme.vue';
 import SideBar from '@/components/sidebar/SideBar.vue';
+import { store } from '@/store/store';
+import { Breaker } from '@/models/breaker';
 
-const panelsArray: Array<Panel> = []
+
+
 const panel1 = new Panel()
 const panel2 = new Panel()
 panel1.nameOfPlane = 'ШР-1'
 panel2.nameOfPlane = 'ШР-2'
-
 panel1.addFeeder()
-panelsArray.push(panel1)
-panelsArray.push(panel2)
+panel1.calc()
+panel2.calc()
+panel1.inApparate = new Breaker('VSG')
+panel2.inApparate = new Breaker('gkd')
+
+store.panels.push(panel1)
+store.panels.push(panel2)
 
 const sideShow = ref(true)
 
+store.selectedPanel = panel1
 
-const panels = reactive(panelsArray)
-
-const selectedFeeder = ref(undefined)
-const selectedPanel = ref(panel1)
-provide('panels', panels)
-
-provide('selectedFeeder', selectedFeeder)
-provide('selectedPanel', selectedPanel)
 
 
 
@@ -45,12 +43,13 @@ provide('selectedPanel', selectedPanel)
 
 <style>
 :root {
-
-  --sidebar-bg-color: white;
+  --sidebar-title-bg-color: #e6e6e6;
+  --sidebar-bg-color: #fbfbfb;
   --sidebar-text-color: #383838;
   --body-bg-color: rgb(206, 202, 202);
   --sidebar-selected-color: #1a73e8;
-
+  --main-border-color: rgb(206, 202, 202);
+  --main-accent-color: #1a73e8;
 }
 
 .header {

@@ -41,14 +41,21 @@ export class Consumer extends Device{
         return this._count;
     }
     public set count(v : number) {
+        if (v === this._installPower) return
         this._count = v;
+        this.supplyPanels.forEach(p => p.calc())
     }
     //#endregion
 
     //#region installPower
     private _installPower: number = 0;
     public get installPower(): number { return this._installPower; }
-    public set installPower(v: number) { this._installPower = v; }
+    public set installPower(v: number) 
+    { 
+        if(v === this._installPower) return
+        this._installPower = v;
+        this.supplyPanels.forEach(p=>p.calc())
+     }
     //#endregion
 
     //#region ratedPower
@@ -74,7 +81,9 @@ export class Consumer extends Device{
     public get cosf(): number { return this._cosf; }
     public set cosf(v: number) 
     { 
+        if (v === this._installPower) return
         this._cosf = v; 
+        this.supplyPanels.forEach(p => p.calc())
     }
     //#endregion
 

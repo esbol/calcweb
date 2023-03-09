@@ -1,9 +1,6 @@
 <template>
-    <input type="number" step="any" 
-    :value="inputValue" 
-    :readonly="!canEdite"
-    @focusout="$emit('focusout', $event)"
-    @focus="selectAll($event.target as HTMLInputElement)" />
+    <input type="number" step="any" :value="inputValue" :readonly="!canEdite" @focusout="$emit('focusout', $event)"
+        @focus="selectAll($event.target as HTMLInputElement)" />
 </template>
 
 <script setup lang="ts">
@@ -25,15 +22,17 @@ function selectAll(target: HTMLInputElement) {
 <style scoped>
 input {
     width: 100%;
+    height: 100%;
     box-sizing: border-box;
     display: block;
     background: transparent;
-    cursor: pointer;
+
     border: none;
+    box-shadow: -1px -1px 1px gray;
     padding-left: 5px;
-    padding-bottom: 1px;
+
     color: var(--row-text-color);
-    text-align: center;
+    text-align: left;
 }
 
 input:focus {
