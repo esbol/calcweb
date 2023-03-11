@@ -81,7 +81,7 @@ export class Consumer extends Device{
     public get cosf(): number { return this._cosf; }
     public set cosf(v: number) 
     { 
-        if (v === this._installPower) return
+        if (v === this._cosf) return
         this._cosf = v; 
         this.supplyPanels.forEach(p => p.calc())
     }

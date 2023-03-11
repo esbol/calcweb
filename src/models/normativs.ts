@@ -12,7 +12,7 @@ export enum CableMaterial {
     Медь = 1,
     Алюминий = 2
 }
-export const ColPhases: Array<number> = [ 1, 3]
+export const ColPhases: Array<number> = [1, 3]
 
 export enum CableEnviroment {
     Air = 1,

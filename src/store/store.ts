@@ -9,7 +9,8 @@ interface IStore {
 export const store: IStore = reactive({
     panels: [],
     selectedPanel: null,
-    selectedObject: null
+    selectedObject: null,
+
 })
 
 watchEffect(()=>{

@@ -48,7 +48,7 @@ store.selectedPanel = panel1
   --sidebar-text-color: #383838;
   --body-bg-color: rgb(206, 202, 202);
   --sidebar-selected-color: #1a73e8;
-  --main-border-color: rgb(206, 202, 202);
+  --main-border-color: rgb(223, 223, 223);
   --main-accent-color: #1a73e8;
 }
 

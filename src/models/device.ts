@@ -29,6 +29,20 @@ export abstract class Device extends ELObject {
     }
 
     //#endregion 
+    
+    //#region colPhase
+    private _colPhase: number = 1
+    public set colPhase(v: number) {
+        if(v == this._colPhase) return
+        if (v == 1) this.voltage = 220
+        if (v == 3) this.voltage = 380
+        this._colPhase = v;
+        this._supplyPanels.forEach(p=>p.calc())
+    }
+    public get colPhase(): number {
+        return this._colPhase
+    }
+    //#endregion
 
 
     //#region supplyPanels

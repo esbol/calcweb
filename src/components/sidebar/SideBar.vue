@@ -17,7 +17,7 @@
 
             <BusProps v-if="(store.selectedObject instanceof Bus)" :bus="store.selectedObject" />
         </div>
-
+        <div class="splitter"></div>
     </div>
 </template>
 
@@ -58,13 +58,21 @@ const props = defineProps({
 
     height: 100%;
 }
-
+.splitter {
+    width: 100%;
+    height: 100%;
+    border-left: 1px solid var(--main-border-color);
+    border-right: 1px solid var(--main-border-color);
+    cursor: col-resize;
+}
 .side-container {
+    display: grid;
+    grid-template-columns: auto 8px;
     width: 50px;
     height: 100%;
     color: var(--sidebar-text-color);
     background: var(--sidebar-bg-color);
-
+    overflow: auto;
 }
 
 .show {

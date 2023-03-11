@@ -61,8 +61,7 @@ const props = defineProps({
 .container-props {
     width: 100%;
     height: auto;
-    border: 1px solid var(--main-border-color);
-    border-top: none;
+    border-bottom: 1px solid var(--main-border-color);
     background: white;
 }
 </style>

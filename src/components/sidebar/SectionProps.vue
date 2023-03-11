@@ -1,46 +1,100 @@
 <template>
-    <div class="row">
-        <div class="name-prop">Обозначение</div>
-        <div class="prop-value">{{ section.nameOfPlane }}</div>
-    </div>
-    <div class="row">
-        <div class="name-prop">Длина</div>
-        <div class="prop-value">{{ section.length }}</div>
-    </div>
-    <div class="row">
-        <div class="name-prop">Кол. фаз</div>
-        <div class="prop-value">{{ section.colPhase }}</div>
-    </div>
-    <div class="row">
-        <div class="name-prop">Iрасч.</div>
-        <div class="prop-value">0</div>
-    </div>
-    <div class="row">
-        <div class="name-prop"><strong>Кабель</strong></div>
-    </div>
-    <div class="row">
-        <div class="name-prop">Марка</div>
-        <div class="prop-value">{{ section.cable.mark }}</div>
-    </div>
-    <div class="row">
-        <div class="name-prop">Количество жил</div>
-        <div class="prop-value">{{ section.cable.colCores }}</div>
-    </div>
-    <div class="row">
-        <div class="name-prop">Сечение</div>
-        <div class="prop-value">{{ section.cable.square }}</div>
-    </div>
-    <div class="row">
-        <div class="name-prop">Допустимый ток</div>
-        <div class="prop-value">{{ section.cable.maxCurrent }}</div>
-    </div>
+    <table>
+        <col width="50%" />
+        <col width="50%" />
+        <tr>
+            <td>
+                <div class="name-prop">Обозначение</div>
+            </td>
+            <td>
+                <div class="prop-value">{{ section.nameOfPlane }}</div>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div class="name-prop">Длина</div>
+            </td>
+            <td>
+                <div class="prop-value">{{ section.length }}</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="name-prop">Кол. фаз</div>
+            </td>
+            <td>
+                <div class="prop-value">{{ section.colPhase }}</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="name-prop">Iрасч.</div>
+            </td>
+            <td>
+                <div class="prop-value">{{ section.modeMax.current.toFixed(3) }}</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="name-prop">Кол. фаз</div>
+            </td>
+            <td>
+                <div class="prop-value">{{ section.colPhase }}</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="name-prop"><strong>Кабель</strong></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="name-prop">Марка</div>
+            </td>
+            <td>
+                 <Select :selected-value="section.cable.mark" :display-path="'mark'"
+                        :options="Cables" @change="setCableMark" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="name-prop">Кол. жил</div>
+            </td>
+            <td>
+                <div class="prop-value">{{ section.cable.colCores }}</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="name-prop">Сечение</div>
+            </td>
+            <td>
+                <div class="prop-value">{{ section.cable.square }}</div>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div class="name-prop">Допустимый ток</div>
+            </td>
+            <td>
+                <div class="prop-value">{{ section.cable.maxCurrent }}</div>
+            </td>
+        </tr>
+    </table>
 </template>
 
 <script setup lang="ts">
 
-
+import Select from './UI/Select.vue'
+import { Cables } from "@/models/bd/cables";
 import { SectionLine } from "@/models/sectionline";
 
+
+function setCableMark(option: any) {
+    props.section.cable.mark = option
+}
 
 const props = defineProps({
     section: {
@@ -56,19 +110,29 @@ const props = defineProps({
     font-family: Arial, Helvetica, sans-serif
 }
 
-.row {
+table {
     width: 100%;
-    height: 25px;
-    display: flex;
-    align-items: center;
+    border-collapse: collapse;
+    border-spacing: 0px;
+}
 
+tr {
+    height: 25px;
     border-bottom: 1px solid var(--main-border-color);
     border-left: 1px solid var(--main-border-color);
+    box-sizing: border-box;
+    padding: 0;
+ 
+}
+
+td {
+    border-left: 1px solid var(--main-border-color);
+    padding: 0;
+
 }
 
 .name-prop {
     height: 100%;
-    width: 50%;
     margin-left: 5px;
     display: flex;
     align-items: center;
@@ -78,8 +142,6 @@ const props = defineProps({
     display: flex;
     align-items: center;
     height: 100%;
-    width: 50%;
-    border-left: 1px solid var(--main-border-color);
     padding-left: 5px;
 }
 </style>

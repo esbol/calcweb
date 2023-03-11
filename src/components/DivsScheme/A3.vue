@@ -60,7 +60,7 @@ function hov() {
    
     width: 1680px;
     height: 1188px;
-    border: 1px solid var(--scheme-line-color);
+    border: 0px solid var(--scheme-line-color);
 
     position: absolute;
     top: 0;
