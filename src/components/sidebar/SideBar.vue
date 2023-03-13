@@ -15,6 +15,10 @@
                 <BreakerProps :breaker="store.selectedObject" />
             </PropsContainer>
 
+            <PropsContainer title="Пусковое устройство" v-if="(store.selectedObject instanceof Contactor)">
+                    <ContactorProps :contactor="store.selectedObject" />
+                </PropsContainer>
+
             <BusProps v-if="(store.selectedObject instanceof Bus)" :bus="store.selectedObject" />
         </div>
         <div class="splitter"></div>
@@ -22,6 +26,7 @@
 </template>
 
 <script setup lang="ts">
+import ContactorProps from "./ContactorProps.vue";
 import PropsContainer from "./PropsContainer.vue";
 import { Bus } from "@/models/bus";
 import BusProps from "./BusProps.vue";
@@ -34,6 +39,7 @@ import SectionProps from "./SectionProps.vue";
 import { store } from "@/store/store";
 import { Consumer } from "@/models/consumer";
 import { Breaker } from "@/models/breaker";
+import { Contactor } from "@/models/contactor";
 
 
 

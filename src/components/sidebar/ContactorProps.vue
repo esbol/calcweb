@@ -8,28 +8,29 @@
             </td>
             <td>
                 <div class="prop-value-input">
-                    <TextInput :input-value="breaker.nameOfPlane" @focusout="breaker.nameOfPlane = $event.target.value"
-                        :can-edite="true" />
-
+                  <TextInput :input-value="contactor.nameOfPlane" @focusout="contactor.nameOfPlane = $event.target.value"
+                    :can-edite="true" />
+                
                 </div>
             </td>
         </tr>
 
         <tr>
-            <td>
-                <div class="name-prop">Марка</div>
-            </td>
-            <td>
-                <div class="prop-value-input"><Select :selected-value="breaker" :options="Breakers" :display-path="'mark'"
-                    @change="setBreakerMark" /></div>
-            </td>
-        </tr>
+                <td>
+                    <div class="name-prop">Марка</div>
+                </td>
+                <td>
+                     <div class="prop-value-input"><Select :selected-value="contactor" 
+                            :options="Contactors" :display-path="'mark'"
+                            @change="setContactorMark" /></div>
+                </td>
+            </tr>
         <tr>
             <td>
                 <div class="name-prop">Кол. фаз</div>
             </td>
             <td>
-                <div class="prop-value">{{ breaker.colPhase }}</div>
+                <div class="prop-value">{{ contactor.colPhase }}</div>
             </td>
         </tr>
         <tr>
@@ -37,17 +38,17 @@
                 <div class="name-prop">Iрасч.</div>
             </td>
             <td>
-                <div class="prop-value">{{ breaker.innerSection.modeMax.current.toFixed(3) }}</div>
+                <div class="prop-value">{{ contactor.innerSection.modeMax.current.toFixed(3) }}</div>
             </td>
         </tr>
-
+     
 
         <tr>
             <td>
                 <div class="name-prop">Номинальный ток</div>
             </td>
             <td>
-                <div class="prop-value">{{ breaker.nominalCurrent }}</div>
+                <div class="prop-value">{{ contactor.nominalCurrent }}</div>
             </td>
         </tr>
     </table>
@@ -57,22 +58,21 @@
 
 import TextInput from './UI/TextInput.vue';
 import Select from './UI/Select.vue'
-
-import { Breakers } from '@/models/bd/breakers';
-import { Breaker } from '@/models/breaker';
+import { Contactor } from '@/models/contactor';
+import { Contactors } from '@/models/bd/contactors';
 
 
 
 const props = defineProps({
-    breaker: {
-        type: Breaker,
+    contactor: {
+        type: Contactor,
         required: true
     }
 })
 
 
-function setBreakerMark(option: any) {
-    props.breaker.mark = option.mark
+function setContactorMark(option: any) {
+    props.contactor.mark = option.mark
 }
 </script>
 
@@ -116,7 +116,6 @@ td {
     padding-left: 5px;
     color: var(--main-text-disabled-color);
 }
-
 .prop-value-input {
     display: flex;
     align-items: center;

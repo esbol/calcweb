@@ -1,4 +1,5 @@
 <template>
+    <div class="back" @click="open=false" v-if="open"></div>
     <div class="select-container">
 
         <div class="selected-item" @click="open = !open"> {{ getOptionValue(selectedValue) }}</div>
@@ -11,7 +12,7 @@
             </span>
         </div>
         <div class="select-window" v-if="open">
-     
+
             <div class="item" v-for="option in options" @click="selectedChange(option)">
                 {{ getOptionValue(option) }}
             </div>
@@ -73,7 +74,7 @@ function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
     position: relative;
     background-color: transparent;
     box-sizing: border-box;
-  
+
 }
 
 .btn {
@@ -92,17 +93,18 @@ function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
     border: 1px solid var(--main-border-color);
     background: red;
     box-shadow: 2px 2px 1px gray;
-    z-index: 1000;
+    z-index: 2000;
 }
 
 .selected-item {
     display: flex;
     align-items: center;
     padding-left: 5px;
-   
+    cursor: pointer;
     white-space: nowrap;
     overflow: hidden;
     box-sizing: border-box;
+    box-shadow: -1px -1px 1px gray;
 }
 
 .item {
@@ -128,7 +130,17 @@ function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
         'GRAD' 0,
         'opsz' 48
 }
+
 span {
     font-size: 22px;
+}
+.back {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: transparent;
+    z-index: 1000;
 }
 </style>

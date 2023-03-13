@@ -1,7 +1,8 @@
 <template>
     <div class="section-container" @click="store.selectedObject = section" :class="{ selected: hover }">
         <div class="text_left" :class="{ hover_text: hover }">
-            {{ section.nameOfPlane }} гр.1-ВВГнг-(А)LS 3x16 - 20м
+            {{ section.nameOfPlane }}-{{ section.cable.mark }} - {{ section.cable.colCores }}x{{ section.cable.square }} -
+            {{ section.cable.length }}м
         </div>
         <div class="line" :class="{ hover_bg: hover }" />
         <div class="text_rigth" :class="{ hover_text: hover }">
@@ -11,15 +12,16 @@
 
         </div>
 
-        <div class="label" :class="{ label_hover: labelHover }" @mouseenter="labelHover = true" @mouseleave="labelHover = false"
-            v-if="hover" @click="$emit('clk', $event, 0)">
+        <div class="label" :class="{ label_hover: labelHover }" @mouseenter="labelHover = true"
+            @mouseleave="labelHover = false" v-if="labelShow" @click="$emit('clk', $event, 0, section)">
             <span class="material-symbols-outlined">
                 add
             </span>
 
 
         </div>
-    
+
+      
     </div>
 </template>
 
@@ -31,6 +33,7 @@ import { store } from '@/store/store';
 import { inject, ref, watch, watchEffect } from 'vue';
 
 const labelHover = ref(false)
+const labelShow = ref(false)
 const hover = ref(false)
 
 const props = defineProps({
@@ -44,19 +47,32 @@ const props = defineProps({
     }
 })
 
+const feeder = store.selectedPanel?.feeders.find(f =>
+    f.sConsumer === props.section || f.sContactor === props.section)
+
+
 
 
 watchEffect(() => {
     if (store.selectedObject === props.section) {
         hover.value = true
+        if (feeder?.contactor == null) {
+            labelShow.value = true
+        } else {
+            labelShow.value = false
+        }
     } else {
         hover.value = false
+        labelShow.value = false
     }
 })
 
 </script>
 
 <style scoped>
+
+
+
 .label_hover {
     transform: scale(1.5);
 }
@@ -102,7 +118,7 @@ span {
 
 .text_left {
     position: absolute;
-    top: 200px;
+    top: 190px;
     left: 0;
     margin-left: 20px;
     transform: rotate(-90deg);
@@ -113,7 +129,7 @@ span {
 
 .text_rigth {
     position: absolute;
-    top: 200px;
+    top: 190px;
     left: 50%;
     margin-left: 12px;
     transform: rotate(-90deg);

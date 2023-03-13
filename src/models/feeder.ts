@@ -1,3 +1,4 @@
+import { Contactors } from './bd/contactors';
 import { Cables } from './bd/cables';
 import { Breakers } from './bd/breakers';
 import { Contact } from './contact';
@@ -9,9 +10,22 @@ import { SectionLine } from "./sectionline";
 import { Panel } from './panel';
 
 export class Feeder {
-    
+    //#region panel
+    private _panel: Panel 
+
+    public set panel(v: Panel) {
+        this._panel = v;
+    }
+
+    public get panel(): Panel{
+        return this._panel
+    }
+    //#endregion
+
+
     constructor(panel: Panel, connectContact: Contact){
 
+        this._panel = panel
         this._breaker = new Breaker(Breakers[0].mark)
         this._breaker.nameOfPlane ='QF' + (panel.feeders.length + 1).toString()
         this._sBreaker = new SectionLine()
@@ -26,7 +40,7 @@ export class Feeder {
         
         this._sConsumer.setEndContact(consumer.inContact)
         this._sConsumer.description = 'sConsumer'
-        this._sConsumer.nameOfPlane = 's' + (panel.feeders.length + 1).toString()
+        this._sConsumer.nameOfPlane = 'M' + (panel.feeders.length + 1).toString()
         this._sConsumer.cable.mark = Cables[0].mark
         this._sConsumer.setStartContact(this._breaker.outContact)
     }
@@ -129,5 +143,21 @@ export class Feeder {
 
         
         
+    }
+
+    public setNewContactor():void {
+        this.contactor = new Contactor(Contactors[0].mark)
+        this.sContactor = new SectionLine()
+        this.sContactor.setEndContact(this.contactor.inContact)
+        this.sContactor.cable.mark = Cables[0].mark
+        this.sContactor.nameOfPlane = 'M' + (this._panel.feeders.indexOf(this)+1).toString() + '-1'
+        this.sConsumer.nameOfPlane = 'M' + (this._panel.feeders.indexOf(this) +1 ).toString() + '-2'
+
+        if(this.breaker!=null){
+            this.sContactor.setStartContact(this.breaker.outContact)
+        }
+
+        this.sConsumer.setStartContact(this.contactor.outContact)
+        this.calc()
     }
 }

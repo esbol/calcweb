@@ -7,7 +7,10 @@
                 <div class="name-prop">Обозначение</div>
             </td>
             <td>
-                <div class="prop-value">{{ section.nameOfPlane }}</div>
+                <div class="prop-value-input">
+                    <TextInput :input-value="section.nameOfPlane" @focusout="section.nameOfPlane = $event.target.value"
+                        :can-edite="true" />
+                </div>
             </td>
         </tr>
 
@@ -16,7 +19,10 @@
                 <div class="name-prop">Длина</div>
             </td>
             <td>
-                <div class="prop-value">{{ section.length }}</div>
+                <div class="prop-value-input">
+                    <NumberInput :input-value="section.cable.length"
+                        @focusout="section.cable.length = parseFloat($event.target.value)" :can-edite="true" />
+                </div>
             </td>
         </tr>
         <tr>
@@ -24,7 +30,7 @@
                 <div class="name-prop">Кол. фаз</div>
             </td>
             <td>
-                <div class="prop-value">{{ section.colPhase }}</div>
+                <div class="prop-value-input"><Select :selected-value="section.colPhase" :display-path="'0'" :options="ColPhases" @change="setColPhase" /></div>
             </td>
         </tr>
         <tr>
@@ -53,8 +59,7 @@
                 <div class="name-prop">Марка</div>
             </td>
             <td>
-                 <Select :selected-value="section.cable.mark" :display-path="'mark'"
-                        :options="Cables" @change="setCableMark" />
+                <Select :selected-value="section.cable" :display-path="'mark'" :options="Cables" @change="setCableMark" />
             </td>
         </tr>
         <tr>
@@ -86,14 +91,19 @@
 </template>
 
 <script setup lang="ts">
-
+import TextInput from './UI/TextInput.vue';
 import Select from './UI/Select.vue'
 import { Cables } from "@/models/bd/cables";
 import { SectionLine } from "@/models/sectionline";
+import NumberInput from './UI/NumberInput.vue';
+import { ColPhases } from '@/models/normativs';
 
 
 function setCableMark(option: any) {
-    props.section.cable.mark = option
+    props.section.cable.mark = option.mark
+}
+function setColPhase(option: any) {
+    props.section.colPhase= option
 }
 
 const props = defineProps({
@@ -122,7 +132,7 @@ tr {
     border-left: 1px solid var(--main-border-color);
     box-sizing: border-box;
     padding: 0;
- 
+
 }
 
 td {
@@ -143,5 +153,14 @@ td {
     align-items: center;
     height: 100%;
     padding-left: 5px;
+    color: var(--main-text-disabled-color);
 }
-</style>
+
+.prop-value-input {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    border-left: 1px solid var(--main-border-color);
+
+}</style>

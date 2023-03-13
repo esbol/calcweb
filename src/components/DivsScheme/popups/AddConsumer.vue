@@ -1,7 +1,7 @@
 <template>
     <div class="wrapp">
-        <div class="row" @click="addContactor">
-            Добавить контактор
+        <div class="row" @click="addConsumer">
+            Добавить нагрузку
         </div>
         <div class="row" @click="$emit('close')">
             Добавить пускатель
@@ -13,6 +13,8 @@
 </template>
 
 <script setup lang="ts">
+import { Contactor } from '@/models/contactor';
+import { Feeder } from '@/models/feeder';
 import { SectionLine } from '@/models/sectionline';
 import { store } from '@/store/store';
 
@@ -23,16 +25,30 @@ const props = defineProps({
 
 const emits = defineEmits(['close'])
 
-function addContactor() {
+function addConsumer() {
 
 
     emits('close')
-    const sl = props.arg as SectionLine
+    const cont = props.arg as Contactor
 
     const feeder = store.selectedPanel?.feeders.find(f =>
-        f.sConsumer === sl || f.sContactor === sl)
+        f.contactor === cont)
 
-    if (feeder) feeder.setNewContactor()
+    if (feeder){
+        const pan = feeder.panel
+        const f = new Feeder(pan, cont.outContact)
+        const index = pan.feeders.indexOf(feeder)
+        pan.feeders.splice(cont.outContact.getSlaveSections().length - 1, 0, f)
+        
+        f.breaker = null
+        f.contactor = null
+        f.sBreaker = null
+        f.sContactor = null
+        f.sConsumer.nameOfPlane = 'M' + (index + 1) + '-' + (cont.outContact.getSlaveSections().length +1)
+        console.log(cont.outContact.getSlaveSections().length);
+        
+        f.calc()
+    }
 }
 
 </script>

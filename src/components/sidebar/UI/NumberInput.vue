@@ -21,18 +21,16 @@ function selectAll(target: HTMLInputElement) {
 
 <style scoped>
 input {
+   height: 100%;
     width: 100%;
-    height: 100%;
+    
     box-sizing: border-box;
     display: block;
     background: transparent;
-
-    border: none;
     box-shadow: -1px -1px 1px gray;
-    padding-left: 5px;
-
+    border: none;
+    padding: 5px;
     color: var(--row-text-color);
-    text-align: left;
 }
 
 input:focus {

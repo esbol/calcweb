@@ -24,11 +24,28 @@ export class SectionLine {
         this.calculationModes.push(new CalculationMode(CalculationModesNames[0], this))
     }
     id: number = Math.random()
+
+
+    //#region isInPanel
+    private _isInPanel: boolean = false;
+    public get isInPanel(): boolean {
+        return this._isInPanel;
+    }
+    public set isInPanel(v: boolean) {
+        this._isInPanel = v;
+    }
+    //#endregion
+
     //#region colPhase
 
     private _colPhase: number = 1;
     public get colPhase(): number {
         return this._colPhase;
+    }
+    public set colPhase(v: number) {
+        if(v === this._colPhase) return
+        this._colPhase = v;
+        this.supplyPanels.forEach(p=>p.calc())
     }
     //#endregion
 

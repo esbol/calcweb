@@ -1,11 +1,10 @@
 <template>
-    <div class="main-wrap"      @click="clearSelect" id="mainWrap">
-        <div id="divContainer"
-    
-         class="scheme-container" v-if="store.selectedPanel != null">
+    <div class="main-wrap" @click="clearSelect" id="mainWrap">
+        <div id="divContainer" class="scheme-container" v-if="store.selectedPanel != null">
             <A3 />
             <div class="inApparate">
-                <BreakerV v-if="store.selectedPanel.inApparate != null" :breaker=store.selectedPanel.inApparate />
+                <BreakerV :showPhases="true" v-if="store.selectedPanel.inApparate != null"
+                    :breaker=store.selectedPanel.inApparate />
             </div>
 
             <div class="shinaDiv">
@@ -13,23 +12,28 @@
             </div>
 
             <div class="rows-container">
-                <div class="feeders" v-for="feeder in store.selectedPanel.feeders" :key="feeder.id">
-                    <BreakerV v-if="feeder.breaker != null" :breaker="feeder.breaker" />
-                    <SectionV @clk="popup" :length="'200px'" v-if="feeder.sContactor != null" :section="feeder.sContactor" />
-                    <SectionV @clk="popup" :length="'500px'" v-else :section="feeder.sConsumer" />
-                    <ContactorV v-if="feeder.contactor != null" :contactor="feeder.contactor" />
-                    <SectionV :length="'200px'" v-if="feeder.contactor != null" :section="feeder.sConsumer" />
-                    <ConsV :consumer="feeder.consumer" />
-                </div>
-                <div class="plus">
-                    <PlusV />
-                </div>
 
+             
+                    <div class="feeders" v-for="feeder in store.selectedPanel.feeders" :key="feeder.id">
+                        <BreakerV :showPhases="true" v-if="feeder.breaker != null" :breaker="feeder.breaker" />
+                        <SectionV @clk="popup" :length="'215px'" v-if="feeder.sContactor != null"
+                            :section="feeder.sContactor" />
+                        <SectionV @clk="popup" :length="'500px'" v-else :section="feeder.sConsumer" />
+                        <ContactorV @clk="popupC" v-if="feeder.contactor != null" :contactor="feeder.contactor" />
+                        <SectionV :length="'215px'" v-if="feeder.contactor != null" :section="feeder.sConsumer" />
+                        <ConsV :consumer="feeder.consumer" />
+                    </div>
+
+                    <div class="plus">
+                        <PlusV />
+                    </div>
+             
             </div>
 
         </div>
     </div>
-<Popup @close="showPopup=false" :indexSlot="indexSlot" v-if="showPopup" :left="popupCoords.x + 'px'" :top="popupCoords.y + 'px'"></Popup>
+    <Popup :arg="arg" @close="showPopup = false" :indexSlot="indexSlot" v-if="showPopup" :left="popupCoords.x + 'px'"
+        :top="popupCoords.y + 'px'"></Popup>
 </template>
 
 <script setup lang="ts">
@@ -64,20 +68,26 @@ const shinaWidth = computed(() => {
 
 })
 
-const popupCoords = ref({x:0, y:0})
+const popupCoords = ref({ x: 0, y: 0 })
 const showPopup = ref(false)
 const indexSlot = ref(0)
+const arg = ref({})
 
-function popup(event: MouseEvent, index: number){
+function popup(event: MouseEvent, index: number, argumetn: any) {
     showPopup.value = true
     indexSlot.value = index
-    popupCoords.value = {x:event.clientX, y:event.clientY}
-    
+    popupCoords.value = { x: event.clientX, y: event.clientY }
+    arg.value = argumetn
 }
-
-function clearSelect(event: MouseEvent){
+function popupC(event: MouseEvent, index: number, argumetn: any) {
+    showPopup.value = true
+    indexSlot.value = index
+    popupCoords.value = { x: event.clientX, y: event.clientY }
+    arg.value = argumetn
+}
+function clearSelect(event: MouseEvent) {
     const target = event.target as Element
-    if(target.className == 'innerFrame' || target.className == 'main-wrap' ){
+    if (target.className == 'innerFrame' || target.className == 'main-wrap') {
         store.selectedObject = null
     }
 }
@@ -85,6 +95,8 @@ function clearSelect(event: MouseEvent){
 </script>
 
 <style>
+
+
 .plus {
     margin-left: 20px;
 }
@@ -113,7 +125,7 @@ function clearSelect(event: MouseEvent){
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 110px;
+    width: auto;
     height: auto;
     border: 0px dashed rgb(134, 73, 73);
 }

@@ -2,7 +2,7 @@
     <div>
         <div class="popup-container">
 
-            <component :is="data[indexSlot]" @close="$emit('close')"></component>
+            <component :arg="arg" :is="data[indexSlot]" @close="$emit('close')"></component>
         </div>
         <div class="back" @click="$emit('close')"></div>
     </div>
@@ -13,9 +13,11 @@
 import { store } from '@/store/store';
 import { ref } from 'vue';
 import AddContactor from './popups/AddContactor.vue';
+import AddConsumer from './popups/AddConsumer.vue';
 
 const data = [
-    AddContactor
+    AddContactor,
+    AddConsumer
 ]
 
 
@@ -32,7 +34,8 @@ const props = defineProps({
     top: {
         type: String,
         required: true
-    }
+    },
+    arg: {}
 })
 
 

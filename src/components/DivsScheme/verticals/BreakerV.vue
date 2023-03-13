@@ -1,11 +1,9 @@
 <template>
-    <div class="breaker-container"
-  
-     @click="store.selectedObject=breaker">
+    <div class="breaker-container" @click="store.selectedObject = breaker">
         <div class="text">
-            <div class="text-name" :class="{ hover_text: hover }">SF19</div>
-            <div class="text-mark" :class="{ hover_text: hover }">ВА47-29М</div>
-            <div class="text-current" :class="{ hover_text: hover }">Iн=10A</div>
+            <div class="text-name" :class="{ hover_text: hover }">{{ breaker.nameOfPlane }}</div>
+            <div class="text-mark" :class="{ hover_text: hover }">{{ breaker.mark }}</div>
+            <div class="text-current" :class="{ hover_text: hover }">Iн={{breaker.nominalCurrent}}A</div>
         </div>
 
 
@@ -20,6 +18,11 @@
 
         <div class="line-after" :class="{ hover_bg: hover }"></div>
 
+        <div class="fases" v-if="showPhases">
+            <div class="phaseLine" v-if="breaker.colPhase = 3" :class="{ hover_bg: hover }"></div>
+            <div class="phaseLine"  :class="{ hover_bg: hover }"></div>
+            <div class="phaseLine" v-if="breaker.colPhase = 3" :class="{ hover_bg: hover }"></div>
+        </div>
     </div>
 </template>
 
@@ -28,13 +31,17 @@
 import { Breaker } from '@/models/breaker';
 import { Contactor } from '@/models/contactor';
 import { store } from '@/store/store';
-import {  ref, watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 
 
 
 const props = defineProps({
     breaker: {
         type: Breaker,
+        required: true
+    },
+    showPhases: {
+        type: Boolean,
         required: true
     }
 })
@@ -53,14 +60,32 @@ watchEffect(() => {
 </script>
 
 <style scoped>
+.fases {
+    width: 15px;
+    height: 13px;
+    border: 0px solid red;
+    position: absolute;
+    top: 10px;
+    left: calc(50% -10px);
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+}
+.phaseLine{
+    width: 100%;
+    height: 1px;
+    background: var(--scheme-line-color);
+    transform: rotate(40deg);
+}
 
 .text {
     position: absolute;
     left: 50px;
-    top: 10px;
+    top: 30px;
 }
+
 .text-name {
-   
+
     color: var(--scheme-line-color);
 }
 
@@ -105,7 +130,7 @@ watchEffect(() => {
 
 .line-before {
     width: 3px;
-    height: 20px;
+    height: 40px;
     background-color: var(--scheme-line-color);
 }
 
