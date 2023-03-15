@@ -16,7 +16,7 @@
             </PropsContainer>
 
             <PropsContainer title="Пусковое устройство" v-if="(store.selectedObject instanceof Contactor)">
-                    <ContactorProps :contactor="store.selectedObject" />
+                    <ContactorProps  />
                 </PropsContainer>
 
             <BusProps v-if="(store.selectedObject instanceof Bus)" :bus="store.selectedObject" />
@@ -33,26 +33,23 @@ import BusProps from "./BusProps.vue";
 import BreakerProps from "./BreakerProps.vue";
 import ConsProps from "./ConsProps.vue";
 import { SectionLine } from "@/models/sectionline";
-import { inject, watch, ref, computed } from "vue";
 import PanelBrowser from "./PanelBrowser.vue";
 import SectionProps from "./SectionProps.vue";
-import { store } from "@/store/store";
 import { Consumer } from "@/models/consumer";
 import { Breaker } from "@/models/breaker";
 import { Contactor } from "@/models/contactor";
+import { useStore } from "vuex";
 
 
+const store = useStore().state
 
 
-// let selectedFeeder = computed(() => {
-//     const selPan = panels.find(p=> p.id===selectedPanelId)
-//     return selPan?.feeders.find(f=> f.id === selectedFeederId)
-// })
 
 
 const props = defineProps({
     show: Boolean,
 })
+
 
 
 </script>

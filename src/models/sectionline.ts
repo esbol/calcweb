@@ -1,3 +1,4 @@
+
 import { Cable } from './cable';
 import { Breaker } from './breaker';
 import { Consumer } from "./consumer";
@@ -7,6 +8,12 @@ import { CalculationMode } from "./calculationmode";
 import { Device } from "./device";
 import { CableEnviroment, CalculationModesNames } from "./normativs";
 import { Panel } from './panel';
+import { CommutateApparate } from './commutateApparate';
+import { calc } from './formuls/calcsection'
+import { Cables } from './bd/cables';
+import { Contactor } from './contactor';
+import { Contactors } from './bd/contactors';
+
 
 export class SectionLine {
     //#region supplyPanels
@@ -21,7 +28,8 @@ export class SectionLine {
 
 
     constructor() {
-        this.calculationModes.push(new CalculationMode(CalculationModesNames[0], this))
+        //console.log('consrtuctor ' + this.modeMax);
+        
     }
     id: number = Math.random()
 
@@ -43,19 +51,16 @@ export class SectionLine {
         return this._colPhase;
     }
     public set colPhase(v: number) {
-        if(v === this._colPhase) return
+        if(v == this._colPhase) return
         this._colPhase = v;
-        this.supplyPanels.forEach(p=>p.calc())
+
     }
     //#endregion
 
     //#region voltage
-    private _voltage: number = 220;
     public get voltage(): number {
-        return this._voltage;
-    }
-    public set voltage(v: number) {
-        this._voltage = v;
+        if(this.colPhase == 1) return 220;
+        else return 380
     }
     //#endregion
 
@@ -110,7 +115,7 @@ export class SectionLine {
     //#endregion
 
     //#region calculationModes
-    private _calculationModes: Array<CalculationMode> = new Array<CalculationMode>();
+    private _calculationModes: Array<CalculationMode> = [new CalculationMode(CalculationModesNames[0], this)];
     public get calculationModes(): Array<CalculationMode> {
         return this._calculationModes;
     }
@@ -121,6 +126,9 @@ export class SectionLine {
     private _modeMax: CalculationMode = this._calculationModes[0];
     public get modeMax(): CalculationMode {
         return this._modeMax;
+    }
+    public set modeMax(v: CalculationMode) {
+        this._modeMax = v;
     }
     //#endregion
 
@@ -166,174 +174,92 @@ export class SectionLine {
     //#endregion
 
     public calc() {
-        this.setSubSections()
-        this.setSubDevices()
-        this.setSubConsumers()
-        this.setColPhase()
-
-        this.setCalculationModes()
-        this.setConsumersToCalcModes()
-
-        this.calculationModes.forEach(m => {
-            m.calc()
-        })
-
-        this.setModeMax()
-
-        this._subSections.forEach(s => s.calc)
+        calc(this)      
     }
 
-    public setSubDevices(): void {
-        this._subDevices.splice(0, this._subDevices.length)
-        const devlist = this._subDevices
-        const endContact = this.endContact
+    public addContactor() {
 
-        if (endContact !== null) recurcy(endContact)
+        
 
-        function recurcy(endC: Contact) {
-            if (devlist.includes(endC.ownDevice) === false) {
-                devlist.push(endC.ownDevice)
-            }
+        let endDevice: Device = new Consumer()
+        if (this.endContact) endDevice = this.endContact.ownDevice
+        
+        
+     
+        let supplyContact: Contact = new Contact(new Consumer())
+        let supplySection: SectionLine = new SectionLine()
 
-            endC.sectionLines.forEach(s => {
-                if (s.startContact === endC) {
-                    if (s.endContact !== null) recurcy(s.endContact)
-                }
-            })
-        }
-        return
-    }
-
-    public setSubConsumers(): void {
-        this._subConsumers.splice(0, this._subConsumers.length)
-        const conslist = this._subConsumers
-
-        this.subDevices.forEach(d => {
-            if (d instanceof Consumer && conslist.includes(d as Consumer) === false) {
-                conslist.push(d as Consumer)
-            }
-
-        })
-
-
-        return
-    }
-
-    public setCalculationModes(): void {
-        //режимы каждого приемника
-        const modes: string[] = [];
-        if (this.subConsumers.length > 0) {
-
-            this.subConsumers.forEach(c => {
-                c.calculationModes.forEach(m => {
-                    if (modes.includes(m) === false) {
-                        modes.push(m.toLowerCase())
+      
+        
+        
+        if (this.startContact) recurcy(this.startContact)
+        function recurcy(contact: Contact) {
+            contact.getSupplySections().forEach(s => {
+                if (s.startContact) {
+                    if (s.startContact.ownDevice instanceof Panel) {
+                        supplyContact = s.startContact
+                    } else {
+                        recurcy(s.startContact)
                     }
-                })
+                }
             })
-
         }
 
+        supplyContact.getSlaveSections().forEach(s => {
+            if (s.subSections.includes(this)) {
+                supplySection = s
 
-        //добавляем отсутсвующие
-        modes.forEach(m => {
-            let exist: boolean = false
-            this.calculationModes.forEach(cm => {
-                if (cm.name === m) {
-                    exist = true
-                }
-            })
-            if (exist === false) {
-                this.calculationModes.push(
-                    new CalculationMode(m, this)
-                )
             }
         })
 
-        const forDel = new Array<CalculationMode>()
-        this.calculationModes.forEach(cm => {
-            if (modes.includes(cm.name) === false) {
-                forDel.push(cm)
-            }
-        })
-        forDel.forEach(cm => {
-            this.calculationModes.splice(
-                this.calculationModes.indexOf(cm), 1
-            )
-        })
+
+        const contactor = new Contactor(Contactors[0].mark)
+
+        
+        this.setEndContact(contactor.inContact)
+       
+       
+
+       
+        
+
+        const sconsumer = new SectionLine()
+        sconsumer.setStartContact(contactor.outContact)
+        if (endDevice) sconsumer.setEndContact(endDevice.inContact)
+
+        
+
+        sconsumer.cable.mark = Cables[0].mark
+        if (supplyContact != null) sconsumer.nameOfPlane = 'M' + (supplyContact.getSlaveSections().indexOf(supplySection) + 1).toString() + '-2'
+
+        this.nameOfPlane = this.nameOfPlane + '-1'
+
+        this.calc()
+        
+       
+       
+
+
 
     }
 
-    private setModeMax(): void {
-        let mMode = this.calculationModes[0]
-        let cur = 0
-        this._calculationModes.forEach(m => {
-            if (m.current > cur) mMode = m
-        })
-        this._modeMax = mMode
-    }
 
-    private setConsumersToCalcModes(): void {
-        this.calculationModes.forEach(cm => {
-            cm.consumers = new Array<Consumer>()
-
-            this.subConsumers.forEach(c => {
-                if (c.calculationModes.includes(cm.name)) {
-                    cm.consumers.push(c)
-                }
-            })
-
-        })
-
-
-    }
+   
 
     public setStartContact(constact: Contact) {
-        if (this._startContact !== null) {
-            this._startContact.removeSection(this);
+        if (this.startContact !== null) {
+            this.startContact.removeSection(this);
         }
         constact.addSection(this)
         this.startContact = constact
     }
 
     public setEndContact(contact: Contact) {
-        if (this._endContact !== null) {
-            this._endContact.removeSection(this)
+        if (this.endContact !== null) {
+            this.endContact.removeSection(this)
         }
         contact.addSection(this)
         this.endContact = contact
     }
 
-    private setSubSections(): void {
-        this._subSections.splice(0, this._subSections.length)
-        const subSec = this._subSections
-
-        if (this._endContact !== null) recurcy(this._endContact)
-        function recurcy(endContact: Contact): void {
-            endContact.getSlaveSections().forEach(s => {
-                if (subSec.includes(s) === false) {
-                    subSec.push(s)
-                }
-                if (s.endContact !== null) recurcy(s.endContact)
-            })
-        }
-    }
-
-
-    private setColPhase(): void {
-        let col:number = 1
-        if (this.endContact !== null) {
-            col = this.endContact.ownDevice.colPhase
-        }
-      
-        this.subSections.forEach(s => {
-           
-            if (s.colPhase > col) {
-                col = s.colPhase
-            }
-        })
-        if(col == 1) this.voltage = 220
-        if(col == 3) this.voltage = 380
-        this._colPhase = col
-    }
 }

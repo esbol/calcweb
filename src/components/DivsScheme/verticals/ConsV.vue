@@ -19,9 +19,10 @@
 <script setup lang="ts">
 
 import { Consumer } from '@/models/consumer';
-import { store } from '@/store/store';
+import { useStore } from 'vuex';
 import {  ref, watchEffect } from 'vue';
 
+const store = useStore().state
 const props = defineProps({
     consumer: {
         type: Consumer,
@@ -115,5 +116,7 @@ watchEffect(() => {
     flex-direction: column;
     align-items: center;
     margin-top: 0px;
+    margin-left: -1px;
+    margin-right: -1px;
 }
 </style>

@@ -14,8 +14,9 @@
 import { Breaker } from "@/models/breaker";
 import { Bus } from "@/models/bus";
 
-import { store } from "@/store/store";
+import { useStore } from "vuex";
 
+const store = useStore().state
 const props = defineProps({
     bus: {
         type: Bus,

@@ -7,24 +7,25 @@ import { Bus } from './bus';
 
 export class Panel extends Device {
     setDataFromDB(mark: string): boolean {
-       return true
+        return true
     }
-    constructor(){
+    constructor() {
         super()
         this.uniteSection.setEndContact(this.outContact)
         this.uniteSection.nameOfPlane = 'uniteSection'
+        this.uniteSection.isInPanel = true
         this.description = 'panel'
-       
+
     }
     readonly outContact: Contact = new Contact(this)
     //#region feeders
     private _feeders: Array<Feeder> = new Array<Feeder>();
-    public get feeders(): Array<Feeder>  {
+    public get feeders(): Array<Feeder> {
         return this._feeders;
     }
     //#endregion
-   
-    
+
+
     //#region uniteSection
     private _uniteSection: SectionLine = new SectionLine();
     public get uniteSection(): SectionLine {
@@ -38,13 +39,14 @@ export class Panel extends Device {
         return this._inApparate;
     }
     public set inApparate(v: CommutateApparate | null) {
+        if (v != null) this._uniteSection.setStartContact(v.outContact)
         this._inApparate = v;
     }
     //#endregion
 
     //#region bus
     private _bus: Bus = new Bus();
-    public get bus(): Bus  {
+    public get bus(): Bus {
         return this._bus;
     }
     public set bus(v: Bus) {
@@ -52,29 +54,46 @@ export class Panel extends Device {
     }
     //#endregion
 
-    public calc(){
-     
-        this.feeders.forEach(f=>{
-            f.calc()
-        })
-        this.uniteSection.calc()
+    public calc() {
 
-        this._uniteSection.subSections.forEach(s=>{
-            if(!s.supplyPanels.includes(this)){
+
+        this.uniteSection.calc()
+        //  this.inApparate?.innerSection.calc()
+        //  this.inApparate?.calc()
+
+
+        this._uniteSection.subSections.forEach(s => {
+            if (!s.supplyPanels.includes(this)) {
                 s.supplyPanels.push(this)
             }
-        } )
-        this._uniteSection.subDevices.forEach(d=>{
+        })
+        this._uniteSection.subDevices.forEach(d => {
             if (!d.supplyPanels.includes(this)) {
                 d.supplyPanels.push(this)
             }
         })
-        
+
+        this.uniteSection.subConsumers.forEach(c => c.calc())
+        this.uniteSection.subSections.forEach(s => s.calc())
+
+        this.uniteSection.subDevices.forEach(d => {
+            if (d instanceof CommutateApparate) {
+                d.calc()
+            }
+        })
+
+
+
     }
 
-    public addFeeder(){
-      
+    public addFeeder() {
+
+
         this._feeders.push(new Feeder(this, this.outContact))
+     
+        
         this.calc()
+
+
     }
 }

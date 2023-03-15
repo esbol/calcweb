@@ -1,6 +1,6 @@
 <template>
     <div class="wrapp">
-        <div class="row" @click="addContactor">
+        <div class="row" @click="addCont">
             Добавить контактор
         </div>
         <div class="row" @click="$emit('close')">
@@ -13,26 +13,30 @@
 </template>
 
 <script setup lang="ts">
+import { Cables } from '@/models/bd/cables';
+import { Contactors } from '@/models/bd/contactors';
+import { Contactor } from '@/models/contactor';
+
+
 import { SectionLine } from '@/models/sectionline';
-import { store } from '@/store/store';
+import { useStore } from 'vuex';
+import { Panel } from '@/models/panel'
 
 
-const props = defineProps({
-    arg: {}
-})
 
 const emits = defineEmits(['close'])
 
-function addContactor() {
+const store = useStore().state
+
+function addCont() {
 
 
     emits('close')
-    const sl = props.arg as SectionLine
+    const sl = store.showPopup.args as SectionLine
+  
+    
+    sl.addContactor()
 
-    const feeder = store.selectedPanel?.feeders.find(f =>
-        f.sConsumer === sl || f.sContactor === sl)
-
-    if (feeder) feeder.setNewContactor()
 }
 
 </script>

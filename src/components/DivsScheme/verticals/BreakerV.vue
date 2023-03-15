@@ -1,40 +1,45 @@
 <template>
-    <div class="breaker-container" @click="store.selectedObject = breaker">
-        <div class="text">
-            <div class="text-name" :class="{ hover_text: hover }">{{ breaker.nameOfPlane }}</div>
-            <div class="text-mark" :class="{ hover_text: hover }">{{ breaker.mark }}</div>
-            <div class="text-current" :class="{ hover_text: hover }">Iн={{breaker.nominalCurrent}}A</div>
+    <div class="b">
+        <div class="breaker-container" @click="store.selectedObject = breaker">
+            <div class="text">
+                <div class="text-name" :class="{ hover_text: hover }">{{ breaker.nameOfPlane }}</div>
+                <div class="text-mark" :class="{ hover_text: hover }">{{ breaker.mark }}</div>
+                <div class="text-current" :class="{ hover_text: hover }">Iн={{ breaker.nominalCurrent }}A</div>
+            </div>
+
+
+            <div class="line-before" :class="{ hover_bg: hover }"></div>
+
+            <div class="boxe">
+                <div class="line" :class="{ hover_bg: hover }" />
+                <div class="lineA" :class="{ hover_border: hover }"></div>
+            </div>
+
+
+
+            <div class="line-after" :class="{ hover_bg: hover }"></div>
+
+            <div class="fases" v-if="showPhases">
+                <div class="phaseLine" v-if="breaker.colPhase === 3" :class="{ hover_bg: hover }"></div>
+                <div class="phaseLine"  :class="{ hover_bg: hover }"></div>
+                <div class="phaseLine" v-if="breaker.colPhase === 3" :class="{ hover_bg: hover }"></div>
+            </div>
         </div>
-
-
-        <div class="line-before" :class="{ hover_bg: hover }"></div>
-
-        <div class="boxe">
-            <div class="line" :class="{ hover_bg: hover }" />
-            <div class="lineA" :class="{ hover_border: hover }"></div>
-        </div>
-
-
-
-        <div class="line-after" :class="{ hover_bg: hover }"></div>
-
-        <div class="fases" v-if="showPhases">
-            <div class="phaseLine" v-if="breaker.colPhase = 3" :class="{ hover_bg: hover }"></div>
-            <div class="phaseLine"  :class="{ hover_bg: hover }"></div>
-            <div class="phaseLine" v-if="breaker.colPhase = 3" :class="{ hover_bg: hover }"></div>
-        </div>
+        <SectionV  v-for="section in breaker.outContact.getSlaveSections()" :section="section"/>
     </div>
+
 </template>
 
 <script setup lang="ts">
 
 import { Breaker } from '@/models/breaker';
 import { Contactor } from '@/models/contactor';
-import { store } from '@/store/store';
+import { SectionLine } from '@/models/sectionline';
+import { useStore } from 'vuex';
 import { ref, watchEffect } from 'vue';
+import SectionV from './SectionV.vue';
 
-
-
+const store = useStore().state
 const props = defineProps({
     breaker: {
         type: Breaker,
@@ -60,6 +65,12 @@ watchEffect(() => {
 </script>
 
 <style scoped>
+.b {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+   height: 100%;
+}
 .fases {
     width: 15px;
     height: 13px;

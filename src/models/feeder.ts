@@ -30,6 +30,7 @@ export class Feeder {
         this._breaker.nameOfPlane ='QF' + (panel.feeders.length + 1).toString()
         this._sBreaker = new SectionLine()
         this._sBreaker.description = 'sBreaker'
+        this._sBreaker.isInPanel = true
         this._sBreaker.setStartContact(connectContact)
         this._sBreaker.setEndContact(this._breaker.inContact)
 
@@ -43,6 +44,7 @@ export class Feeder {
         this._sConsumer.nameOfPlane = 'M' + (panel.feeders.length + 1).toString()
         this._sConsumer.cable.mark = Cables[0].mark
         this._sConsumer.setStartContact(this._breaker.outContact)
+        console.log(this);
     }
   
     id: number = Date.now()
@@ -146,6 +148,8 @@ export class Feeder {
     }
 
     public setNewContactor():void {
+       
+        
         this.contactor = new Contactor(Contactors[0].mark)
         this.sContactor = new SectionLine()
         this.sContactor.setEndContact(this.contactor.inContact)

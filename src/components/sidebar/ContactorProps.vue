@@ -60,19 +60,20 @@ import TextInput from './UI/TextInput.vue';
 import Select from './UI/Select.vue'
 import { Contactor } from '@/models/contactor';
 import { Contactors } from '@/models/bd/contactors';
+import { useStore } from 'vuex';
 
+const contactor = useStore().state.selectedObject as Contactor
 
-
-const props = defineProps({
-    contactor: {
-        type: Contactor,
-        required: true
-    }
-})
+// const props = defineProps({
+//     contactor: {
+//         type: Contactor,
+//         required: true
+//     }
+// })
 
 
 function setContactorMark(option: any) {
-    props.contactor.mark = option.mark
+    contactor.mark = option.mark
 }
 </script>
 

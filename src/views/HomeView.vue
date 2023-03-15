@@ -1,8 +1,8 @@
 <template>
-  <div class="header">header</div>
+  <div class="header">{{ store.state.panels.length }}</div>
   <div class="main" :class="{ sidehidden: sideShow === false, sideshow: sideShow === true }">
     <SideBar :show="sideShow"/>
-    <DivScheme v-if="store.selectedPanel != null"
+    <DivScheme v-if="store.state.selectedPanel != null"
      />
   </div>
   <div class="footer">footer</div>
@@ -13,27 +13,24 @@ import DivScheme from '@/components/DivScheme.vue';
 import { ref, provide, watch } from 'vue'
 import { Panel } from '@/models/panel'
 import SideBar from '@/components/sidebar/SideBar.vue';
-import { store } from '@/store/store';
+
 import { Breaker } from '@/models/breaker';
+import { Breakers } from '@/models/bd/breakers';
 
+import { useStore } from 'vuex';
 
+const store = useStore()
 
 const panel1 = new Panel()
-const panel2 = new Panel()
-panel1.nameOfPlane = 'ШР-1'
-panel2.nameOfPlane = 'ШР-2'
-panel1.addFeeder()
-panel1.calc()
-panel2.calc()
-panel1.inApparate = new Breaker('VSG')
-panel2.inApparate = new Breaker('gkd')
+panel1.inApparate = new Breaker(Breakers[0].mark)
 
-store.panels.push(panel1)
-store.panels.push(panel2)
+store.state.panels.push(panel1)
+store.state.selectedPanel = store.state.panels[0]
+panel1.nameOfPlane='ШР1'
 
 const sideShow = ref(true)
 
-store.selectedPanel = panel1
+
 
 
 

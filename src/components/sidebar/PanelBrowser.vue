@@ -12,8 +12,10 @@
 
 <script setup lang="ts">
 
-import { store } from "@/store/store";
 
+import { useStore } from "vuex";
+
+const store = useStore().state
 
 </script>
 

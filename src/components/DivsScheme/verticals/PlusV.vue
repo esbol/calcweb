@@ -3,7 +3,7 @@
 
         <div class="line" :class="{ hover_border: hover }" />
 
-        <div class="plus_btn" @click="store.selectedPanel?.addFeeder()" @mouseenter="hov" @mouseleave="hover = false"
+        <div class="plus_btn" @click="addFeeder" @mouseenter="hov" @mouseleave="hover = false"
             :class="{ hover_border: hover }">
             <div class="circle" :class="{ hover_border: hover }">
                 <div class="plus_g" :class="{ hover_border: hover }"></div>
@@ -17,14 +17,22 @@
 
 <script setup lang="ts">
 
-import { store } from '@/store/store';
+import { useStore } from 'vuex';
 import { ref } from 'vue';
 
 const hover = ref(false)
 
+const store = useStore()
+
+function addFeeder(){
+    store.state.selectedPanel.addFeeder();
+}
+
 function hov() {
     hover.value = true
 }
+
+
 
 </script>
 

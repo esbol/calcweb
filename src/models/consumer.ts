@@ -12,6 +12,7 @@ export class Consumer extends Device{
         super()
         this.description = 'consumer'
         this._groupNameBySP = 'не указано'
+        this.nameOfPlane = 'cons'
     }
 
     //#region calculationModes
@@ -43,7 +44,6 @@ export class Consumer extends Device{
     public set count(v : number) {
         if (v === this._installPower) return
         this._count = v;
-        this.supplyPanels.forEach(p => p.calc())
     }
     //#endregion
 
@@ -54,7 +54,6 @@ export class Consumer extends Device{
     { 
         if(v === this._installPower) return
         this._installPower = v;
-        this.supplyPanels.forEach(p=>p.calc())
      }
     //#endregion
 
@@ -83,7 +82,7 @@ export class Consumer extends Device{
     { 
         if (v === this._cosf) return
         this._cosf = v; 
-        this.supplyPanels.forEach(p => p.calc())
+    
     }
     //#endregion
 

@@ -9,6 +9,8 @@ export abstract class CommutateApparate extends Device {
         this.innerSection.setStartContact(this.inContact)
         this.innerSection.setEndContact(this.outContact)
         this.mark = mark
+
+        
     }
 
     readonly outContact: Contact = new Contact(this)
@@ -37,8 +39,15 @@ export abstract class CommutateApparate extends Device {
 
 
     public calc(current: number = 0) {
-        this.innerSection.calc()
+       
+        this.colPhase = this.innerSection.colPhase
+      
+        
+       // console.log(this.innerSection);
+        
         let cur = 0
+       
+        
         if (current == 0) cur = this.innerSection.modeMax.current
         else cur = current
 

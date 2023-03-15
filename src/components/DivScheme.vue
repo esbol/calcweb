@@ -1,39 +1,34 @@
 <template>
     <div class="main-wrap" @click="clearSelect" id="mainWrap">
-        <div id="divContainer" class="scheme-container" v-if="store.selectedPanel != null">
+        <div id="divContainer" class="divContainer" v-if="store.selectedPanel != null">
             <A3 />
             <div class="inApparate">
                 <BreakerV :showPhases="true" v-if="store.selectedPanel.inApparate != null"
                     :breaker=store.selectedPanel.inApparate />
             </div>
 
+
             <div class="shinaDiv">
-                <BusV :width="shinaWidth" :bus="store.selectedPanel.bus" />
+                <BusV :bus="store.selectedPanel.bus" />
+            
+          
+
+            <div id="rows" class="rows-container">
+
+
+                <div class="feeders" v-for="section in store.selectedPanel.outContact.getSlaveSections()" :key="section.id">
+                    <SectionV :section="section" />
+                </div>
+
+                <div class="plus">
+                    <PlusV />
+                </div>
+
             </div>
-
-            <div class="rows-container">
-
-             
-                    <div class="feeders" v-for="feeder in store.selectedPanel.feeders" :key="feeder.id">
-                        <BreakerV :showPhases="true" v-if="feeder.breaker != null" :breaker="feeder.breaker" />
-                        <SectionV @clk="popup" :length="'215px'" v-if="feeder.sContactor != null"
-                            :section="feeder.sContactor" />
-                        <SectionV @clk="popup" :length="'500px'" v-else :section="feeder.sConsumer" />
-                        <ContactorV @clk="popupC" v-if="feeder.contactor != null" :contactor="feeder.contactor" />
-                        <SectionV :length="'215px'" v-if="feeder.contactor != null" :section="feeder.sConsumer" />
-                        <ConsV :consumer="feeder.consumer" />
-                    </div>
-
-                    <div class="plus">
-                        <PlusV />
-                    </div>
-             
-            </div>
-
+      </div>
         </div>
+        <Popup />
     </div>
-    <Popup :arg="arg" @close="showPopup = false" :indexSlot="indexSlot" v-if="showPopup" :left="popupCoords.x + 'px'"
-        :top="popupCoords.y + 'px'"></Popup>
 </template>
 
 <script setup lang="ts">
@@ -50,41 +45,17 @@ import A3 from './DivsScheme/A3.vue';
 import { reactive, ref, computed, onMounted, toRefs } from 'vue';
 
 import { addScale } from './DivsScheme/pan'
-import { store } from '@/store/store'
+import { useStore } from 'vuex'
 //#endregion
 
-onMounted(() => { addScale('mainWrap') })
+const store = useStore().state
 
-const shinaWidth = computed(() => {
-    if (store.selectedPanel != null) {
-        if (store.selectedPanel.feeders.length > 2) {
-            return store.selectedPanel.feeders.length * 110 + 90 + 'px'
-        } else {
-            return '300px'
-        }
-    } else {
-        return '300px'
-    }
-
+onMounted(() => { 
+    addScale('mainWrap')  
 })
 
-const popupCoords = ref({ x: 0, y: 0 })
-const showPopup = ref(false)
-const indexSlot = ref(0)
-const arg = ref({})
 
-function popup(event: MouseEvent, index: number, argumetn: any) {
-    showPopup.value = true
-    indexSlot.value = index
-    popupCoords.value = { x: event.clientX, y: event.clientY }
-    arg.value = argumetn
-}
-function popupC(event: MouseEvent, index: number, argumetn: any) {
-    showPopup.value = true
-    indexSlot.value = index
-    popupCoords.value = { x: event.clientX, y: event.clientY }
-    arg.value = argumetn
-}
+
 function clearSelect(event: MouseEvent) {
     const target = event.target as Element
     if (target.className == 'innerFrame' || target.className == 'main-wrap') {
@@ -95,15 +66,14 @@ function clearSelect(event: MouseEvent) {
 </script>
 
 <style>
-
-
 .plus {
     margin-left: 20px;
 }
 
 .rows-container {
     display: flex;
-    margin-left: 100px;
+    height: 750px;
+    box-sizing: border-box;
 }
 
 .shinaDiv {
@@ -113,6 +83,7 @@ function clearSelect(event: MouseEvent) {
 .inApparate {
     margin-top: 50px;
     margin-left: 150px;
+    height: 100px;
 }
 
 /* ::selection {
@@ -120,14 +91,15 @@ function clearSelect(event: MouseEvent) {
 } */
 
 .feeders {
-    flex-grow: 0;
+
 
     display: flex;
     flex-direction: column;
-    align-items: center;
+   
     width: auto;
-    height: auto;
+    height: 100%;
     border: 0px dashed rgb(134, 73, 73);
+
 }
 
 :root {
@@ -138,10 +110,11 @@ function clearSelect(event: MouseEvent) {
 }
 
 
-.scheme-container {
+.divContainer {
     background: white;
     display: flex;
     flex-direction: column;
+    align-items: start;
     width: 1680px;
     height: 1188px;
     position: relative;

@@ -46,7 +46,7 @@
         <div class="name-prop">Резервный</div>
         <div class="prop-value">{{ consumer.count }}</div>
     </div>
-    <div class="row">
+    <div class="row" v-if="consumer.supplyPanels.length > 0">
         <div class="name-prop">Подключен к</div>
         <div class="prop-value">{{ consumer.supplyPanels[0].nameOfPlane }}</div>
     </div>
@@ -70,7 +70,7 @@ const props = defineProps({
 
 function setColPhase(n: number){
     props.consumer.colPhase = n
-    console.log(props.consumer.colPhase);
+    props.consumer.supplyPanels[0].calc()
     
 }
 

@@ -1,42 +1,27 @@
 <template>
-    <div>
+    <div v-if="store.showPopup.show">
         <div class="popup-container">
 
-            <component :arg="arg" :is="data[indexSlot]" @close="$emit('close')"></component>
+            <component :is="components[store.showPopup.componentIndx]" @close="store.showPopup.show=false"></component>
         </div>
-        <div class="back" @click="$emit('close')"></div>
+        <div class="back" @click="store.showPopup.show = false"></div>
     </div>
 </template>
 
 <script setup lang="ts">
 
-import { store } from '@/store/store';
-import { ref } from 'vue';
-import AddContactor from './popups/AddContactor.vue';
 import AddConsumer from './popups/AddConsumer.vue';
+import AddContactor from './popups/AddContactor.vue';
+import { useStore } from 'vuex';
+import { ref, computed } from 'vue';
 
-const data = [
+const components = [
     AddContactor,
     AddConsumer
 ]
-
-
-
-const props = defineProps({
-    indexSlot: {
-        type: Number,
-        required: true
-    },
-    left: {
-        type: String,
-        required: true
-    },
-    top: {
-        type: String,
-        required: true
-    },
-    arg: {}
-})
+const store = useStore().state
+const x = computed(()=> store.showPopup.x + 'px')
+const y = computed(() => store.showPopup.y + 'px')
 
 
 </script>
@@ -49,17 +34,17 @@ const props = defineProps({
     width: 100vw;
     height: 100vh;
     background-color: transparent;
-    z-index: 1000;
+    z-index: 4000;
 }
 
 .popup-container {
     position: fixed;
-    left: v-bind(left);
-    top: v-bind(top);
+    left: v-bind(x);
+    top: v-bind(y);
     box-shadow: 2px 2px 2px gray;
     border: 1px solid rgb(201, 201, 201);
     background-color: white;
-
-    z-index: 2000;
+ 
+    z-index: 5000;
 }
 </style>

@@ -8,16 +8,13 @@
 
 import { Bus } from '@/models/bus';
 import { Consumer } from '@/models/consumer';
-import { store } from '@/store/store';
+import { useStore } from 'vuex';
 import { ref, watchEffect } from 'vue';
 
+const store = useStore().state
 const props = defineProps({
     bus: {
         type: Bus,
-        required: true
-    },
-    width: {
-        type: String,
         required: true
     }
 })
@@ -60,7 +57,7 @@ watchEffect(() => {
 .bus-container {
     cursor: pointer;
     position: relative;
-    width: v-bind(width);
+    width: 100%;
     height: 12px;
     border: 3px solid var(--scheme-line-color);
 

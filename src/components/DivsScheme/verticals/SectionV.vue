@@ -1,54 +1,103 @@
 <template>
-    <div class="section-container" @click="store.selectedObject = section" :class="{ selected: hover }">
-        <div class="text_left" :class="{ hover_text: hover }">
-            {{ section.nameOfPlane }}-{{ section.cable.mark }} - {{ section.cable.colCores }}x{{ section.cable.square }} -
-            {{ section.cable.length }}м
-        </div>
-        <div class="line" :class="{ hover_bg: hover }" />
-        <div class="text_rigth" :class="{ hover_text: hover }">
-            лоток Л1-500x200 - 15м
-        </div>
-        <div class="section" :class="{ hover_border: hover }">
+    <div class="s">
+
+        <div class="section-container" v-if="!section.isInPanel" @click="store.selectedObject = section"
+            :class="{ selected: hover }">
+            <div class="text_left" :class="{ hover_text: hover }">
+                {{ section.nameOfPlane }}-{{ section.cable.mark }} - {{ section.cable.colCores }}x{{ section.cable.square }}
+                -
+                {{ section.cable.length }}м
+            </div>
+            <div class="line" :class="{ hover_bg: hover }" />
+            <div class="text_rigth" :class="{ hover_text: hover }">
+                лоток Л1-500x200 - 15м
+            </div>
+            <div class="section" :class="{ hover_border: hover }">
+
+            </div>
+
+            <div class="label" :class="{ label_hover: labelHover }" @mouseenter="labelHover = true"
+                @mouseleave="labelHover = false" v-if="labelShow" @click="showPopup($event)">
+                <span class="material-symbols-outlined">
+                    add
+                </span>
+
+
+            </div>
+
 
         </div>
 
-        <div class="label" :class="{ label_hover: labelHover }" @mouseenter="labelHover = true"
-            @mouseleave="labelHover = false" v-if="labelShow" @click="$emit('clk', $event, 0, section)">
-            <span class="material-symbols-outlined">
-                add
-            </span>
-
-
-        </div>
-
-      
+        <BreakerV :breaker="breaker" :showPhases="true" v-if="breakerShow" />
+        <ConsV :consumer="consumer" v-if="consumerShow" />
+        <ContactorV :contactor="contactor" v-if="contactorShow" />
     </div>
 </template>
 
 <script setup lang="ts">
 
-
+import ContactorV from './ContactorV.vue';
+import BreakerV from './BreakerV.vue';
+import ConsV from './ConsV.vue';
+import { Consumer } from '@/models/consumer';
 import { SectionLine } from '@/models/sectionline';
-import { store } from '@/store/store';
-import { inject, ref, watch, watchEffect } from 'vue';
+import { useStore } from 'vuex';
+import { reactive, ref, watch, watchEffect, computed } from 'vue';
+import { Breaker } from '@/models/breaker';
+import { Contactor } from '@/models/contactor';
 
+
+const store = useStore().state
 const labelHover = ref(false)
 const labelShow = ref(false)
 const hover = ref(false)
+
+
+let breaker: Breaker
+let consumer: Consumer
+let contactor: Contactor
+
+function showPopup(event: MouseEvent) {
+    store.showPopup.x = event.clientX,
+        store.showPopup.y = event.clientY
+    store.showPopup.componentIndx = 0
+    store.showPopup.args = props.section
+    store.showPopup.show = true
+}
 
 const props = defineProps({
     section: {
         type: SectionLine,
         required: true
-    },
-    length: {
-        type: String,
-        required: true
     }
 })
 
-const feeder = store.selectedPanel?.feeders.find(f =>
-    f.sConsumer === props.section || f.sContactor === props.section)
+const breakerShow = computed(() => {
+    if (props.section.endContact != null) {
+        if (props.section.endContact.ownDevice instanceof Breaker) {
+            breaker = props.section.endContact.ownDevice as Breaker
+            return true
+        } else return false
+    } else return false
+})
+
+const contactorShow = computed(() => {
+    if (props.section.endContact != null) {
+        if (props.section.endContact.ownDevice instanceof Contactor) {
+            contactor = props.section.endContact.ownDevice as Contactor
+            return true
+        } else return false
+    } else return false
+})
+
+const consumerShow = computed(() => {
+    if (props.section.endContact != null) {
+        if (props.section.endContact.ownDevice instanceof Consumer) {
+            consumer = props.section.endContact.ownDevice as Consumer
+            return true
+        } else return false
+    } else return false
+})
 
 
 
@@ -56,10 +105,10 @@ const feeder = store.selectedPanel?.feeders.find(f =>
 watchEffect(() => {
     if (store.selectedObject === props.section) {
         hover.value = true
-        if (feeder?.contactor == null) {
-            labelShow.value = true
-        } else {
+        if (props.section.startContact?.ownDevice instanceof Contactor || props.section.endContact?.ownDevice instanceof Contactor) {
             labelShow.value = false
+        } else {
+            labelShow.value = true
         }
     } else {
         hover.value = false
@@ -70,9 +119,13 @@ watchEffect(() => {
 </script>
 
 <style scoped>
-
-
-
+.s{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    height: 100%;
+}
 .label_hover {
     transform: scale(1.5);
 }
@@ -106,9 +159,10 @@ span {
     cursor: pointer;
     position: relative;
     width: 70px;
-    height: v-bind(length);
     border: 0px dashed gray;
-
+    min-height: 220px;
+    height: 100%;
+    flex-grow: 1;
 }
 
 .selected {
@@ -144,6 +198,7 @@ span {
     left: calc(50% - 1px);
     width: 3px;
     height: 100%;
+   
     background-color: var(--scheme-line-color);
 }
 
