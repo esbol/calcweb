@@ -4,6 +4,8 @@ import { Device } from "./device";
 import { Feeder } from "./feeder";
 import { CommutateApparate } from './commutateApparate';
 import { Bus } from './bus';
+import { addOneConsumerFeeder } from './schemeActions/schemeactions';
+
 
 export class Panel extends Device {
     setDataFromDB(mark: string): boolean {
@@ -58,25 +60,15 @@ export class Panel extends Device {
 
 
         this.uniteSection.calc()
-        //  this.inApparate?.innerSection.calc()
-        //  this.inApparate?.calc()
-
-
-        this._uniteSection.subSections.forEach(s => {
-            if (!s.supplyPanels.includes(this)) {
-                s.supplyPanels.push(this)
-            }
-        })
-        this._uniteSection.subDevices.forEach(d => {
-            if (!d.supplyPanels.includes(this)) {
-                d.supplyPanels.push(this)
-            }
-        })
-
-        this.uniteSection.subConsumers.forEach(c => c.calc())
-        this.uniteSection.subSections.forEach(s => s.calc())
+     
+      
+        this.uniteSection.subSections.forEach(s =>{
+            if(!s.supplyPanels.includes(this)) s.supplyPanels.push(this)
+            s.calc()
+        } )
 
         this.uniteSection.subDevices.forEach(d => {
+            if (!d.supplyPanels.includes(this)) d.supplyPanels.push(this)
             if (d instanceof CommutateApparate) {
                 d.calc()
             }
@@ -87,13 +79,8 @@ export class Panel extends Device {
     }
 
     public addFeeder() {
-
-
-        this._feeders.push(new Feeder(this, this.outContact))
-     
+        console.log(this.outContact.getSlaveSections().length);
         
-        this.calc()
-
-
+        addOneConsumerFeeder(this)
     }
 }

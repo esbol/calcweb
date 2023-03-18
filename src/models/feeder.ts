@@ -44,7 +44,7 @@ export class Feeder {
         this._sConsumer.nameOfPlane = 'M' + (panel.feeders.length + 1).toString()
         this._sConsumer.cable.mark = Cables[0].mark
         this._sConsumer.setStartContact(this._breaker.outContact)
-        console.log(this);
+    
     }
   
     id: number = Date.now()

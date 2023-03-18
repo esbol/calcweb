@@ -1,15 +1,15 @@
 <template>
     <div class="contactor-container" @click="store.selectedObject = contactor">
-        <div class="text"  v-if="contactor.outContact.getSlaveSections().length === 1" :class="{ hover_text: hover }">
+        <div class="text" v-if="contactor.outContact.getSlaveSections().length === 1" :class="{ hover_text: hover }">
             <span>{{ contactor.nameOfPlane }}<br></span>
             <span>{{ contactor.mark }}<br></span>
             <span>In={{ contactor.nominalCurrent }}A<br></span>
         </div>
-         <div v-else class="text_w" :class="{ hover_text: hover }">
-                <span>{{ contactor.nameOfPlane }}<br></span>
-                <span>{{ contactor.mark }}<br></span>
-                <span>In={{ contactor.nominalCurrent }}A<br></span>
-            </div>
+        <div v-else class="text_w" :class="{ hover_text: hover }">
+            <span>{{ contactor.nameOfPlane }}<br></span>
+            <span>{{ contactor.mark }}<br></span>
+            <span>In={{ contactor.nominalCurrent }}A<br></span>
+        </div>
         <div class="line-before" :class="{ hover_bg: hover }"></div>
 
         <div v-if="contactor.outContact.getSlaveSections().length === 1" class="contactor" :class="{ hover_border: hover }">
@@ -19,7 +19,8 @@
         <div v-else class="contactor_w" :class="{ hover_border: hover }">
             <div class="line_w" :class="{ hover_bg: hover }" />
         </div>
-        <div class="line-after" v-if="contactor.outContact.getSlaveSections().length === 1" :class="{ hover_bg: hover }"></div>
+        <div class="line-after" v-if="contactor.outContact.getSlaveSections().length === 1" :class="{ hover_bg: hover }">
+        </div>
 
         <div class="label" :class="{ label_hover: labelHover }" @mouseenter="labelHover = true"
             @mouseleave="labelHover = false" v-if="labelShow" @click="showPopup($event)">
@@ -30,8 +31,11 @@
 
         </div>
     </div>
+
     <div class="c">
-        <SectionV v-for="section in contactor.outContact.getSlaveSections()" :section="section" />
+        
+      <SectionV v-for="section in contactor.outContact.getSlaveSections()" :section="section" />
+ 
     </div>
 </template>
 
@@ -63,8 +67,8 @@ function showPopup(event: MouseEvent) {
 
 
 watchEffect(() => {
-    
-    
+
+
     if (store.selectedObject === props.contactor) {
         hover.value = true
         labelShow.value = true
@@ -77,6 +81,8 @@ watchEffect(() => {
 </script>
 
 <style scoped>
+
+
 .c {
     display: flex;
     flex-direction: row;
@@ -114,8 +120,9 @@ watchEffect(() => {
     left: calc(100% - 3px);
     position: absolute;
 }
+
 .text_w {
-    top:-50px;
+    top: -50px;
     position: absolute;
     left: 0;
 }
@@ -141,7 +148,7 @@ span {
     cursor: pointer;
     position: relative;
     width: calc(100% - 70px);
-    height: 70px;
+   
     border: 0px dashed gray;
     display: flex;
     flex-direction: column;
@@ -167,6 +174,7 @@ span {
     position: relative;
     overflow: hidden;
 }
+
 .contactor_w {
     flex-grow: 0;
     width: 100%;
@@ -177,15 +185,17 @@ span {
     position: relative;
     overflow: hidden;
 }
+
 .line_w {
     position: absolute;
     top: 5px;
     width: 100%;
     height: 1px;
     background-color: var(--scheme-line-color);
-   
-    
+
+
 }
+
 .line {
     position: absolute;
     top: 0;

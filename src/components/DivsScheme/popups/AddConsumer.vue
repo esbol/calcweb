@@ -1,6 +1,6 @@
 <template>
     <div class="wrapp">
-        <div class="row" @click="addConsumer">
+        <div class="row" @click="addCons">
             Добавить нагрузку
         </div>
         <div class="row" @click="$emit('close')">
@@ -13,28 +13,23 @@
 </template>
 
 <script setup lang="ts">
-import { Consumer } from '@/models/consumer';
+
 import { Contactor } from '@/models/contactor';
-import { Feeder } from '@/models/feeder';
-import { SectionLine } from '@/models/sectionline';
+import { addConsumer } from '@/models/schemeActions/schemeactions';
+
 import { useStore } from 'vuex';
 
 
 
 const emits = defineEmits(['close'])
 const store = useStore().state
-function addConsumer() {
+function addCons() {
 
 
     emits('close')
     const cont = store.showPopup.args as Contactor
-
-    const consumer = new Consumer()
-    const sConsumer = new SectionLine()
-    sConsumer.setEndContact(consumer.inContact)
-    sConsumer.setStartContact(cont.outContact)
-    sConsumer.calc()
-    store.selectedPanel?.calc()
+    addConsumer(cont.outContact)
+   
 }
 
 </script>

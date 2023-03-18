@@ -133,23 +133,68 @@ export class SectionLine {
     //#endregion
 
     //#region subConsumers
-    private _subConsumers: Array<Consumer> = new Array<Consumer>();
     public get subConsumers(): Array<Consumer> {
-        return this._subConsumers;
+
+        
+        const conslist = new Array<Consumer>()
+
+        this.subDevices.forEach(d => {
+            if (d instanceof Consumer && conslist.includes(d as Consumer) === false) {
+                conslist.push(d as Consumer)
+            }
+
+        })
+
+        return conslist
     }
     //#endregion
 
     //#region subDevices
-    private _subDevices: Array<Device> = new Array<Device>();
+
     public get subDevices(): Array<Device> {
-        return this._subDevices;
+
+
+        const devlist = new Array<Device>()
+      
+
+        if (this.endContact !== null) recurcy(this.endContact)
+
+        function recurcy(endC: Contact) {
+            if (devlist.includes(endC.ownDevice) === false) {
+                devlist.push(endC.ownDevice)
+            }
+
+            endC.sectionLines.forEach(s => {
+                if (s.startContact === endC) {
+                    if (s.endContact !== null) recurcy(s.endContact)
+                }
+            })
+        }
+
+        return devlist
     }
     //#endregion
 
     //#region subSections
-    private _subSections: Array<SectionLine> = new Array<SectionLine>();
+   
     public get subSections(): Array<SectionLine> {
-        return this._subSections;
+
+    
+        const subSec = new Array<SectionLine>()
+
+        if (this.endContact !== null) recurcy(this.endContact)
+        function recurcy(endContact: Contact): void {
+            endContact.getSlaveSections().forEach(s => {
+                if (subSec.includes(s) === false) {
+                    subSec.push(s)
+                }
+                if (s.endContact !== null) recurcy(s.endContact)
+            })
+        }
+
+
+
+        return subSec
     }
     //#endregion
 
@@ -177,72 +222,7 @@ export class SectionLine {
         calc(this)      
     }
 
-    public addContactor() {
-
-        
-
-        let endDevice: Device = new Consumer()
-        if (this.endContact) endDevice = this.endContact.ownDevice
-        
-        
-     
-        let supplyContact: Contact = new Contact(new Consumer())
-        let supplySection: SectionLine = new SectionLine()
-
-      
-        
-        
-        if (this.startContact) recurcy(this.startContact)
-        function recurcy(contact: Contact) {
-            contact.getSupplySections().forEach(s => {
-                if (s.startContact) {
-                    if (s.startContact.ownDevice instanceof Panel) {
-                        supplyContact = s.startContact
-                    } else {
-                        recurcy(s.startContact)
-                    }
-                }
-            })
-        }
-
-        supplyContact.getSlaveSections().forEach(s => {
-            if (s.subSections.includes(this)) {
-                supplySection = s
-
-            }
-        })
-
-
-        const contactor = new Contactor(Contactors[0].mark)
-
-        
-        this.setEndContact(contactor.inContact)
-       
-       
-
-       
-        
-
-        const sconsumer = new SectionLine()
-        sconsumer.setStartContact(contactor.outContact)
-        if (endDevice) sconsumer.setEndContact(endDevice.inContact)
-
-        
-
-        sconsumer.cable.mark = Cables[0].mark
-        if (supplyContact != null) sconsumer.nameOfPlane = 'M' + (supplyContact.getSlaveSections().indexOf(supplySection) + 1).toString() + '-2'
-
-        this.nameOfPlane = this.nameOfPlane + '-1'
-
-        this.calc()
-        
-       
-       
-
-
-
-    }
-
+   
 
    
 

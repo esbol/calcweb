@@ -13,14 +13,13 @@
 </template>
 
 <script setup lang="ts">
-import { Cables } from '@/models/bd/cables';
-import { Contactors } from '@/models/bd/contactors';
-import { Contactor } from '@/models/contactor';
+
 
 
 import { SectionLine } from '@/models/sectionline';
 import { useStore } from 'vuex';
-import { Panel } from '@/models/panel'
+
+import { addContactor } from '@/models/schemeActions/schemeactions';
 
 
 
@@ -34,8 +33,8 @@ function addCont() {
     emits('close')
     const sl = store.showPopup.args as SectionLine
   
+    addContactor(sl)
     
-    sl.addContactor()
 
 }
 

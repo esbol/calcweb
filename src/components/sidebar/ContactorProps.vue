@@ -64,12 +64,6 @@ import { useStore } from 'vuex';
 
 const contactor = useStore().state.selectedObject as Contactor
 
-// const props = defineProps({
-//     contactor: {
-//         type: Contactor,
-//         required: true
-//     }
-// })
 
 
 function setContactorMark(option: any) {

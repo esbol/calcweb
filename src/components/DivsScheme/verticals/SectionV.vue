@@ -1,4 +1,6 @@
 <template>
+    
+ 
     <div class="s">
 
         <div class="section-container" v-if="!section.isInPanel" @click="store.selectedObject = section"
@@ -32,6 +34,7 @@
         <ConsV :consumer="consumer" v-if="consumerShow" />
         <ContactorV :contactor="contactor" v-if="contactorShow" />
     </div>
+    
 </template>
 
 <script setup lang="ts">
@@ -45,6 +48,8 @@ import { useStore } from 'vuex';
 import { reactive, ref, watch, watchEffect, computed } from 'vue';
 import { Breaker } from '@/models/breaker';
 import { Contactor } from '@/models/contactor';
+import { CommutateApparate } from '@/models/commutateApparate';
+import { Panel } from '@/models/panel';
 
 
 const store = useStore().state
@@ -99,6 +104,25 @@ const consumerShow = computed(() => {
     } else return false
 })
 
+// const height = computed(() => {
+//     if (props.section.startContact != null && props.section.endContact != null) {
+//         //--без автомата
+//         if (props.section.startContact.ownDevice instanceof Panel) {
+//             //--контактор
+//             if(props.section.endContact.ownDevice instanceof CommutateApparate) return 226 + 'px'
+//             //--если консюмер или панель на конце
+//             else return 452 + 'px'
+//         } 
+//         //--автомат
+//         else if (props.section.startContact.ownDevice instanceof CommutateApparate) {
+//             //--контактор
+//             if (props.section.endContact.ownDevice instanceof CommutateApparate) return 226 + 'px'
+//             //--если консюмер или панель на конце
+//             else return 452 + 'px'
+//         }
+        
+//     } else return 0 + 'px'
+// })
 
 
 
@@ -119,6 +143,11 @@ watchEffect(() => {
 </script>
 
 <style scoped>
+
+
+
+
+
 .s{
     display: flex;
     flex-direction: column;
@@ -160,9 +189,9 @@ span {
     position: relative;
     width: 70px;
     border: 0px dashed gray;
-    min-height: 220px;
+    min-height: 212px;
     height: 100%;
-    flex-grow: 1;
+    
 }
 
 .selected {

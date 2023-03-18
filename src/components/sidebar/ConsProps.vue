@@ -1,55 +1,59 @@
 <template>
-    <div class="row">
-        <div class="name-prop">Обозначение</div>
-        <div class="prop-value-input">
-            <TextInput :input-value="consumer.nameOfPlane" @focusout="consumer.nameOfPlane = $event.target.value"
-                :can-edite="true" />
-        </div>
-    </div>
-    <div class="row">
-        <div class="name-prop">Руст.</div>
-        <div class="prop-value-input">
-            <NumberInput :input-value="consumer.installPower"
-                @focusout="consumer.installPower = parseFloat($event.target.value)" :can-edite="true" />
-        </div>
-    </div>
-    <div class="row">
-        <div class="name-prop">Кол. фаз</div>
-        <div class="prop-value-input">
-            <Select 
-            :selected-value="consumer.colPhase"
-            :display-path="'0'" 
-            :options="ColPhases" 
-            @change="setColPhase" />
-        </div>
-    </div>
-    <div class="row">
-        <div class="name-prop">cos f</div>
-        <div class="prop-value-input">
-             <NumberInput :input-value="consumer.cosf"
-                    @focusout="consumer.cosf = parseFloat($event.target.value)" :can-edite="true" />
-        </div>
-    </div>
-    <div class="row">
-        <div class="name-prop">Iрасч.</div>
-        <div class="prop-value">{{ consumer.current.toFixed(3) }}</div>
-    </div>
-    <div class="row">
-        <div class="name-prop">Потеря напряж.</div>
-        <div class="prop-value">1.2%</div>
-    </div>
-    <div class="row">
-        <div class="name-prop">Количество</div>
-        <div class="prop-value">{{ consumer.count }}</div>
-    </div>
-    <div class="row">
-        <div class="name-prop">Резервный</div>
-        <div class="prop-value">{{ consumer.count }}</div>
-    </div>
-    <div class="row" v-if="consumer.supplyPanels.length > 0">
-        <div class="name-prop">Подключен к</div>
-        <div class="prop-value">{{ consumer.supplyPanels[0].nameOfPlane }}</div>
-    </div>
+    <table>
+        <col width="50%" />
+        <col width="50%" />
+        <tr>
+            <td>
+                <div class="name-prop">Обозначение</div>
+            </td>
+            <td>
+                <div class="prop-value-input">
+                    <TextInput :input-value="consumer.nameOfPlane" @focusout="consumer.nameOfPlane = $event.target.value"
+                        :can-edite="true" />
+
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div class="name-prop">Руст.</div>
+            </td>
+            <td>
+                <div class="prop-value-input"><NumberInput :input-value="consumer.installPower"
+                    @focusout="setInstallPower($event.target.value)" :can-edite="true" /></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="name-prop">Кол. фаз</div>
+            </td>
+            <td>
+                <div class="prop-value-input"><Select :selected-value="consumer.colPhase" :display-path="'0'" :options="ColPhases" @change="setColPhase" /></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="name-prop">Cos f</div>
+            </td>
+            <td>
+                <div class="prop-value-input"><NumberInput :input-value="consumer.cosf" @focusout="setCosf($event.target.value)"
+                    :can-edite="true" /></div>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td>
+                <div class="name-prop">Iрасч.</div>
+            </td>
+            <td>
+                <div class="prop-value">{{ consumer.current.toFixed(3) }}</div>
+            </td>
+        </tr>
+    </table>
+
+    
 </template>
 
 <script setup lang="ts">
@@ -68,11 +72,21 @@ const props = defineProps({
     }
 })
 
-function setColPhase(n: number){
+function setColPhase(n: number) {
     props.consumer.colPhase = n
-    props.consumer.supplyPanels[0].calc()
-    
+    props.consumer.supplyPanels.forEach(p=>p.calc())
+
 }
+
+function setInstallPower(n: any) {
+    props.consumer.installPower = parseFloat(n)
+    props.consumer.supplyPanels.forEach(p => p.calc())
+}
+function setCosf(n: any) {
+    props.consumer.cosf = parseFloat(n)
+    props.consumer.supplyPanels.forEach(p => p.calc())
+}
+
 
 </script>
 
@@ -81,19 +95,29 @@ function setColPhase(n: number){
     font-family: Arial, Helvetica, sans-serif
 }
 
-.row {
+table {
     width: 100%;
-    height: 25px;
-    display: flex;
-    align-items: center;
+    border-collapse: collapse;
+    border-spacing: 0px;
+}
 
+tr {
+    height: 25px;
     border-bottom: 1px solid var(--main-border-color);
     border-left: 1px solid var(--main-border-color);
+    box-sizing: border-box;
+    padding: 0;
+
+}
+
+td {
+    border-left: 1px solid var(--main-border-color);
+    padding: 0;
+
 }
 
 .name-prop {
     height: 100%;
-    width: 50%;
     margin-left: 5px;
     display: flex;
     align-items: center;
@@ -103,17 +127,14 @@ function setColPhase(n: number){
     display: flex;
     align-items: center;
     height: 100%;
-    width: 50%;
-    border-left: 1px solid var(--main-border-color);
     padding-left: 5px;
-    color: rgb(140, 140, 140);
+    color: var(--main-text-disabled-color);
 }
-
 .prop-value-input {
     display: flex;
     align-items: center;
     height: 100%;
-    width: 50%;
+    width: 100%;
     border-left: 1px solid var(--main-border-color);
 
 }

@@ -140,9 +140,9 @@ function setColPhase(section: SectionLine): void {
 
 export function calc(secton: SectionLine) {
 
-    setSubSections(secton)
-    setSubDevices(secton)
-    setSubConsumers(secton)
+    // setSubSections(secton)
+    // setSubDevices(secton)
+    // setSubConsumers(secton)
     setColPhase(secton)
 
     setCalculationModes(secton)

@@ -1,8 +1,17 @@
+import { Contactors, IContactor } from './bd/contactors';
 import { CommutateApparate } from "./commutateApparate";
 
 export class Contactor extends CommutateApparate {
     setDataFromDB(mark: string): boolean {
-        return true
+        let cont: IContactor | undefined
+       
+        cont = Contactors.find(c=>c.mark === mark)
+        if(cont != undefined){
+   
+            this.possibleCurrents = cont.possibleCurrents
+            return true
+        }
+        return false
     }
 
     constructor(mark: string) {

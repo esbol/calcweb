@@ -69,9 +69,10 @@ function hov() {
     justify-content: center;
     align-items: center;
     width: 40px;
-    height: 500px;
+    height: 400px;
     border: 2px dashed var(--scheme-line-color);
     border-radius: 5px;
+    margin-top: 150px;
 }
 
 
@@ -83,7 +84,7 @@ function hov() {
     cursor: pointer;
     position: relative;
     width: 70px;
-    height: 540px;
+    
     border: 0px dashed gray;
     display: flex;
     flex-direction: column;
@@ -93,9 +94,5 @@ function hov() {
 }
 
 
-.line {
-    width: 2px;
-    height: 20px;
-    border-left: 2px dashed var(--scheme-line-color);
-}
+
 </style>

@@ -1,6 +1,9 @@
+
 import { Contact } from "./contact";
 import { ELObject } from "./elobject";
 import { Panel } from "./panel";
+
+
 
 
 export abstract class Device extends ELObject {
@@ -34,14 +37,16 @@ export abstract class Device extends ELObject {
 
 
     //#region supplyPanels
-    private _supplyPanels: Array<Panel> = [];
+
+    
+    private _supplyPanels : Array<Panel> = []
     public get supplyPanels(): Array<Panel> {
         return this._supplyPanels;
     }
     public set supplyPanels(v: Array<Panel>) {
         this._supplyPanels = v;
     }
+    
     //#endregion
-
 
 }
