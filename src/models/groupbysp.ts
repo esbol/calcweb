@@ -84,7 +84,7 @@ export class GroupBySP {
             s += c.ratedSPower
             this.consumersCount += c.count
         });
-        this.installPower = i * this.kSprosa
+        this.installPower = i
         this.ratedPower = r * this.kSprosa
         this.ratedQPower = q * this.kSprosa
         this.ratedSPower = s * this.kSprosa

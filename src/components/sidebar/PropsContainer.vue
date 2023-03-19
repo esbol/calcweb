@@ -46,7 +46,7 @@ const props = defineProps({
 .data-container {
     display: flex;
     flex-direction: column;
-    min-height: 300px;
+    min-height: 200px;
     width: 100%;
     justify-content: flex-start;
     align-items: flex-start;

@@ -98,20 +98,18 @@ import { SectionLine } from "@/models/sectionline";
 import NumberInput from './UI/NumberInput.vue';
 import { ColPhases } from '@/models/normativs';
 
+import { useStore } from 'vuex';
+
+const section = useStore().state.selectedObject as SectionLine
 
 function setCableMark(option: any) {
-    props.section.cable.mark = option.mark
+    section.cable.mark = option.mark
 }
 function setColPhase(option: any) {
-    props.section.colPhase= option
+    section.colPhase= option
 }
 
-const props = defineProps({
-    section: {
-        type: SectionLine,
-        required: true
-    }
-})
+
 
 </script>
 

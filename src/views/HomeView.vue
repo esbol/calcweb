@@ -28,6 +28,8 @@ store.state.panels.push(panel1)
 store.state.selectedPanel = store.state.panels[0]
 panel1.nameOfPlane='ШР1'
 
+
+
 const sideShow = ref(true)
 
 
@@ -39,6 +41,14 @@ const sideShow = ref(true)
 </script>
 
 <style>
+@font-face {
+
+font-family: "isocpeur"; 
+
+src: url("@/assets/isocpeui.ttf") format("truetype"); 
+font-style: normal; 
+font-weight: normal; 
+} 
 :root {
   --sidebar-title-bg-color: #e6e6e6;
   --sidebar-bg-color: #fbfbfb;

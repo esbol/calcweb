@@ -8,6 +8,7 @@ export class CalculationMode {
     constructor(name: string, section: SectionLine){
         this.name = name
         this._section = section
+        
     }
    
     //#region section
@@ -18,7 +19,7 @@ export class CalculationMode {
     //#endregion
 
     //#region name
-    private _name : string = 'Normal';
+    private _name : string = '';
     public get name() : string {
         return this._name;
     }
@@ -38,7 +39,7 @@ export class CalculationMode {
     //#endregion
 
     //#region groupsBySPList
-    private _groupsBySPList: Array<GroupBySP> = [ ]
+    private _groupsBySPList: Array<GroupBySP> = []
     public get groupsBySPList(): Array<GroupBySP> {
         return this._groupsBySPList;
     }
@@ -113,16 +114,22 @@ export class CalculationMode {
     public calc(){
         this.setGroupsBySP()
         this.groupsBySPList.forEach(g => g.calc())
+        
         this.calcPowers()
     }
 
     private setGroupsBySP():void {
-
+        
+      
+        
         //добавляем группу если ее нет
          this.consumers.forEach(c => {
             let group = this.groupsBySPList.find(g=> g.groupName === c.groupNameBySP) 
+           
+            
             if(group === undefined){
                this.groupsBySPList.push(new GroupBySP(c.groupNameBySP))
+             
             }
         });
         //список групп для удаления
@@ -132,7 +139,7 @@ export class CalculationMode {
             if(consumer === undefined) forDel.push(g)
         })
         forDel.forEach(g=> this.groupsBySPList.splice(
-            forDel.indexOf(g), 1
+            this.groupsBySPList.indexOf(g), 1
         ))
 
         //добавляем нагрузку на каждую группу

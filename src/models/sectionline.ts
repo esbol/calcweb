@@ -17,12 +17,24 @@ import { Contactors } from './bd/contactors';
 
 export class SectionLine {
     //#region supplyPanels
-    private _supplyPanels: Array<Panel> = [];
-    public get supplyPanels(): Array<Panel> {
-        return this._supplyPanels;
-    }
-    public set supplyPanels(v: Array<Panel>) {
-        this._supplyPanels = v;
+
+    public getSupplyPanels(): Array<Panel>{
+        const spanels: Array<Panel> = new Array<Panel>()
+        if(this.startContact != null) recurcy(this.startContact)
+        function recurcy(contact: Contact) {
+            contact.getSupplySections().forEach(s => {
+                if (s.startContact != null) {
+                    if (s.startContact.ownDevice.constructor.name == 'Panel') {
+                        if (!spanels.includes(s.startContact.ownDevice as Panel)) {
+                            spanels.push(s.startContact.ownDevice as Panel)
+                        }
+                    } else {
+                        recurcy(s.startContact)
+                    }
+                }
+            })
+        }
+        return spanels
     }
     //#endregion
 

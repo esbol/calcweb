@@ -1,7 +1,9 @@
 
+import { Breaker } from "./breaker";
 import { Contact } from "./contact";
 import { ELObject } from "./elobject";
 import { Panel } from "./panel";
+
 
 
 
@@ -11,6 +13,7 @@ export abstract class Device extends ELObject {
 
     constructor() {
         super()
+        
     }
     //#endregion
    
@@ -38,15 +41,24 @@ export abstract class Device extends ELObject {
 
     //#region supplyPanels
 
-    
-    private _supplyPanels : Array<Panel> = []
-    public get supplyPanels(): Array<Panel> {
-        return this._supplyPanels;
+    public getSupplyPanels(): Array<Panel> {
+        const spanels: Array<Panel> = new Array<Panel>()
+        recurcy(this.inContact)
+        function recurcy(contact: Contact){
+            contact.getSupplySections().forEach(s=>{
+                if(s.startContact != null){       
+                    if(s.startContact.ownDevice.constructor.name == 'Panel'){
+                        if(!spanels.includes(s.startContact.ownDevice as Panel)){
+                            spanels.push(s.startContact.ownDevice as Panel)
+                        }
+                    }else{
+                        recurcy(s.startContact)
+                    }
+                }
+            })
+        }
+        return spanels
     }
-    public set supplyPanels(v: Array<Panel>) {
-        this._supplyPanels = v;
-    }
-    
     //#endregion
 
 }

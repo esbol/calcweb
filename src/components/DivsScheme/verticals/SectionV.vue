@@ -145,6 +145,8 @@ watchEffect(() => {
 <style scoped>
 
 
+    
+
 
 
 
@@ -208,6 +210,7 @@ span {
     transform-origin: left;
     width: auto;
     white-space: nowrap;
+  
 }
 
 .text_rigth {

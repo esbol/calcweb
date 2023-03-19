@@ -61,18 +61,13 @@ import Select from './UI/Select.vue'
 import { Breakers } from '@/models/bd/breakers';
 import { Breaker } from '@/models/breaker';
 
+import { useStore } from 'vuex';
 
-
-const props = defineProps({
-    breaker: {
-        type: Breaker,
-        required: true
-    }
-})
+const breaker = useStore().state.selectedObject as Breaker
 
 
 function setBreakerMark(option: any) {
-    props.breaker.mark = option.mark
+    breaker.mark = option.mark
 }
 </script>
 

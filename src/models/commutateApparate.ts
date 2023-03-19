@@ -5,6 +5,7 @@ import { Device } from "./device";
 export abstract class CommutateApparate extends Device {
     constructor(mark: string) {
         super()
+     
         this.innerSection.nameOfPlane = 'innerSection'
         this.innerSection.setStartContact(this.inContact)
         this.innerSection.setEndContact(this.outContact)
@@ -43,7 +44,7 @@ export abstract class CommutateApparate extends Device {
         this.colPhase = this.innerSection.colPhase
       
         
-       // console.log(this.innerSection);
+       
         
         let cur = 0
        

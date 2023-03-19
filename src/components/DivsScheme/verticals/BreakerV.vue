@@ -164,7 +164,7 @@ watchEffect(() => {
 .text {
     position: absolute;
     left: 60px;
-    top: 30px;
+    top: 40px;
 }
 
 .text-name {

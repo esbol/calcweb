@@ -7,7 +7,8 @@ export const TypesBySP: Array<string> =
     
 export const CalculationModesNames: Array<string> =
     [
-        'нормальный'
+        'рабочий',
+        'При пожаре'
     ]
 
 export enum CableMaterial {

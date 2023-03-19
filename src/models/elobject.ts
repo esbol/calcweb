@@ -33,7 +33,7 @@ export abstract class ELObject {
    
     description: string = ''
 
-    constructor() { }
+    constructor() {  }
 
     abstract setDataFromDB(mark: string): boolean
 }

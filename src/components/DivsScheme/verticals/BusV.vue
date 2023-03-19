@@ -9,9 +9,9 @@
             <span>PE</span>
         </div>
         <div class="fases">
+            <div class="phaseLine" :class="{ hover_bg: hover }" v-if="store.selectedPanel.uniteSection.colPhase == 3"></div>
             <div class="phaseLine" :class="{ hover_bg: hover }"></div>
-            <div class="phaseLine" :class="{ hover_bg: hover }"></div>
-            <div class="phaseLine" :class="{ hover_bg: hover }"></div>
+            <div class="phaseLine" :class="{ hover_bg: hover }" v-if="store.selectedPanel.uniteSection.colPhase == 3"></div>
         </div>
         <div class="l_end1"></div>
         <div class="l_end2"></div>
@@ -24,13 +24,14 @@
         <div class="pe_rigth"></div>
         <div class="contact"></div>
         <div class="contact2"></div>
+        <PanelPowers />
     </div>
 </template>
 
 <script setup lang="ts">
 
 import { Bus } from '@/models/bus';
-import { Consumer } from '@/models/consumer';
+import PanelPowers from './PanelPowers.vue';
 import { useStore } from 'vuex';
 import { ref, watchEffect } from 'vue';
 

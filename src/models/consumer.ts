@@ -1,4 +1,4 @@
-import { CalculationModesNames } from './normativs';
+import { CalculationModesNames, TypesBySP } from './normativs';
 
 import { Device } from "./device";
 import { calcCurrentByInstallPower, calcQPower, calcSPower } from './formuls/calcpowers';
@@ -10,23 +10,23 @@ import { calcCurrentByInstallPower, calcQPower, calcSPower } from './formuls/cal
 export class Consumer extends Device{
     constructor() {
         super()
-        this.description = 'consumer'
+        this.description = 'Наименование'
         this._groupNameBySP = 'не указано'
         this.nameOfPlane = 'cons'
     }
 
     //#region calculationModes
-    private _calculationModes: Array<string> = [CalculationModesNames[0]];
-    public get calculationModes(): Array<string> {
-        return this._calculationModes;
+    private _calculationModesNames: Array<string> = [CalculationModesNames[0]];
+    public get calculationModesNames(): Array<string> {
+        return this._calculationModesNames;
     }
-    public set calculationModes(v: Array<string>) {
-        this._calculationModes = v;
+    public set calculationModesNames(v: Array<string>) {
+        this._calculationModesNames = v;
     }
     //#endregion
 
     //#region groupNameBySP
-    private _groupNameBySP: string = "";
+    private _groupNameBySP: string = TypesBySP[0];
     public get groupNameBySP(): string {
         return this._groupNameBySP;
     }

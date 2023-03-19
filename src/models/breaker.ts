@@ -14,6 +14,7 @@ export class Breaker extends CommutateApparate {
     
     constructor(mark: string){
         super(mark)
+      
         this.description = 'breaker'
         this.innerSection.nameOfPlane = 'innerBreaker'
     }

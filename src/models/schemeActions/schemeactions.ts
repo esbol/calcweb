@@ -63,7 +63,7 @@ export function addContactor(section: SectionLine) {
 
     section.nameOfPlane = section.nameOfPlane + '-1'
 
-    section.supplyPanels.forEach(p =>{
+    section.getSupplyPanels().forEach(p =>{
         p.calc()
         rename(p)
     })
@@ -75,7 +75,7 @@ export function addConsumer(contact: Contact) {
     const myArr = myStr.split('-')
     myStr = myArr[0]
 
-    consumer.nameOfPlane = 'N' + (contact.getSupplySections()[0].supplyPanels[0].uniteSection.subConsumers.length + 1)
+    consumer.nameOfPlane = 'N' + (contact.getSupplySections()[0].getSupplyPanels()[0].uniteSection.subConsumers.length + 1)
     const sConsumer = new SectionLine()
     sConsumer.nameOfPlane = myStr + '-' + (contact.getSlaveSections().length + 2)
     sConsumer.cable.mark = Cables[0].mark
@@ -85,35 +85,12 @@ export function addConsumer(contact: Contact) {
     // const panels = getSupplyPanels(contact)
 
 
-    contact.ownDevice.supplyPanels.forEach(p => {
+    contact.ownDevice.getSupplyPanels().forEach(p => {
         p.calc()
         rename(p)
     })
 
 }
-
-// function getSupplyPanels(contact: Contact):Array<Panel>{
-
-//     const panels: Array<Panel> = []
-
-//     recurcy(contact)
-//     function recurcy(c: Contact) {
-//         c.getSupplySections().forEach(s => {
-//             if (s.startContact != null) {
-
-
-//                 if (s.startContact.ownDevice instanceof Panel) {
-//                     const p = s.startContact.ownDevice as Panel
-//                     if (!panels.includes(p)) {
-//                         panels.push(p)
-//                     }
-//                 }
-//                 recurcy(s.startContact)
-//             }
-//         })
-//     }
-//     return panels
-// }
 
 export function deleteObject(object: any) {
     if (object instanceof SectionLine) {
@@ -123,7 +100,7 @@ export function deleteObject(object: any) {
             delEmpty(sl.startContact.ownDevice)
         }
 
-        sl.supplyPanels.forEach(p => {
+        sl.getSupplyPanels().forEach(p => {
             p.calc()
             rename(p)
         })
@@ -135,7 +112,7 @@ export function deleteObject(object: any) {
     }
 
     function delEmpty(d: Device) {
-        d.supplyPanels.forEach(p => {
+        d.getSupplyPanels().forEach(p => {
             p.outContact.getSlaveSections().forEach(s => {
                 if (s.subConsumers.length == 0) s.startContact?.removeSection(s)
             })
@@ -147,8 +124,10 @@ export function deleteObject(object: any) {
 }
 
 export function addOneConsumerFeeder(panel: Panel) {
-
+    
+    
     const breaker = new Breaker(Breakers[0].mark)
+   
     breaker.nameOfPlane = 'QF' + (panel.outContact.getSlaveSections().length + 1).toString()
     const sBreaker = new SectionLine()
     sBreaker.description = 'sBreaker'

@@ -13,6 +13,7 @@ export class Panel extends Device {
     }
     constructor() {
         super()
+        
         this.uniteSection.setEndContact(this.outContact)
         this.uniteSection.nameOfPlane = 'uniteSection'
         this.uniteSection.isInPanel = true
@@ -63,24 +64,24 @@ export class Panel extends Device {
      
       
         this.uniteSection.subSections.forEach(s =>{
-            if(!s.supplyPanels.includes(this)) s.supplyPanels.push(this)
+           
             s.calc()
         } )
 
         this.uniteSection.subDevices.forEach(d => {
-            if (!d.supplyPanels.includes(this)) d.supplyPanels.push(this)
             if (d instanceof CommutateApparate) {
                 d.calc()
             }
         })
 
-
+   
 
     }
 
     public addFeeder() {
-        console.log(this.outContact.getSlaveSections().length);
-        
+               
         addOneConsumerFeeder(this)
+       
+       
     }
 }

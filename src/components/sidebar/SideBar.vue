@@ -4,15 +4,19 @@
     <div class="side-container" :class="{ show: show }">
         <div class="wrapper" v-if="show">
             <PanelBrowser />
+             <PropsContainer title="Панель" v-if="(store.selectedPanel != null)">
+                    <PanelProps/>
+                </PropsContainer>
+
             <PropsContainer title="Участок сети" v-if="(store.selectedObject instanceof SectionLine)">
-                <SectionProps :section="store.selectedObject" />
+                <SectionProps />
             </PropsContainer>
 
             <PropsContainer title="Электроприемник" v-if="(store.selectedObject instanceof Consumer)">
                 <ConsProps :consumer="store.selectedObject" />
             </PropsContainer>
             <PropsContainer title="Автомат" v-if="(store.selectedObject instanceof Breaker)">
-                <BreakerProps :breaker="store.selectedObject" />
+                <BreakerProps />
             </PropsContainer>
 
             <PropsContainer title="Пусковое устройство" v-if="(store.selectedObject instanceof Contactor)">
@@ -26,6 +30,7 @@
 </template>
 
 <script setup lang="ts">
+import PanelProps from "./PanelProps.vue";
 import ContactorProps from "./ContactorProps.vue";
 import PropsContainer from "./PropsContainer.vue";
 import { Bus } from "@/models/bus";
