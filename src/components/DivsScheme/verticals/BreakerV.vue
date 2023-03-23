@@ -1,7 +1,11 @@
 <template>
     <div class="b">
         <div class="breaker-container" @click="store.selectedObject = breaker">
+
             <div class="text">
+                <div class="error" v-if="error">
+                    <div class="error_text">Нет номинала автомата</div>
+                </div>
                 <div class="text-name" :class="{ hover_text: hover }">{{ breaker.nameOfPlane }}</div>
                 <div class="text-mark" :class="{ hover_text: hover }">{{ breaker.mark }}</div>
                 <div class="text-current" :class="{ hover_text: hover }">Iн={{ breaker.nominalCurrent }}A</div>
@@ -60,6 +64,7 @@ const props = defineProps({
 })
 
 const hover = ref(false)
+const error = ref(false)
 
 watchEffect(() => {
     if (store.selectedObject === props.breaker) {
@@ -67,12 +72,57 @@ watchEffect(() => {
     } else {
         hover.value = false
     }
+    if (props.breaker.nominalCurrent == -1) {
+        error.value = true
+    } else {
+        error.value = false
+    }
 })
 
 
 </script>
 
 <style scoped>
+.error {
+    position: absolute;
+    left: -5px;
+    top: -5px;
+    width: 50px;
+    height: 60px;
+    border: 2px dashed red;
+
+}
+
+.error:hover .error_text {
+    visibility: visible;
+}
+
+.error_text {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 110%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.error_text::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+}
+
 .contact_pe {
     width: 8px;
     height: 8px;
@@ -82,6 +132,7 @@ watchEffect(() => {
     right: 17px;
     top: 154px;
 }
+
 .contact_f {
     width: 8px;
     height: 8px;

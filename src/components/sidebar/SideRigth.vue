@@ -2,14 +2,9 @@
 
 <template>
     <div class="side-container" :class="{ show: show }">
+    <div class="splitter"></div>
         <div class="wrapper" v-if="show">
-            <PropsContainer title="Панели">
-                <PanelBrowser />
-            </PropsContainer>
-
-            <PropsContainer :title="store.selectedPanel.nameOfPlane" v-if="(store.selectedPanel != null)">
-                <PanelProps />
-            </PropsContainer>
+           
 
             <PropsContainer title="Участок сети" v-if="(store.selectedObject instanceof SectionLine)">
                 <SectionProps :section="store.selectedObject" />
@@ -26,24 +21,13 @@
                 <ContactorProps :contactor="store.selectedObject" />
             </PropsContainer>
 
-            <PropsContainer title="Штамп" v-if="(store.selectedObject instanceof Stamp)">
-                <StampProps :stamp="store.selectedObject" />
-            </PropsContainer>
-
-            <PropsContainer title="Формат" >
-                <FormatProps :stamp="store.selectedObject" />
-            </PropsContainer>
-
             <BusProps v-if="(store.selectedObject instanceof Bus)" :bus="store.selectedObject" />
-
         </div>
-        <div class="splitter"></div>
+        
     </div>
 </template>
 
 <script setup lang="ts">
-import FormatProps from "./FormatProps.vue";
-import StampProps from "./StampProps.vue";
 import PanelProps from "./PanelProps.vue";
 import ContactorProps from "./ContactorProps.vue";
 import PropsContainer from "./PropsContainer.vue";
@@ -58,7 +42,6 @@ import { Consumer } from "@/models/consumer";
 import { Breaker } from "@/models/breaker";
 import { Contactor } from "@/models/contactor";
 import { useStore } from "vuex";
-import { Stamp } from "@/models/settings/stamp";
 
 
 const store = useStore().state
@@ -92,7 +75,7 @@ const props = defineProps({
 
 .side-container {
     display: grid;
-    grid-template-columns: auto 8px;
+    grid-template-columns: 8px auto;
     width: 50px;
     height: 100%;
     color: var(--sidebar-text-color);
@@ -101,6 +84,6 @@ const props = defineProps({
 }
 
 .show {
-    width: 300px;
+    width: 250px;
 }
 </style>

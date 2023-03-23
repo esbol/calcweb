@@ -1,18 +1,20 @@
 <template>
     <div class="main-wrap" @click="clearSelect" id="mainWrap">
-        <div id="divContainer"
-        
-        v-on:keydown="handleKeyDown" tabindex="0"
-         class="divContainer" v-if="store.selectedPanel != null">
-   
-            <A3 />
+        <div ref="content" id="divContainer" v-on:keydown="handleKeyDown" tabindex="0" class="divContainer"
+            v-if="store.selectedPanel != null">
+
+            <Format/>
+            <div class="cablesTable" v-if="store.selectedPanel != null">
+                <CablesTable :cables="store.selectedPanel.cables" />
+            </div>
+
             <div class="inApparate">
                 <BreakerInV :showPhases="true" v-if="store.selectedPanel.inApparate != null"
                     :breaker=store.selectedPanel.inApparate />
             </div>
 
 
-            <div class="shinaDiv"  >
+            <div class="shinaDiv">
                 <BusV :bus="store.selectedPanel.bus" />
 
 
@@ -33,6 +35,7 @@
 
                 </div>
             </div>
+
         </div>
         <Popup />
     </div>
@@ -40,34 +43,42 @@
 
 <script setup lang="ts">
 //#region import
+import CablesTable from './DivsScheme/verticals/CablesTable.vue'
 import BreakerInV from './DivsScheme/verticals/BreakerInV.vue'
 import Popup from './DivsScheme/Popup.vue'
 import BusV from './DivsScheme/verticals/BusV.vue'
-import ConsV from './DivsScheme/verticals/ConsV.vue'
-import ContactorV from './DivsScheme/verticals/ContactorV.vue'
+
 import SectionV from './DivsScheme/verticals/SectionV.vue'
 import PlusV from './DivsScheme/verticals/PlusV.vue'
-import BreakerV from './DivsScheme/verticals/BreakerV.vue'
 
-import A3 from './DivsScheme/A3.vue';
+
+
+import Format from './DivsScheme/formats/Format.vue';
 import { reactive, ref, computed, onMounted, toRefs } from 'vue';
 
 import { addScale } from './DivsScheme/pan'
 import { useStore } from 'vuex'
 import { deleteObject } from '@/models/schemeActions/schemeactions'
+import { Panel } from '@/models/panel'
+import { Cable } from '@/models/cable'
+
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+
 //#endregion
 
 const store = useStore().state
+const cables = new Array<Cable>()
 
 
-function handleKeyDown(event: KeyboardEvent){
-      console.log(event.code);
-    
+
+function handleKeyDown(event: KeyboardEvent) {
+    console.log(event.code);
+
     if (event.code === "Delete" || event.keyCode === 46) {
         deleteObject(store.selectedObject)
-     
-        
     }
+   // printToPDF()
 }
 
 
@@ -75,25 +86,70 @@ onMounted(() => {
     addScale('mainWrap')
 })
 
+const width = computed(() => {
+    const scale = store.selectedPanel.format.pixelScale
+    return store.selectedPanel.format.width * scale + 'px'
+})
 
+const height = computed(() => {
+    const scale = store.selectedPanel.format.pixelScale
+    return store.selectedPanel.format.height * scale + 'px'
+})
 
 function clearSelect(event: MouseEvent) {
     const target = event.target as Element
     if (target.className == 'innerFrame' || target.className == 'main-wrap') {
         store.selectedObject = null
     }
+    
+}
+
+const content = ref<HTMLDivElement | null>(null);
+
+async function printToPDF() {
+    if (!content.value) return;
+
+    // Создайте изображение с помощью html2canvas
+    const canvas = await html2canvas(content.value, {
+        scale: 2,
+        useCORS: true,
+    });
+
+    // Создайте новый экземпляр jsPDF
+    const pdf = new jsPDF({
+        orientation: "l",
+        unit: "mm",
+        format: "a3",
+    });
+
+    // Рассчитайте соотношение сторон изображения
+    const imgWidth = pdf.internal.pageSize.getWidth();
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    // Добавьте изображение на страницу PDF
+    pdf.addImage(canvas.toDataURL("image/jpeg", 1.0), "JPEG", 0, 0, imgWidth, imgHeight);
+
+    // Сохраните PDF-файл
+    pdf.save("output.pdf");
 }
 
 </script>
 
 <style>
-.cells{
+.cablesTable {
+    position: absolute;
+    left: 100px;
+    bottom: 50px
+}
+
+.cells {
     position: absolute;
     width: 100%;
     height: 100%;
     z-index: 0;
     background: green;
 }
+
 .plus {
     margin-left: 20px;
     margin-right: 20px;
@@ -153,14 +209,15 @@ function clearSelect(event: MouseEvent) {
     display: flex;
     flex-direction: column;
     align-items: start;
-    width: 1680px;
-    height: 1188px;
+    width: v-bind(width);
+    height: v-bind(height);
     position: relative;
     padding-top: 20px;
     padding-left: 50px;
     box-shadow: 0px 0px 2px 1px #d1d1d1;
 }
-.divContainer:focus{
+
+.divContainer:focus {
     outline: none;
 }
 

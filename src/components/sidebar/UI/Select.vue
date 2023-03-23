@@ -3,7 +3,7 @@
     <div class="select-container">
 
         <div class="selected-item" @click="open = !open"> {{ getOptionValue(selectedValue) }}</div>
-        <div class="btn" @click="open = !open">
+        <div class="btn no-select" @click="open = !open">
             <span v-if="!open" class="material-symbols-outlined">
                 expand_more
             </span>

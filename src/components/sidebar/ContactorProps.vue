@@ -30,7 +30,8 @@
                 <div class="name-prop">Кол. фаз</div>
             </td>
             <td>
-                <div class="prop-value">{{ contactor.colPhase }}</div>
+                <div class="prop-value-input"><Select :selected-value="contactor.colPhase" :display-path="'0'"
+                            :options="ColPhases" @change="setColPhase" /></div>
             </td>
         </tr>
         <tr>
@@ -60,15 +61,25 @@ import TextInput from './UI/TextInput.vue';
 import Select from './UI/Select.vue'
 import { Contactor } from '@/models/contactor';
 import { Contactors } from '@/models/bd/contactors';
-import { useStore } from 'vuex';
+import { ColPhases } from '@/models/normativs';
 
-const contactor = useStore().state.selectedObject as Contactor
-
-
+const props = defineProps({
+    contactor: {
+        type: Contactor,
+        required: true
+    }
+})
 
 function setContactorMark(option: any) {
-    contactor.mark = option.mark
+    props.contactor.mark = option.mark
 }
+
+function setColPhase(val: string) {
+    props.contactor.colPhase = parseFloat(val)
+    props.contactor.getSupplyPanels().forEach(p => p.calc())
+
+}
+
 </script>
 
 <style scoped>

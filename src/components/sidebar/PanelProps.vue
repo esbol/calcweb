@@ -116,7 +116,12 @@ import { Panel } from '@/models/panel';
 const store = useStore().state
 
 function setColPhase(n: number) {
-    store.selectedPanel.uniteSection.colPhase = n
+    const panel = store.selectedPanel as Panel
+    panel.uniteSection.colPhase = n
+    panel.calc()
+    panel.uniteSection.getSupplyPanels().forEach(p => p.calc())
+
+    
 }
 
 function setK(name:string, val: string){

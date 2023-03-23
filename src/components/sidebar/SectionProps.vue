@@ -21,7 +21,7 @@
             <td>
                 <div class="prop-value-input">
                     <NumberInput :input-value="section.cable.length"
-                        @focusout="section.cable.length = parseFloat($event.target.value)" :can-edite="true" />
+                        @focusout="setCableLenght($event.target.value)" :can-edite="true" />
                 </div>
             </td>
         </tr>
@@ -41,14 +41,7 @@
                 <div class="prop-value">{{ section.modeMax.current.toFixed(3) }}</div>
             </td>
         </tr>
-        <tr>
-            <td>
-                <div class="name-prop">Кол. фаз</div>
-            </td>
-            <td>
-                <div class="prop-value">{{ section.colPhase }}</div>
-            </td>
-        </tr>
+      
         <tr>
             <td>
                 <div class="name-prop"><strong>Кабель</strong></div>
@@ -98,15 +91,24 @@ import { SectionLine } from "@/models/sectionline";
 import NumberInput from './UI/NumberInput.vue';
 import { ColPhases } from '@/models/normativs';
 
-import { useStore } from 'vuex';
+const props = defineProps({
+    section: {
+        type: SectionLine,
+        required: true
+    }
+})
 
-const section = useStore().state.selectedObject as SectionLine
-
+function setCableLenght(option: any) {
+    props.section.cable.length = parseFloat(option)
+    props.section.getSupplyPanels().forEach(p => p.calc())
+}
 function setCableMark(option: any) {
-    section.cable.mark = option.mark
+    props.section.cable.mark = option.mark
+    props.section.getSupplyPanels().forEach(p => p.calc())
 }
 function setColPhase(option: any) {
-    section.colPhase= option
+    props.section.colPhase= option
+    props.section.getSupplyPanels().forEach(p=>p.calc())
 }
 
 

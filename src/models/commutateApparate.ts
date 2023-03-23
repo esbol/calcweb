@@ -14,6 +14,9 @@ export abstract class CommutateApparate extends Device {
         
     }
 
+
+
+
     readonly outContact: Contact = new Contact(this)
     readonly innerSection: SectionLine = new SectionLine()
 
@@ -29,8 +32,7 @@ export abstract class CommutateApparate extends Device {
 
     //#endregion
 
-
-
+    
     //#region nominalCurrent
     protected _nominalCurrent: number = 0
     public get nominalCurrent(): number {
@@ -39,19 +41,26 @@ export abstract class CommutateApparate extends Device {
     //#endregion
 
 
-    public calc(current: number = 0) {
+    public calc() {
+        this.innerSection.calc()
        
-        this.colPhase = this.innerSection.colPhase
+        let col = this.innerSection.colPhase
+
+        if(col == 3){
+            this.colPhase = 3
+        }else{
+            if(this.innerSection.subConsumers.length == 1){
+                this.colPhase = 1
+            }
+        }
+
+       
       
         
        
         
-        let cur = 0
+        let cur = this.innerSection.modeMax.current
        
-        
-        if (current == 0) cur = this.innerSection.modeMax.current
-        else cur = current
-
   
         for (let index = 0; index < this._possibleCurrents.length; index++) {
             const element = this._possibleCurrents[index];

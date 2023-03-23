@@ -1,13 +1,25 @@
-import { createStore } from 'vuex'
+import { Panel } from '@/models/panel'
+import { Format } from '@/models/settings/format'
+
+import { createStore, Module } from 'vuex'
+
+export interface IState {
+  panels: Array<Panel>
+  selectedPanel: Panel | null
+  selectedObject: any | null
+  showPopup: any
+
+
+}
 
 
 
-export default createStore({
+export default createStore<IState>({
   state: {
     panels: [],
     selectedPanel: null,
     selectedObject: null,
-    selectedObjectId: 0,
+
     showPopup: {
       show: false,
       x: 0,

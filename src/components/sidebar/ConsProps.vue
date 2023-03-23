@@ -80,6 +80,18 @@
                 <div class="prop-value">{{ consumer.getSupplyPanels()[0].nameOfPlane }}</div>
             </td>
         </tr>
+        <tr>
+                <td>
+                    <div class="name-prop">Наименование</div>
+                </td>
+                <td>
+                    <div class="prop-value-input">
+                        <TextInput :input-value="consumer.description" @focusout="consumer.description = $event.target.value"
+                            :can-edite="true" />
+
+                    </div>
+                </td>
+            </tr>
     </table>
 </template>
 

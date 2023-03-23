@@ -1,3 +1,4 @@
+import { CommutateApparate } from "./commutateApparate";
 
 
 
@@ -15,10 +16,13 @@ export abstract class ELObject {
   
     //#region colPhase
     private _colPhase: number = 1
-    public set colPhase(v: number) {
+    public  set colPhase(v: number) {
         if (v == this._colPhase) return
         this._colPhase = v;
-        
+        if(this instanceof CommutateApparate){
+            const ca = this as CommutateApparate
+            ca.innerSection.colPhase = v
+        }
     }
     public get colPhase(): number {
         return this._colPhase

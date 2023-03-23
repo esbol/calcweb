@@ -16,6 +16,7 @@ import { Contactors } from './bd/contactors';
 
 
 export class SectionLine {
+
     //#region supplyPanels
 
     public getSupplyPanels(): Array<Panel>{
@@ -40,7 +41,6 @@ export class SectionLine {
 
 
     constructor() {
-        //console.log('consrtuctor ' + this.modeMax);
         
     }
     id: number = Math.random()
@@ -211,7 +211,7 @@ export class SectionLine {
     //#endregion
 
     //#region cable
-    private _cable: Cable = new Cable();
+    private _cable: Cable = new Cable(this);
     public get cable(): Cable {
         return this._cable;
     }

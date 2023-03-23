@@ -84,7 +84,7 @@ function setColPhase(section: SectionLine): void {
     let col: number = 1
   
 
-    section.subConsumers.forEach(c=> {
+    section.subDevices.forEach(c=> {
         if(c.colPhase > col) col = c.colPhase
     })
 
@@ -115,4 +115,5 @@ export function calc(secton: SectionLine) {
     })
 
     setModeMax(secton)
+    secton.cable.calc()
 }

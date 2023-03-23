@@ -4,6 +4,7 @@
     <SideBar :show="sideShow"/>
     <DivScheme v-if="store.state.selectedPanel != null"
      />
+   
   </div>
   <div class="footer">footer</div>
 </template>
@@ -13,11 +14,13 @@ import DivScheme from '@/components/DivScheme.vue';
 import { ref, provide, watch } from 'vue'
 import { Panel } from '@/models/panel'
 import SideBar from '@/components/sidebar/SideBar.vue';
-
+import SideRigth from '@/components/sidebar/SideRigth.vue';
 import { Breaker } from '@/models/breaker';
 import { Breakers } from '@/models/bd/breakers';
 
 import { useStore } from 'vuex';
+import { IState } from '@/store';
+
 
 const store = useStore()
 
@@ -27,7 +30,6 @@ panel1.inApparate = new Breaker(Breakers[0].mark)
 store.state.panels.push(panel1)
 store.state.selectedPanel = store.state.panels[0]
 panel1.nameOfPlane='ШР1'
-
 
 
 const sideShow = ref(true)
@@ -41,6 +43,11 @@ const sideShow = ref(true)
 </script>
 
 <style>
+
+.no-select {
+    user-select: none;
+}
+
 @font-face {
 
 font-family: "isocpeur"; 
@@ -50,7 +57,7 @@ font-style: normal;
 font-weight: normal; 
 } 
 :root {
-  --sidebar-title-bg-color: #e6e6e6;
+  --sidebar-title-bg-color: #e6e6e6e0;
   --sidebar-bg-color: #fbfbfb;
   --sidebar-text-color: #383838;
   --body-bg-color: rgb(206, 202, 202);
@@ -86,6 +93,15 @@ font-weight: normal;
 }
 
 .sideshow {
-  grid-template-columns: 250px auto;
+  grid-template-columns: 300px auto;
 }
+
+.material-symbols-outlined {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 48
+}
+
 </style>

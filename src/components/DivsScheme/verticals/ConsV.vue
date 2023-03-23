@@ -1,6 +1,5 @@
 <template>
-    <div @click="store.selectedObject=consumer" 
-    class="cons-container" :class="{ hover_border: hover }">
+    <div @click="store.selectedObject = consumer" class="cons-container" :class="{ hover_border: hover }">
         <div class="frame-name" :class="{ hover_text: hover }">
             {{ consumer.nameOfPlane }}
         </div>
@@ -11,7 +10,7 @@
             {{ consumer.current.toFixed(2) }}
         </div>
         <div class="frame-description" :class="{ hover_text: hover }">
-            {{ consumer.description }}
+            <div class="descr_text">{{ consumer.description }}</div>
         </div>
     </div>
 </template>
@@ -20,7 +19,7 @@
 
 import { Consumer } from '@/models/consumer';
 import { useStore } from 'vuex';
-import {  ref, watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 
 const store = useStore().state
 const props = defineProps({
@@ -46,18 +45,22 @@ watchEffect(() => {
 </script>
 
 <style scoped>
+.descr_text{
+    text-align: center;
+}
+
 .frame-description {
     width: 100%;
     height: 60px;
     display: flex;
-    justify-content: left;
+    justify-content: center;
     align-items: center;
 
     padding-left: 5px;
 }
 
 .frame-current {
-   width: 100%;
+    width: 100%;
     height: 30px;
     display: flex;
     justify-content: center;
