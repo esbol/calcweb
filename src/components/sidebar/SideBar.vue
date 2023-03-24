@@ -30,14 +30,21 @@
                 <StampProps :stamp="store.selectedObject" />
             </PropsContainer>
 
-            <PropsContainer title="Формат" >
-                <FormatProps :stamp="store.selectedObject" />
+            <PropsContainer title="Формат">
+                <FormatProps />
             </PropsContainer>
 
             <BusProps v-if="(store.selectedObject instanceof Bus)" :bus="store.selectedObject" />
 
         </div>
-        <div class="splitter"></div>
+        <div class="splitter">
+            <div class="spl_btn">
+                 <div class="spl_line"></div>
+                  <div class="spl_line"></div>
+            </div>
+       
+     
+        </div>
     </div>
 </template>
 
@@ -88,6 +95,22 @@ const props = defineProps({
     border-left: 1px solid var(--main-border-color);
     border-right: 1px solid var(--main-border-color);
     cursor: col-resize;
+    display: flex;
+    justify-content: center;
+    vertical-align: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.spl_btn{
+    display: flex;
+    width: 4px;
+    justify-content: space-between;
+}
+.spl_line{
+    width: 1px;
+    height: 15px;
+    background-color: var(--main-border-color);
 }
 
 .side-container {

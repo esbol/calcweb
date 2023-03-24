@@ -4,7 +4,7 @@
     <div class="s">
 
         <div class="section-container" v-if="!section.isInPanel" @click="store.selectedObject = section"
-            :class="{ selected: hover }">
+            >
             <div class="text_left" :class="{ hover_text: hover }">
                 {{ section.nameOfPlane }}-{{ section.cable.mark }} - {{ section.cable.colCores }}x{{ section.cable.square }}
                 -
@@ -12,7 +12,7 @@
             </div>
             <div class="line" :class="{ hover_bg: hover }" />
             <div class="text_rigth" :class="{ hover_text: hover }">
-                лоток Л1-500x200 - 15м
+                {{ section.pipe.mark }}.{{ section.pipe.diametr }} - {{ section.pipe.length }} м
             </div>
             <div class="section" :class="{ hover_border: hover }">
 

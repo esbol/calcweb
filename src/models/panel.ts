@@ -7,6 +7,7 @@ import { Bus } from './bus';
 import { addOneConsumerFeeder } from './schemeActions/schemeactions';
 import { Cable } from './cable';
 import { Format } from './settings/format';
+import { Pipe } from './pipe';
 
 
 export class Panel extends Device {
@@ -63,6 +64,16 @@ export class Panel extends Device {
     }
     //#endregion
 
+    //#region pipes
+    private _pipes: Array<Pipe> = new Array<Pipe>()
+    public get pipes(): Array<Pipe> {
+        return this._pipes;
+    }
+    public set pipes(v: Array<Pipe>) {
+        this._pipes = v;
+    }
+    //#endregion
+
     public calc() {
 
 
@@ -82,7 +93,7 @@ export class Panel extends Device {
         this.inApparate?.calc()
 
         this.calcColCables()
-
+        this.calcColPipes()
     }
 
     public addFeeder() {
@@ -140,6 +151,58 @@ export class Panel extends Device {
         sumCables.sort((a: Cable, b: Cable) => a.square - b.square)
 
         this.cables = sumCables
+    }
+
+    private calcColPipes() {
+        const pipes = new Array<Pipe>()
+        this.uniteSection.subSections.forEach(s => {
+            if (!s.isInPanel) {
+                if (s.pipe.length > 0) {
+                    pipes.push(s.pipe)
+                }
+            }
+        })
+
+        
+        const sumPipes: Array<Pipe> = new Array<Pipe>()
+        pipes.forEach(c => {
+            const pipe = new Pipe(this.uniteSection)
+            pipe.mark = c.mark
+            pipe.diametr = c.diametr
+
+            pipes.forEach(cab => {
+                if (cab.mark == pipe.mark && cab.diametr == pipe.diametr) {
+                    pipe.length += cab.length
+                }
+            })
+
+            let isSame = false
+
+            sumPipes.forEach(cab => {
+                if (cab.mark == pipe.mark && cab.diametr == pipe.diametr) {
+                    isSame = true
+                }
+            })
+
+            if (!isSame) sumPipes.push(pipe)
+        })
+
+        sumPipes.sort((a: Pipe, b: Pipe) => {
+            const markA = a.mark.toUpperCase()
+            const markB = b.mark.toUpperCase()
+            if (markA < markB) {
+                return -1
+            }
+            if (markA > markB) {
+                return 1
+            }
+            return 0
+        })
+        sumPipes.sort((a: Pipe, b: Pipe) => a.diametr - b.diametr)
+       
+        this.pipes = sumPipes
+   
+        
     }
 
     //#region format

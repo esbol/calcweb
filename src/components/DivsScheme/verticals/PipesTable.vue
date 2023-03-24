@@ -3,22 +3,22 @@
         :style="{ top: position.y + 'px', left: position.x + 'px' }">
 
         <table>
+            <col width="180px" />
+            <col width="120px" />
+            <col width="80px" />
             <tr>
-                <td colspan="3">Таблица потребности кабелей</td>
+                <td colspan="3">Таблица потребности труб</td>
             </tr>
-            <col width="150px" />
-            <col width="150px" />
-            <col width="80" />
             <tr class="header">
-                <td>Число и сечение жил, напряжение</td>
-                <td>Марка</td>
+                <td>Обозначение по стандарту</td>
+                <td>Диаметр по стандарту, мм</td>
                 <td>Длина, м</td>
             </tr>
 
-            <tr v-for="cable in cables">
-                <td>{{ cable.colCores }}x{{ cable.square }} - 0.66</td>
-                <td>{{ cable.mark }}</td>
-                <td>{{ cable.length }}</td>
+            <tr v-for="pipe in pipes">
+                <td>{{ pipe.specData.description }}</td>
+                <td>{{ pipe.diametr }}</td>
+                <td>{{ pipe.length }}</td>
             </tr>
 
 
@@ -35,6 +35,7 @@ import { useStore } from 'vuex';
 import { ref, watchEffect, computed, PropType, onUnmounted } from 'vue';
 import { Cable } from '@/models/cable';
 import { Panel } from '@/models/panel';
+import { Pipe } from '@/models/pipe';
 
 const store = useStore().state
 
@@ -42,19 +43,19 @@ const store = useStore().state
 const color = ref('var(--scheme-line-hover-color)')
 
 const props = defineProps({
-    cables: {
-        type: Array as PropType<Cable[]>,
+    pipes: {
+        type: Array as PropType<Pipe[]>,
         required: true
     }
 })
 
 function select() {
-    store.selectedObject = props.cables
+    store.selectedObject = props.pipes
 
 }
 watchEffect(() => {
 
-    if (store.selectedObject == props.cables) {
+    if (store.selectedObject == props.pipes) {
 
         color.value = 'var(--scheme-line-hover-color)'
 

@@ -13,6 +13,7 @@ import { calc } from './formuls/calcsection'
 import { Cables } from './bd/cables';
 import { Contactor } from './contactor';
 import { Contactors } from './bd/contactors';
+import { Pipe } from './pipe';
 
 
 export class SectionLine {
@@ -217,6 +218,16 @@ export class SectionLine {
     }
     public set cable(v: Cable) {
         this._cable = v;
+    }
+    //#endregion
+    
+    //#region pipe
+    private _pipe: Pipe = new Pipe(this);
+    public get pipe(): Pipe {
+        return this._pipe;
+    }
+    public set pipe(v: Pipe) {
+        this._pipe = v;
     }
     //#endregion
 

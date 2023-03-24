@@ -80,6 +80,41 @@
                 <div class="prop-value">{{ section.cable.maxCurrent }}</div>
             </td>
         </tr>
+
+
+     <tr>
+                <td>
+                    <div class="name-prop"><strong>Труба</strong></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="name-prop">Марка</div>
+                </td>
+                <td>
+                    <Select :selected-value="section.pipe" :display-path="'mark'" :options="Pipes" @change="setPipeMark" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="name-prop">Диаметр</div>
+                </td>
+                <td>
+                    <div class="prop-value">{{ section.pipe.diametr }}</div>
+                </td>
+            </tr>
+             <tr>
+                <td>
+                    <div class="name-prop">Длина</div>
+                </td>
+                <td>
+                    <div class="prop-value-input">
+                        <NumberInput :input-value="section.pipe.length"
+                            @focusout="setPipeLenght($event.target.value)" :can-edite="true" />
+                    </div>
+                </td>
+            </tr>
+
     </table>
 </template>
 
@@ -90,6 +125,7 @@ import { Cables } from "@/models/bd/cables";
 import { SectionLine } from "@/models/sectionline";
 import NumberInput from './UI/NumberInput.vue';
 import { ColPhases } from '@/models/normativs';
+import { Pipes } from '@/models/bd/pipes';
 
 const props = defineProps({
     section: {
@@ -102,8 +138,16 @@ function setCableLenght(option: any) {
     props.section.cable.length = parseFloat(option)
     props.section.getSupplyPanels().forEach(p => p.calc())
 }
+function setPipeLenght(option: any) {
+    props.section.pipe.length = parseFloat(option)
+    props.section.getSupplyPanels().forEach(p => p.calc())
+}
 function setCableMark(option: any) {
     props.section.cable.mark = option.mark
+    props.section.getSupplyPanels().forEach(p => p.calc())
+}
+function setPipeMark(option: any) {
+    props.section.pipe.mark = option.mark
     props.section.getSupplyPanels().forEach(p => p.calc())
 }
 function setColPhase(option: any) {

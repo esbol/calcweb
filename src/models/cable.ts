@@ -8,7 +8,7 @@ import { Contact } from './contact';
 
 export class Cable extends ELObject {
     setDataFromDB(mark: string): boolean {
-       const cab: ICable | undefined = Cables.find(c=> c.mark) 
+       const cab: ICable | undefined = Cables.find(c=> c.mark == mark) 
         if(cab != undefined){
             this.possibleSquares = cab.possibleSquares
             this.material = cab.material
@@ -57,6 +57,7 @@ export class Cable extends ELObject {
         return this._mark;
     }
     public set mark(v: string) {
+        if(this.setDataFromDB(v))
         this._mark = v;
     }
     //#endregion

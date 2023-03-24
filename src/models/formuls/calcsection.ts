@@ -116,4 +116,5 @@ export function calc(secton: SectionLine) {
 
     setModeMax(secton)
     secton.cable.calc()
+    secton.pipe.calc()
 }

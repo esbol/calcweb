@@ -7,6 +7,9 @@
             <div class="cablesTable" v-if="store.selectedPanel != null">
                 <CablesTable :cables="store.selectedPanel.cables" />
             </div>
+            <div class="pipesTable" v-if="store.selectedPanel != null">
+                    <PipesTable :pipes="store.selectedPanel.pipes" />
+                </div>
 
             <div class="inApparate">
                 <BreakerInV :showPhases="true" v-if="store.selectedPanel.inApparate != null"
@@ -43,6 +46,7 @@
 
 <script setup lang="ts">
 //#region import
+import PipesTable from './DivsScheme/verticals/PipesTable.vue'
 import CablesTable from './DivsScheme/verticals/CablesTable.vue'
 import BreakerInV from './DivsScheme/verticals/BreakerInV.vue'
 import Popup from './DivsScheme/Popup.vue'
@@ -138,7 +142,12 @@ async function printToPDF() {
 <style>
 .cablesTable {
     position: absolute;
-    left: 100px;
+    left: 80px;
+    bottom: 50px
+}
+.pipesTable {
+    position: absolute;
+    left: 530px;
     bottom: 50px
 }
 
@@ -215,6 +224,8 @@ async function printToPDF() {
     padding-top: 20px;
     padding-left: 50px;
     box-shadow: 0px 0px 2px 1px #d1d1d1;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .divContainer:focus {
@@ -225,6 +236,8 @@ async function printToPDF() {
     width: 100%;
     height: 100%;
     overflow: auto;
+   padding-left: 10px;
+   padding-top: 5px;
 }
 
 .slide-fade-enter-active {
