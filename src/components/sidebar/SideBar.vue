@@ -10,7 +10,7 @@
             <PropsContainer :title="store.selectedPanel.nameOfPlane" v-if="(store.selectedPanel != null)">
                 <PanelProps />
             </PropsContainer>
-
+          
             <PropsContainer title="Участок сети" v-if="(store.selectedObject instanceof SectionLine)">
                 <SectionProps :section="store.selectedObject" />
             </PropsContainer>
@@ -30,26 +30,24 @@
                 <StampProps :stamp="store.selectedObject" />
             </PropsContainer>
 
-            <PropsContainer title="Формат">
-                <FormatProps />
-            </PropsContainer>
+
 
             <BusProps v-if="(store.selectedObject instanceof Bus)" :bus="store.selectedObject" />
 
         </div>
         <div class="splitter">
             <div class="spl_btn">
-                 <div class="spl_line"></div>
-                  <div class="spl_line"></div>
+                <div class="spl_line"></div>
+                <div class="spl_line"></div>
             </div>
-       
-     
+
+
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import FormatProps from "./FormatProps.vue";
+
 import StampProps from "./StampProps.vue";
 import PanelProps from "./PanelProps.vue";
 import ContactorProps from "./ContactorProps.vue";
@@ -102,12 +100,13 @@ const props = defineProps({
     align-items: center;
 }
 
-.spl_btn{
+.spl_btn {
     display: flex;
     width: 4px;
     justify-content: space-between;
 }
-.spl_line{
+
+.spl_line {
     width: 1px;
     height: 15px;
     background-color: var(--main-border-color);

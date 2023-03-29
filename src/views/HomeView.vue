@@ -1,17 +1,20 @@
 <template>
-  <div class="header">{{ store.state.panels.length }}</div>
-  <div class="main" :class="{ sidehidden: sideShow === false, sideshow: sideShow === true }">
-    <SideBar :show="sideShow"/>
-    <DivScheme v-if="store.state.selectedPanel != null"
-     />
-   
+  <div class="header" >
+   <Header />
   </div>
-  <div class="footer">footer</div>
+  <div class="main"  :class="{ sidehidden: sideShow === false, sideshow: sideShow === true }">
+    <SideBar :show="sideShow" />
+    <DivScheme v-if="store.state.selectedPanel != null" />
+
+  </div>
+  <div class="footer" @click="getPanels">footer</div>
 </template>
 
 <script setup lang="ts">
+
+import Header from '@/components/Header/Header.vue';
 import DivScheme from '@/components/DivScheme.vue';
-import { ref, provide, watch } from 'vue'
+import { ref, provide, watch, onMounted, onBeforeUnmount } from 'vue'
 import { Panel } from '@/models/panel'
 import SideBar from '@/components/sidebar/SideBar.vue';
 import SideRigth from '@/components/sidebar/SideRigth.vue';
@@ -24,17 +27,53 @@ import { IState } from '@/store';
 
 const store = useStore()
 
-const panel1 = new Panel()
-panel1.inApparate = new Breaker(Breakers[0].mark)
 
-store.state.panels.push(panel1)
+
+if (store.state.panels.length == 0) {
+  const panel1 = new Panel()
+  panel1.inApparate = new Breaker(Breakers[0].mark)
+
+  store.state.panels.push(panel1)
+
+  panel1.nameOfPlane = 'ШР1'
+}
+
 store.state.selectedPanel = store.state.panels[0]
-panel1.nameOfPlane='ШР1'
-
 
 const sideShow = ref(true)
 
 
+const savePanels = () => {
+  store.dispatch('savePanels', store.state.panels);
+  console.log('save');
+  
+};
+
+// const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+//   savePanels();
+// };
+
+const getPanels = ()=>{
+  console.log('get');
+  store.dispatch('fetchPanels');
+ 
+  
+  
+}
+
+// onMounted(() => {
+//   store.dispatch('fetchPanels');
+//   window.addEventListener('beforeunload', handleBeforeUnload);
+//   console.log('onmount');
+  
+// });
+
+// onBeforeUnmount(() => {
+  
+//   window.removeEventListener('beforeunload', handleBeforeUnload);
+//   console.log('beforonumountd');
+  
+// });
 
 
 
@@ -43,19 +82,19 @@ const sideShow = ref(true)
 </script>
 
 <style>
-
 .no-select {
-    user-select: none;
+  user-select: none;
 }
 
 @font-face {
 
-font-family: "isocpeur"; 
+  font-family: "isocpeur";
 
-src: url("@/assets/isocpeui.ttf") format("truetype"); 
-font-style: normal; 
-font-weight: normal; 
-} 
+  src: url("@/assets/isocpeui.ttf") format("truetype");
+  font-style: normal;
+  font-weight: normal;
+}
+
 :root {
   --sidebar-title-bg-color: #e6e6e6e0;
   --sidebar-bg-color: #fbfbfb;
@@ -65,10 +104,11 @@ font-weight: normal;
   --main-border-color: rgb(223, 223, 223);
   --main-accent-color: #1a73e8;
   --main-text-disabled-color: rgb(140, 140, 140);
+  --main-text-color: #383838;
 }
 
 .header {
-  height: 50px;
+
   border-bottom: 1px solid rgb(198, 196, 196);
 }
 
@@ -77,6 +117,7 @@ font-weight: normal;
   background: white;
   border-top: 1px solid rgb(219, 219, 219);
 }
+
 .main {
   display: grid;
   width: 100%;
@@ -97,11 +138,10 @@ font-weight: normal;
 }
 
 .material-symbols-outlined {
-    font-variation-settings:
-        'FILL' 0,
-        'wght' 400,
-        'GRAD' 0,
-        'opsz' 48
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48
 }
-
 </style>

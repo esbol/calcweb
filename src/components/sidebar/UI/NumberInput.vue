@@ -1,11 +1,13 @@
 <template>
     <input type="number" step="any" :value="inputValue" :readonly="!canEdite" @focusout="$emit('focusout', $event)"
+    :style="{ color: state.textColor }"
         @focus="selectAll($event.target as HTMLInputElement)" />
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts">import { computed, reactive, ref, watchEffect } from 'vue';
 
-defineProps({
+
+const props = defineProps({
     inputValue: Number,
     canEdite: Boolean
 })
@@ -15,6 +17,19 @@ defineEmits(['focusout'])
 function selectAll(target: HTMLInputElement) {
     target.select()
 }
+const state = reactive({
+    textColor: 'red', // можно заменить на любой другой цвет
+    paragraphColor: 'blue' // можно заменить на любой другой цвет
+});
+const color = ref('#000000');
+watchEffect(() => {
+    if(props.canEdite){
+        state.textColor = 'var(--main-text-color)'
+    }else{
+        state.textColor = 'var(--main-text-disabled-color)'
+    }
+    
+})
 
 </script>
 
@@ -22,7 +37,7 @@ function selectAll(target: HTMLInputElement) {
 <style scoped>
 input {
    height: 100%;
-    width: 100%;
+    width: 100%!important;
     
     box-sizing: border-box;
     display: block;
@@ -30,7 +45,6 @@ input {
     box-shadow: -1px -1px 1px gray;
     border: none;
     padding: 5px;
-    color: var(--row-text-color);
 }
 
 input:focus {
