@@ -32,7 +32,7 @@
 
 
 
-            <BusProps v-if="(store.selectedObject instanceof Bus)" :bus="store.selectedObject" />
+            
 
         </div>
         <div class="splitter">

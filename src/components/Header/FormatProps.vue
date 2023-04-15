@@ -8,7 +8,7 @@
 
 
         <div class="size"><span class="material-symbols-outlined">
-                height
+                 width
             </span></div>
 
 
@@ -22,7 +22,7 @@
 
 
         <div ><span class="material-symbols-outlined">
-                width
+                height
             </span></div>
 
 
@@ -69,6 +69,7 @@ function setFormat(n: string) {
 
 <style scoped>
 .material-symbols-outlined {
+    color: var(--main-text-color);
     font-variation-settings:
         'FILL' 0,
         'wght' 400,

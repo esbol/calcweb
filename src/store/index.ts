@@ -2,13 +2,15 @@ import { Panel } from '@/models/panel'
 import { Format } from '@/models/settings/format'
 import Flatted, { parse, stringify, toJSON, fromJSON } from 'flatted';
 import { createStore, Module } from 'vuex'
+import { plainToClass, classToPlain, Exclude, Expose, Transform } from 'class-transformer';
+
 
 export interface IState {
   panels: Array<Panel>
   selectedPanel: Panel | null
   selectedObject: any | null
   showPopup: any
-
+  showGrid: boolean
 
 }
 
@@ -26,15 +28,15 @@ export default createStore<IState>({
       y: 0,
       componentIndx: 0,
       args: {}
-    }
+    },
+    showGrid: false
   },
   getters: {
   },
   mutations: {
     setPanels(state, panels: Array<Panel>) {
-      console.log(panels[0] instanceof Panel);
-      console.log(panels[0]);
-      
+
+
       state.panels.splice(0, state.panels.length);
 
       panels.forEach(p => {
@@ -53,26 +55,27 @@ export default createStore<IState>({
     fetchPanels({ commit }) {
       const panelsJSON = localStorage.getItem('panels');
       if (panelsJSON) {
-        const panels: Array<Panel> = parse(panelsJSON)
-        commit('setPanels', panels);
-        console.log(panels);
+        const deserialized = parse(panelsJSON)
+        
+        const panel = plainToClass(Panel, deserialized)
+        console.log(panel);
+        
+        //commit('setPanels', panels);
+
 
       }
     },
     savePanels({ state }) {
 
-      const panelsJSON = stringify(state.panels);
+      // const panelsJSON = stringify(state.panels);
+      const panelsJSON = stringify(state.panels[0])
       localStorage.setItem('panels', panelsJSON);
-      console.log(state.panels);
+      console.log(panelsJSON);
 
-      // const pans = localStorage.getItem('panels');
-      // if (pans) {
-      //   const panels: Array<Panel> = parse(pans);
-      //   console.log(panels);
 
-      // }
     },
   },
   modules: {
   }
 })
+

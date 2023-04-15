@@ -7,7 +7,7 @@
     <DivScheme v-if="store.state.selectedPanel != null" />
 
   </div>
-  <div class="footer" @click="getPanels">footer</div>
+  <div class="footer" >footer</div>
 </template>
 
 <script setup lang="ts">
@@ -42,38 +42,6 @@ store.state.selectedPanel = store.state.panels[0]
 
 const sideShow = ref(true)
 
-
-const savePanels = () => {
-  store.dispatch('savePanels', store.state.panels);
-  console.log('save');
-  
-};
-
-// const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-//   savePanels();
-// };
-
-const getPanels = ()=>{
-  console.log('get');
-  store.dispatch('fetchPanels');
- 
-  
-  
-}
-
-// onMounted(() => {
-//   store.dispatch('fetchPanels');
-//   window.addEventListener('beforeunload', handleBeforeUnload);
-//   console.log('onmount');
-  
-// });
-
-// onBeforeUnmount(() => {
-  
-//   window.removeEventListener('beforeunload', handleBeforeUnload);
-//   console.log('beforonumountd');
-  
-// });
 
 
 

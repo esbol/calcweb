@@ -1,15 +1,17 @@
 <template>
     <div class="main-wrap" @click="clearSelect" id="mainWrap">
-        <div ref="content" id="divContainer" v-on:keydown="handleKeyDown" tabindex="0" class="divContainer"
+        <div ref="content" id="divContainer" v-on:keydown="handleKeyDown" tabindex="0"
+        :class="{show_grid: store.showGrid}"
+        class="divContainer"
             v-if="store.selectedPanel != null">
 
-            <Format/>
+            <Format />
             <div class="cablesTable" v-if="store.selectedPanel != null">
                 <CablesTable :cables="store.selectedPanel.cables" />
             </div>
             <div class="pipesTable" v-if="store.selectedPanel != null">
-                    <PipesTable :pipes="store.selectedPanel.pipes" />
-                </div>
+                <PipesTable :pipes="store.selectedPanel.pipes" />
+            </div>
 
             <div class="inApparate">
                 <BreakerInV :showPhases="true" v-if="store.selectedPanel.inApparate != null"
@@ -82,7 +84,7 @@ function handleKeyDown(event: KeyboardEvent) {
     if (event.code === "Delete" || event.keyCode === 46) {
         deleteObject(store.selectedObject)
     }
-   // printToPDF()
+    // printToPDF()
 }
 
 
@@ -105,7 +107,7 @@ function clearSelect(event: MouseEvent) {
     if (target.className == 'innerFrame' || target.className == 'main-wrap') {
         store.selectedObject = null
     }
-    
+
 }
 
 const content = ref<HTMLDivElement | null>(null);
@@ -145,6 +147,7 @@ async function printToPDF() {
     left: 80px;
     bottom: 50px
 }
+
 .pipesTable {
     position: absolute;
     left: 530px;
@@ -212,8 +215,7 @@ async function printToPDF() {
 
 .divContainer {
     background-color: rgb(255, 255, 255);
-    background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEyIEwgNDggMTIgTSAxMiAwIEwgMTIgNDggTSAwIDI0IEwgNDggMjQgTSAyNCAwIEwgMjQgNDggTSAwIDM2IEwgNDggMzYgTSAzNiAwIEwgMzYgNDgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QwZDBkMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDQ4IDAgTCAwIDAgMCA0OCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZDBkMGQwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=);
-    background-position: -1px -1px;
+
 
     display: flex;
     flex-direction: column;
@@ -228,6 +230,11 @@ async function printToPDF() {
     margin-right: auto;
 }
 
+.show_grid {
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEyIEwgNDggMTIgTSAxMiAwIEwgMTIgNDggTSAwIDI0IEwgNDggMjQgTSAyNCAwIEwgMjQgNDggTSAwIDM2IEwgNDggMzYgTSAzNiAwIEwgMzYgNDgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QwZDBkMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDQ4IDAgTCAwIDAgMCA0OCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZDBkMGQwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=);
+    background-position: -1px -1px;
+}
+
 .divContainer:focus {
     outline: none;
 }
@@ -236,8 +243,8 @@ async function printToPDF() {
     width: 100%;
     height: 100%;
     overflow: auto;
-   padding-left: 10px;
-   padding-top: 5px;
+    padding-left: 10px;
+    padding-top: 5px;
 }
 
 .slide-fade-enter-active {
