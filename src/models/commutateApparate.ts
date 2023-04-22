@@ -10,15 +10,10 @@ export abstract class CommutateApparate extends Device {
         this.innerSection.setStartContact(this.inContact)
         this.innerSection.setEndContact(this.outContact)
         this.mark = mark
-
-        
     }
 
-
-
-
-    readonly outContact: Contact = new Contact(this)
-    readonly innerSection: SectionLine = new SectionLine()
+    outContact: Contact = new Contact(this)
+    innerSection: SectionLine = new SectionLine()
 
     //#region possibleCurrents
     protected _possibleCurrents: Array<number> = [0]
@@ -73,5 +68,13 @@ export abstract class CommutateApparate extends Device {
        
 
 
+    }
+
+    toJSON(){
+        return Object.assign(super.toJSON(), {
+            outContactId: this.outContact.id,
+            innerSectionId: this.innerSection.id,
+            nominalCurrent: this.nominalCurrent,
+        })
     }
 }

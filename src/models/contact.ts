@@ -1,19 +1,28 @@
 import { ELObject } from "./elobject";
 import { Device } from "./device"
 import { SectionLine } from "./sectionline";
+import { Consumer } from "./consumer";
 
 export class Contact extends ELObject{
     setDataFromDB(mark: string): boolean {
         return true
     }
-    readonly ownDevice: Device
-   
+     //#region ownDevice
+     private _ownDevice : Device ;
+     public get ownDevice() : Device {
+         return this._ownDevice;
+     }
+     public set ownDevice(v : Device) {
+         this._ownDevice = v;
+     }
+     //#endregion
+    
     constructor(device: Device){
         super()
-        this.ownDevice = device
+        this._ownDevice = device
     }
 
-
+    
     //#region sectionLines
     public readonly sectionLines: Array<SectionLine> = new Array<SectionLine>();
     //#endregion
@@ -52,5 +61,14 @@ export class Contact extends ELObject{
         this.sectionLines.splice(
             this.sectionLines.indexOf(section), 1
         )
+    }
+
+    toJSON(){
+        const sectionsIds = new Array<number>()
+        this.sectionLines.forEach(s=> sectionsIds.push(s.id))
+        return Object.assign(super.toJSON(), {
+            ownDeviceId: this.ownDevice.id,
+            sectionsIds: sectionsIds,
+        })
     }
 }

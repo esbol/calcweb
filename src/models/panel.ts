@@ -23,15 +23,10 @@ export class Panel extends Device {
         this.description = 'panel'
 
     }
-    readonly outContact: Contact = new Contact(this)
+    outContact: Contact = new Contact(this)
 
-
-    //#region uniteSection
-    private _uniteSection: SectionLine = new SectionLine();
-    public get uniteSection(): SectionLine {
-        return this._uniteSection;
-    }
-    //#endregion
+    uniteSection: SectionLine = new SectionLine();
+    
 
     //#region inApparate
     private _inApparate: CommutateApparate | null = null;
@@ -39,7 +34,7 @@ export class Panel extends Device {
         return this._inApparate;
     }
     public set inApparate(v: CommutateApparate | null) {
-        if (v != null) this._uniteSection.setStartContact(v.outContact)
+        if (v != null) this.uniteSection.setStartContact(v.outContact)
         this._inApparate = v;
     }
     //#endregion
@@ -214,4 +209,12 @@ export class Panel extends Device {
         this._format = v;
     }
     //#endregion 
+
+    toJSON(){
+        return Object.assign(super.toJSON(), {
+            outContactId: this.outContact.id,
+            uniteSectionId: this.uniteSection.id,
+            inApparateId: this.inApparate?.id,
+        })
+    }
 }

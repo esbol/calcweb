@@ -57,8 +57,8 @@ export default createStore<IState>({
       if (panelsJSON) {
         const deserialized = parse(panelsJSON)
         
-        const panel = plainToClass(Panel, deserialized)
-        console.log(panel);
+       // const panel = plainToClass(Panel, deserialized)
+        console.log(deserialized);
         
         //commit('setPanels', panels);
 
@@ -68,8 +68,8 @@ export default createStore<IState>({
     savePanels({ state }) {
 
       // const panelsJSON = stringify(state.panels);
-      const panelsJSON = stringify(state.panels[0])
-      localStorage.setItem('panels', panelsJSON);
+      const panelsJSON = JSON.stringify(state.panels[0])
+     // localStorage.setItem('panels', panelsJSON);
       console.log(panelsJSON);
 
 

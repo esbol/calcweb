@@ -29,9 +29,6 @@
             <PropsContainer title="Штамп" v-if="(store.selectedObject instanceof Stamp)">
                 <StampProps :stamp="store.selectedObject" />
             </PropsContainer>
-
-
-
             
 
         </div>

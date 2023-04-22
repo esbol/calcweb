@@ -245,10 +245,6 @@ export class SectionLine {
         calc(this)      
     }
 
-   
-
-   
-
     public setStartContact(constact: Contact) {
         if (this.startContact !== null) {
             this.startContact.removeSection(this);
@@ -263,6 +259,23 @@ export class SectionLine {
         }
         contact.addSection(this)
         this.endContact = contact
+    }
+
+    toJSON(){
+        return {
+            id: this.id,
+            isInPanel: this.isInPanel,
+            colPhase: this.colPhase,
+            voltage: this.voltage,
+            length: this.length,
+            nameOfPlane: this.nameOfPlane,
+            description: this.description,
+            startContactId: this.startContact?.id,
+            endContactId: this.endContact?.id,
+            cable: this.cable,
+            pipe: this.pipe,
+            enviroment: this.enviroment
+        }
     }
 
 }

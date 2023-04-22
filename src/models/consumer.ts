@@ -132,4 +132,14 @@ export class Consumer extends Device{
         this.ratedQPower = calcQPower(this.ratedPower, this.tgf)
         this.ratedSPower = calcSPower(this.ratedPower, this.ratedQPower)
     }
+
+
+    toJSON(){
+        return Object.assign(super.toJSON(), {
+            groupNameBySP: this.groupNameBySP,
+            count: this.count,
+            installPower: this.installPower,
+            cosf: this.cosf
+        })
+    }
 }

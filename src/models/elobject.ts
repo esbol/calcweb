@@ -40,6 +40,16 @@ export abstract class ELObject {
     constructor() {  }
 
     abstract setDataFromDB(mark: string): boolean
+
+    toJSON(){
+        return {
+            id: this.id,
+            colPhase: this.colPhase,
+            voltage: this.voltage,
+            nameOfPlane: this.nameOfPlane,
+            description: this.description
+        }
+    }
 }
 
 

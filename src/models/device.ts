@@ -37,9 +37,7 @@ export abstract class Device extends ELObject {
     //#endregion 
     
  
-
-
-    //#region supplyPanels
+    //#region getSupplyPanels
 
     public getSupplyPanels(): Array<Panel> {
         const spanels: Array<Panel> = new Array<Panel>()
@@ -60,5 +58,12 @@ export abstract class Device extends ELObject {
         return spanels
     }
     //#endregion
+
+    toJSON(){
+        return Object.assign(super.toJSON(), {
+            inContactId: this.inContact.id,
+            mark: this.mark,
+        })
+    }
 
 }
