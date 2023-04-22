@@ -3,6 +3,7 @@ import { Format } from '@/models/settings/format'
 import Flatted, { parse, stringify, toJSON, fromJSON } from 'flatted';
 import { createStore, Module } from 'vuex'
 import { plainToClass, classToPlain, Exclude, Expose, Transform } from 'class-transformer';
+import { getJSON } from '@/models/serialize/serialize';
 
 
 export interface IState {
@@ -66,9 +67,10 @@ export default createStore<IState>({
       }
     },
     savePanels({ state }) {
-
+      
+      
       // const panelsJSON = stringify(state.panels);
-      const panelsJSON = JSON.stringify(state.panels[0])
+      const panelsJSON = getJSON(state.panels)
      // localStorage.setItem('panels', panelsJSON);
       console.log(panelsJSON);
 
