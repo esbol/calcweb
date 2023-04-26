@@ -3,17 +3,22 @@ import { Contact } from "./contact";
 import { Device } from "./device";
 
 export abstract class CommutateApparate extends Device {
-    constructor(mark: string) {
+    constructor(mark?: string) {
         super()
-     
-        this.innerSection.nameOfPlane = 'innerSection'
-        this.innerSection.setStartContact(this.inContact)
-        this.innerSection.setEndContact(this.outContact)
-        this.mark = mark
+        const inner = new SectionLine()
+        inner.nameOfPlane = 'innerSection'
+        inner.setStartContact(this.inContact)
+        inner.setEndContact(this.outContact)
+        if(mark != undefined) this.mark = mark
     }
 
     outContact: Contact = new Contact(this)
-    innerSection: SectionLine = new SectionLine()
+
+    //#region innerSection
+    public get innerSection(): SectionLine {
+        return this.inContact.getSlaveSections()[0];
+    }
+    //#endregion
 
     //#region possibleCurrents
     protected _possibleCurrents: Array<number> = [0]
@@ -33,10 +38,17 @@ export abstract class CommutateApparate extends Device {
     public get nominalCurrent(): number {
         return this._nominalCurrent;
     }
+    public set nominalCurrent(v: number) {
+        this._nominalCurrent = v
+    }
     //#endregion
 
 
     public calc() {
+
+
+        
+
         this.innerSection.calc()
        
         let col = this.innerSection.colPhase
@@ -48,11 +60,6 @@ export abstract class CommutateApparate extends Device {
                 this.colPhase = 1
             }
         }
-
-       
-      
-        
-       
         
         let cur = this.innerSection.modeMax.current
        
@@ -67,13 +74,13 @@ export abstract class CommutateApparate extends Device {
         }
        
 
+        
 
     }
 
     toJSON(){
         return Object.assign(super.toJSON(), {
             outContactId: this.outContact.id,
-            innerSectionId: this.innerSection.id,
             nominalCurrent: this.nominalCurrent,
         })
     }

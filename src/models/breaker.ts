@@ -11,12 +11,19 @@ export class Breaker extends CommutateApparate {
             return true
         }
     }
-    
-    constructor(mark: string){
+
+    constructor(mark?: string){
         super(mark)
-      
         this.description = 'breaker'
         this.innerSection.nameOfPlane = 'innerBreaker'
+        this.innerSection.description = 'innerBreaker'
+        this.inContact.nameOfPlane = 'BreakerInContact'
+        this.outContact.nameOfPlane = 'BreakerOutContact'
     }
     
+    toJSON(){
+        return Object.assign(super.toJSON(), {
+            type: 'Breaker'
+        })
+    }
 }

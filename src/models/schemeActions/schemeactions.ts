@@ -15,6 +15,8 @@ export function addContactor(section: SectionLine) {
 
 
     let endDevice: Device = new Consumer()
+
+    if(section.endContact?.ownDevice !== null)
     if (section.endContact) endDevice = section.endContact.ownDevice
 
 
@@ -84,7 +86,7 @@ export function addConsumer(contact: Contact) {
 
     // const panels = getSupplyPanels(contact)
 
-
+    if(contact.ownDevice != null)
     contact.ownDevice.getSupplyPanels().forEach(p => {
         p.calc()
         rename(p)
@@ -97,6 +99,7 @@ export function deleteObject(object: any) {
         const sl = object as SectionLine
         if (sl.startContact != null) {
             sl.startContact.removeSection(sl)
+            if(sl.startContact.ownDevice != null)
             delEmpty(sl.startContact.ownDevice)
         }
 

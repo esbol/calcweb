@@ -111,6 +111,14 @@ export class Pipe extends ELObject {
 
     }
 
-
+    toJSON(){
+        return Object.assign(super.toJSON(), {
+            
+            mark: this.mark,
+            diametr: this.diametr,
+            length: this.length,
+         
+        })
+    }
 
 }

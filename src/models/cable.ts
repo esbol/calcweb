@@ -198,4 +198,15 @@ export class Cable extends ELObject {
         return br
     }
 
+    toJSON(){
+        return Object.assign(super.toJSON(), {
+            
+            mark: this.mark,
+            colCores: this.colCores,
+            square: this.square,
+            length: this.length,
+            material: this.material,
+            maxCurrent: this.maxCurrent
+        })
+    }
 }

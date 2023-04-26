@@ -17,7 +17,7 @@ export abstract class Device extends ELObject {
     }
     //#endregion
    
-    readonly inContact: Contact = new Contact(this)
+    inContact: Contact = new Contact(this)
     
     //#region Mark
 
@@ -44,7 +44,8 @@ export abstract class Device extends ELObject {
         recurcy(this.inContact)
         function recurcy(contact: Contact){
             contact.getSupplySections().forEach(s=>{
-                if(s.startContact != null){       
+                if(s.startContact != null){
+                    if(s.startContact.ownDevice != null)       
                     if(s.startContact.ownDevice.constructor.name == 'Panel'){
                         if(!spanels.includes(s.startContact.ownDevice as Panel)){
                             spanels.push(s.startContact.ownDevice as Panel)

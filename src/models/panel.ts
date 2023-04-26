@@ -8,6 +8,8 @@ import { addOneConsumerFeeder } from './schemeActions/schemeactions';
 import { Cable } from './cable';
 import { Format } from './settings/format';
 import { Pipe } from './pipe';
+import { Breaker } from './breaker';
+import { Breakers } from './bd/breakers';
 
 
 export class Panel extends Device {
@@ -16,28 +18,33 @@ export class Panel extends Device {
     }
     constructor() {
         super()
-        
+        this.inApparate = new Breaker(Breakers[0].mark)
+        this.inApparate.nameOfPlane = 'inApparate'
+        this.s1Section  = new SectionLine()
+        this.outContact  = new Contact(this)
+        this.s1Section.setStartContact(this.inContact)
+        this.s1Section.setEndContact(this.inApparate.inContact)
+
+        this.uniteSection  = new SectionLine()
+        this.uniteSection.setStartContact(this.inApparate.outContact)
         this.uniteSection.setEndContact(this.outContact)
+        
+     
         this.uniteSection.nameOfPlane = 'uniteSection'
+        this.uniteSection.description = 'uniteSection'
         this.uniteSection.isInPanel = true
         this.description = 'panel'
-
+        this.inContact.description = 'panelInCont'
+        this.outContact.description = 'panelOutCont'
+        this.s1Section.nameOfPlane = 's1Section'
+        this.s1Section.description = 's1Section'
+        this.s1Section.isInPanel = true
     }
-    outContact: Contact = new Contact(this)
-
-    uniteSection: SectionLine = new SectionLine();
+    outContact: Contact
+    uniteSection: SectionLine;
+    s1Section: SectionLine;
+    inApparate: CommutateApparate;
     
-
-    //#region inApparate
-    private _inApparate: CommutateApparate | null = null;
-    public get inApparate(): CommutateApparate | null {
-        return this._inApparate;
-    }
-    public set inApparate(v: CommutateApparate | null) {
-        if (v != null) this.uniteSection.setStartContact(v.outContact)
-        this._inApparate = v;
-    }
-    //#endregion
 
     //#region bus
     private _bus: Bus = new Bus();
@@ -71,21 +78,23 @@ export class Panel extends Device {
 
     public calc() {
 
+        this.s1Section.calc()
 
-        this.uniteSection.calc()
-     
-        this.uniteSection.subDevices.forEach(d => {
+        this.s1Section.subSections.forEach(s =>{
+           
+            s.calc()
+        } )
+
+        this.s1Section.subDevices.forEach(d => {
             if (d instanceof CommutateApparate) {
                 d.calc()
             }
         })
         
-        this.uniteSection.subSections.forEach(s =>{
-           
-            s.calc()
-        } )
+       
 
-        this.inApparate?.calc()
+    
+    
 
         this.calcColCables()
         this.calcColPipes()
@@ -213,8 +222,10 @@ export class Panel extends Device {
     toJSON(){
         return Object.assign(super.toJSON(), {
             outContactId: this.outContact.id,
+            s1SectionId: this.s1Section.id,
             uniteSectionId: this.uniteSection.id,
-            inApparateId: this.inApparate?.id,
+            inApparateId: this.inApparate.id,
+            type: 'Panel'
         })
     }
 }

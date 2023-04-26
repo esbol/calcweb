@@ -8,18 +8,18 @@ export class Contact extends ELObject{
         return true
     }
      //#region ownDevice
-     private _ownDevice : Device ;
-     public get ownDevice() : Device {
+     private _ownDevice : Device | null = null ;
+     public get ownDevice() : Device | null{
          return this._ownDevice;
      }
-     public set ownDevice(v : Device) {
+     public set ownDevice(v : Device | null) {
          this._ownDevice = v;
      }
      //#endregion
     
-    constructor(device: Device){
+    constructor(device?: Device){
         super()
-        this._ownDevice = device
+        if(device != undefined) this._ownDevice = device
     }
 
     
@@ -63,12 +63,5 @@ export class Contact extends ELObject{
         )
     }
 
-    toJSON(){
-        const sectionsIds = new Array<number>()
-        this.sectionLines.forEach(s=> sectionsIds.push(s.id))
-        return Object.assign(super.toJSON(), {
-            ownDeviceId: this.ownDevice.id,
-            sectionsIds: sectionsIds,
-        })
-    }
+    
 }

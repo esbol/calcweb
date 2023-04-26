@@ -45,7 +45,6 @@ export abstract class ELObject {
         return {
             id: this.id,
             colPhase: this.colPhase,
-            voltage: this.voltage,
             nameOfPlane: this.nameOfPlane,
             description: this.description
         }

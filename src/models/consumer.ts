@@ -13,6 +13,7 @@ export class Consumer extends Device{
         this.description = 'Наименование'
         this._groupNameBySP = 'не указано'
         this.nameOfPlane = 'cons'
+        this.inContact.nameOfPlane = 'ConsumerInContact'
     }
 
     //#region calculationModes
@@ -139,7 +140,8 @@ export class Consumer extends Device{
             groupNameBySP: this.groupNameBySP,
             count: this.count,
             installPower: this.installPower,
-            cosf: this.cosf
+            cosf: this.cosf,
+            type: 'Consumer'
         })
     }
 }

@@ -26,6 +26,7 @@ export class SectionLine {
         function recurcy(contact: Contact) {
             contact.getSupplySections().forEach(s => {
                 if (s.startContact != null) {
+                    if(s.startContact.ownDevice != null)
                     if (s.startContact.ownDevice.constructor.name == 'Panel') {
                         if (!spanels.includes(s.startContact.ownDevice as Panel)) {
                             spanels.push(s.startContact.ownDevice as Panel)
@@ -173,6 +174,7 @@ export class SectionLine {
         if (this.endContact !== null) recurcy(this.endContact)
 
         function recurcy(endC: Contact) {
+            if(endC.ownDevice != null)
             if (devlist.includes(endC.ownDevice) === false) {
                 devlist.push(endC.ownDevice)
             }
@@ -266,14 +268,13 @@ export class SectionLine {
             id: this.id,
             isInPanel: this.isInPanel,
             colPhase: this.colPhase,
-            voltage: this.voltage,
             length: this.length,
             nameOfPlane: this.nameOfPlane,
             description: this.description,
             startContactId: this.startContact?.id,
             endContactId: this.endContact?.id,
-            cable: this.cable,
-            pipe: this.pipe,
+            cableId: this.cable.id,
+            pipeId: this.pipe.id,
             enviroment: this.enviroment
         }
     }

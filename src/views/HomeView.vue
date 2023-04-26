@@ -31,8 +31,6 @@ const store = useStore()
 
 if (store.state.panels.length == 0) {
   const panel1 = new Panel()
-  panel1.inApparate = new Breaker(Breakers[0].mark)
-
   store.state.panels.push(panel1)
 
   panel1.nameOfPlane = 'ШР1'
