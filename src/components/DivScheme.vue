@@ -6,6 +6,11 @@
             v-if="store.selectedPanel != null">
 
             <Format />
+
+            <div class="bokovic">
+                <Bokovic />
+            </div>
+
             <div class="cablesTable" v-if="store.selectedPanel != null">
                 <CablesTable :cables="store.selectedPanel.cables" />
             </div>
@@ -48,6 +53,7 @@
 
 <script setup lang="ts">
 //#region import
+import Bokovic from './DivsScheme/formats/Bokovic.vue'
 import PipesTable from './DivsScheme/verticals/PipesTable.vue'
 import CablesTable from './DivsScheme/verticals/CablesTable.vue'
 import BreakerInV from './DivsScheme/verticals/BreakerInV.vue'
@@ -142,6 +148,11 @@ async function printToPDF() {
 </script>
 
 <style>
+.bokovic{
+    position: absolute;
+    left: 80px;
+    top: 20px
+}
 .cablesTable {
     position: absolute;
     left: 80px;
@@ -177,13 +188,13 @@ async function printToPDF() {
 }
 
 .shinaDiv {
-    margin-left: 100px;
+    margin-left: 300px;
     height: 786px;
 }
 
 .inApparate {
     margin-top: 30px;
-    margin-left: 280px;
+    margin-left: 480px;
     display: flex;
     flex-direction: column;
     align-items: stretch;

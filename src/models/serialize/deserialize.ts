@@ -10,9 +10,9 @@ import { Breaker } from "../breaker";
 import { Cable } from "../cable";
 import { Pipe } from "../pipe";
 
-const devices: Array<Device> = []
-const sections: Array<SectionLine> = []
-const contacts: Array<Contact> = []
+let devices: Array<Device> = []
+let sections: Array<SectionLine> = []
+let contacts: Array<Contact> = []
 
 interface IJSON {
     jsonDevices: Array<string>,
@@ -23,9 +23,17 @@ interface IJSON {
 }
 
 export function getPanels(jsonString: string) {
+
+    
+
+    devices = []
+    sections = []
+    contacts = []
+
     const objJson: IJSON = JSON.parse(jsonString)
 
-
+    console.log(objJson);
+    
 
     objJson.jsonContacts.forEach(cont => {
         const contact: Contact = Object.assign(new Contact(), JSON.parse(cont))
@@ -85,14 +93,17 @@ export function getPanels(jsonString: string) {
 
 
 
-    let panels = new Array<Panel>()
+    const panels = new Array<Panel>()
     devices.forEach(d => {
         if (d instanceof Panel) {
-            panels.push(d as Panel)
+            const pan = d as Panel
+            if(!panels.includes(pan))
+            panels.push(pan)
         }
     })
 
-
+    console.log(panels);
+    
     return panels
 
 }

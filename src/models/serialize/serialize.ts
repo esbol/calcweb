@@ -10,11 +10,12 @@ import { Cable } from "../cable";
 import { Pipe } from "../pipe";
 
 
-
+let panels = new Array<Panel>()
 
 export function getJSON(panels1: Array<Panel>){
     panels = panels1
-
+  
+    
     
     setElements()
     setJSONs()
@@ -30,21 +31,34 @@ export function getJSON(panels1: Array<Panel>){
     
 }
 
-let panels = new Array<Panel>()
 
-const devices: Array<Device> = []
-const sections: Array<SectionLine> = []
-const contacts: Array<Contact> = []
-const cables: Array<Cable> = []
-const pipes: Array<Pipe> = []
 
-const jsonDevices: Array<string> = []
-const jsonSections: Array<string> = []
-const jsonContacts: Array<string> = []
-const jsonCables: Array<string> = []
-const jsonPipes: Array<string> = []
+let devices: Array<Device> = []
+let sections: Array<SectionLine> = []
+let contacts: Array<Contact> = []
+let cables: Array<Cable> = []
+let pipes: Array<Pipe> = []
+
+let jsonDevices: Array<string> = []
+let jsonSections: Array<string> = []
+let jsonContacts: Array<string> = []
+let jsonCables: Array<string> = []
+let jsonPipes: Array<string> = []
 
 function setElements(){
+
+    devices = []
+    sections = []
+    contacts = []
+    cables = []
+    pipes = []
+
+    jsonDevices = []
+    jsonSections = []
+    jsonContacts = []
+    jsonCables = []
+    jsonPipes = []
+
     panels.forEach(p=>{
         const devs = p.s1Section.subDevices
         devs.forEach(d=>{

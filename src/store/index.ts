@@ -37,11 +37,10 @@ export default createStore<IState>({
   },
   mutations: {
     setPanels(state, panels: Array<Panel>) {
-      state.panels.splice(0, state.panels.length);
-      panels.forEach(p => {
-        state.panels.push(p)
-      })
+      state.panels = panels
       state.selectedPanel = panels[0]
+      
+      
     },
     addPanel(state, panel: Panel) {
       state.panels.push(panel)
@@ -58,6 +57,7 @@ export default createStore<IState>({
     },
     savePanels({ state }) {
       const panelsJSON = getJSON(state.panels)
+      localStorage.removeItem('panels')
       localStorage.setItem('panels', panelsJSON);
     },
   },
