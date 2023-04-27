@@ -7,6 +7,7 @@ export abstract class CommutateApparate extends Device {
         super()
         const inner = new SectionLine()
         inner.nameOfPlane = 'innerSection'
+        inner.description = 'inner'
         inner.setStartContact(this.inContact)
         inner.setEndContact(this.outContact)
         if(mark != undefined) this.mark = mark

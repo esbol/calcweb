@@ -1,18 +1,16 @@
 <template>
     <div class="b">
-        <div class="breakerIn-container" @click="store.selectedObject = breaker">
+        <div class="breakerIn-container" @click="store.selectedObject = fuse">
             <div class="text">
-                <div class="text-name" :class="{ hover_text: hover }">{{ breaker.nameOfPlane }}</div>
-                <div class="text-mark" :class="{ hover_text: hover }">{{ breaker.mark }}</div>
-                <div class="text-current" :class="{ hover_text: hover }">Iн={{ breaker.nominalCurrent }}A</div>
+                <div class="text-name" :class="{ hover_text: hover }">{{ fuse.nameOfPlane }}</div>
+                <div class="text-mark" :class="{ hover_text: hover }">{{ fuse.mark }}</div>
+                <div class="text-current" :class="{ hover_text: hover }">Iн={{ fuse.nominalCurrent }}A</div>
             </div>
 
 
             <div class="line-before" :class="{ hover_bg: hover }"></div>
 
-            <div class="boxe">
-                <div class="line" :class="{ hover_bg: hover }" />
-                <div class="lineA" :class="{ hover_border: hover }"></div>
+            <div class="boxe" :class="{ hover_border: hover }">
             </div>
 
 
@@ -29,12 +27,12 @@
             <div class="contact_pe"></div>
 
             <div class="fases" v-if="showPhases">
-                <div class="phaseLine" v-if="breaker.colPhase === 3" :class="{ hover_bg: hover }"></div>
+                <div class="phaseLine" v-if="fuse.colPhase === 3" :class="{ hover_bg: hover }"></div>
                 <div class="phaseLine" :class="{ hover_bg: hover }"></div>
-                <div class="phaseLine" v-if="breaker.colPhase === 3" :class="{ hover_bg: hover }"></div>
+                <div class="phaseLine" v-if="fuse.colPhase === 3" :class="{ hover_bg: hover }"></div>
             </div>
         </div>
-        <SectionV v-for="section in breaker.outContact.getSlaveSections()" :section="section" />
+        <SectionV v-for="section in fuse.outContact.getSlaveSections()" :section="section" />
     </div>
 </template>
 
@@ -46,11 +44,12 @@ import { SectionLine } from '@/models/sectionline';
 import { useStore } from 'vuex';
 import { ref, watchEffect } from 'vue';
 import SectionV from './SectionV.vue';
+import { Fuse } from '@/models/fuse';
 
 const store = useStore().state
 const props = defineProps({
-    breaker: {
-        type: Breaker,
+    fuse: {
+        type: Fuse,
         required: true
     },
     showPhases: {
@@ -62,7 +61,7 @@ const props = defineProps({
 const hover = ref(false)
 
 watchEffect(() => {
-    if (store.selectedObject === props.breaker) {
+    if (store.selectedObject === props.fuse) {
         hover.value = true
     } else {
         hover.value = false
@@ -88,7 +87,7 @@ watchEffect(() => {
     border-radius: 50%;
     background: var(--scheme-line-color);
     position: absolute;
-    right: 4px;
+    right: 1px;
     bottom: -32px;
 }
 
@@ -108,16 +107,16 @@ watchEffect(() => {
     border-radius: 50%;
     background: var(--scheme-line-color);
     position: absolute;
-    right: 17px;
+    right: 15px;
     bottom: -20px;
 }
 
 .line_pe {
     position: absolute;
-    bottom: -27px;
-    right: 7px;
+    bottom: -28px;
+    right: 4px;
     width: 2px;
-    height: 92px;
+    height: 88px;
     background-image: linear-gradient(to bottom, var(--scheme-line-color) 80%, rgba(255, 255, 255, 0) 0%);
     background-size: 25px 25px;
 
@@ -131,7 +130,7 @@ watchEffect(() => {
     position: absolute;
     top: 0;
     left: 36px;
-    width: 52px;
+    width: 57px;
     height: 2px;
     transform: rotate(60deg);
     transform-origin: left;
@@ -140,10 +139,10 @@ watchEffect(() => {
 
 .line_0 {
     position: absolute;
-    top: 24px;
-    right: 20px;
+    top: 26px;
+    right: 18px;
     width: 2px;
-    height: 100px;
+    height: 97px;
     background: var(--scheme-line-color);
 }
 
@@ -225,7 +224,7 @@ watchEffect(() => {
 
 .line-before {
     width: 3px;
-    height: 40px;
+    height: 70px;
     background-color: var(--scheme-line-color);
 }
 
@@ -260,10 +259,10 @@ watchEffect(() => {
 }
 
 .boxe {
-    width: 30px;
-    border: 0px dashed gray;
+    width: 18px;
+    border: 2px solid var(--scheme-line-color);
     overflow: visible;
-    position: relative;
-    height: 30px;
+    position: absolute;
+    height: 40px;
 }
 </style>

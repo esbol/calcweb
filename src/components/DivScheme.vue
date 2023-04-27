@@ -1,9 +1,7 @@
 <template>
     <div class="main-wrap" @click="clearSelect" id="mainWrap">
         <div ref="content" id="divContainer" v-on:keydown="handleKeyDown" tabindex="0"
-        :class="{show_grid: store.showGrid}"
-        class="divContainer"
-            v-if="store.selectedPanel != null">
+            :class="{ show_grid: store.showGrid }" class="divContainer" v-if="store.selectedPanel != null">
 
             <Format />
 
@@ -19,8 +17,12 @@
             </div>
 
             <div class="inApparate">
-                <BreakerInV :showPhases="true" v-if="store.selectedPanel.inApparate != null"
+                <BreakerInV :showPhases="true" v-if="store.selectedPanel.inApparate instanceof Breaker"
                     :breaker=store.selectedPanel.inApparate />
+                <FuseInV :showPhases="true" v-if="store.selectedPanel.inApparate instanceof Fuse"
+                    :fuse="store.selectedPanel.inApparate" />
+                <DiffBreakerInV :showPhases="true" v-if="store.selectedPanel.inApparate instanceof DiffBreaker"
+                    :diffBreaker="store.selectedPanel.inApparate" />
             </div>
 
 
@@ -57,6 +59,8 @@ import Bokovic from './DivsScheme/formats/Bokovic.vue'
 import PipesTable from './DivsScheme/verticals/PipesTable.vue'
 import CablesTable from './DivsScheme/verticals/CablesTable.vue'
 import BreakerInV from './DivsScheme/verticals/BreakerInV.vue'
+import FuseInV from './DivsScheme/verticals/FuseInV.vue'
+import DiffBreakerInV from './DivsScheme/verticals/DiffBreakerInV.vue'
 import Popup from './DivsScheme/Popup.vue'
 import BusV from './DivsScheme/verticals/BusV.vue'
 
@@ -73,9 +77,12 @@ import { useStore } from 'vuex'
 import { deleteObject } from '@/models/schemeActions/schemeactions'
 import { Panel } from '@/models/panel'
 import { Cable } from '@/models/cable'
+import { Fuse } from '@/models/fuse'
+import { Breaker } from '@/models/breaker'
 
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { DiffBreaker } from '@/models/diffBreaker'
 
 //#endregion
 
@@ -148,11 +155,12 @@ async function printToPDF() {
 </script>
 
 <style>
-.bokovic{
+.bokovic {
     position: absolute;
     left: 80px;
     top: 20px
 }
+
 .cablesTable {
     position: absolute;
     left: 80px;

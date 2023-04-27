@@ -23,8 +23,8 @@
 
             <div class="line-after" :class="{ hover_bg: hover }"></div>
 
-            <div class="line_0">
-                <div class="line_0_angle"></div>
+            <div class="line_0" :class="{ hover_bg: hover }">
+                <div class="line_0_angle" :class="{ hover_bg: hover }"></div>
             </div>
 
             <div class="line_pe_angle"></div>
@@ -259,7 +259,7 @@ watchEffect(() => {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    
 }
 
 .line-before {

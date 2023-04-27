@@ -9,6 +9,9 @@ import { Consumer } from "../consumer";
 import { Breaker } from "../breaker";
 import { Cable } from "../cable";
 import { Pipe } from "../pipe";
+import { Contactor } from "../contactor";
+import { Fuse } from "../fuse";
+import { DiffBreaker } from "../diffBreaker";
 
 let devices: Array<Device> = []
 let sections: Array<SectionLine> = []
@@ -80,7 +83,9 @@ export function getPanels(jsonString: string) {
             if (row.includes('type')) {
 
                 if (row.includes('Breaker')) createBreaker(d)
-
+                if (row.includes('Fuse')) createFuse(d)
+                if (row.includes('DiffBreaker')) createDiffBreaker(d)
+                if (row.includes('Contactor')) createContactor(d)
                 if (row.includes('Consumer')) createConsumer(d)
             }
         })
@@ -124,6 +129,48 @@ function createBreaker(text: string) {
     }
     devices.push(breaker)
 }
+function createFuse(text: string) {
+    const fuse: Fuse = Object.assign(new Fuse(), JSON.parse(text))
+    const inCon = contacts.find(c => c.id == JSON.parse(text).inContactId)
+    if (inCon != undefined) {
+        fuse.inContact = inCon
+        inCon.ownDevice = fuse
+    }
+    const outCon = contacts.find(c => c.id == JSON.parse(text).outContactId)
+    if (outCon != undefined) {
+        fuse.outContact = outCon
+        outCon.ownDevice = fuse
+    }
+    devices.push(fuse)
+}
+function createDiffBreaker(text: string) {
+    const diffBreaker: DiffBreaker = Object.assign(new DiffBreaker(), JSON.parse(text))
+    const inCon = contacts.find(c => c.id == JSON.parse(text).inContactId)
+    if (inCon != undefined) {
+        diffBreaker.inContact = inCon
+        inCon.ownDevice = diffBreaker
+    }
+    const outCon = contacts.find(c => c.id == JSON.parse(text).outContactId)
+    if (outCon != undefined) {
+        diffBreaker.outContact = outCon
+        outCon.ownDevice = diffBreaker
+    }
+    devices.push(diffBreaker)
+}
+function createContactor(text: string) {
+    const contactor: Contactor = Object.assign(new Contactor(), JSON.parse(text))
+    const inCon = contacts.find(c => c.id == JSON.parse(text).inContactId)
+    if (inCon != undefined) {
+        contactor.inContact = inCon
+        inCon.ownDevice = contactor
+    }
+    const outCon = contacts.find(c => c.id == JSON.parse(text).outContactId)
+    if (outCon != undefined) {
+        contactor.outContact = outCon
+        outCon.ownDevice = contactor
+    }
+    devices.push(contactor)
+}
 function createPanel(text: string) {
     const panel: Panel = Object.assign(new Panel(), JSON.parse(text))
     const inCon = contacts.find(c => c.id == JSON.parse(text).inContactId)
@@ -147,8 +194,7 @@ function createPanel(text: string) {
     const unite = sections.find(s => s.id == JSON.parse(text).uniteSectionId)
     if (unite != undefined) panel.uniteSection = unite
 
-    const inApp = devices.find(d => d.id == JSON.parse(text).inApparateId)
-    if (inApp != undefined) panel.inApparate = inApp as CommutateApparate
+   
     devices.push(panel)
 }
 function createConsumer(text: string) {

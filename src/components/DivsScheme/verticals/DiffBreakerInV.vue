@@ -1,10 +1,10 @@
 <template>
     <div class="b">
-        <div class="breakerIn-container" @click="store.selectedObject = breaker">
+        <div class="breakerIn-container" @click="store.selectedObject = diffBreaker">
             <div class="text">
-                <div class="text-name" :class="{ hover_text: hover }">{{ breaker.nameOfPlane }}</div>
-                <div class="text-mark" :class="{ hover_text: hover }">{{ breaker.mark }}</div>
-                <div class="text-current" :class="{ hover_text: hover }">Iн={{ breaker.nominalCurrent }}A</div>
+                <div class="text-name" :class="{ hover_text: hover }">{{ diffBreaker.nameOfPlane }}</div>
+                <div class="text-mark" :class="{ hover_text: hover }">{{ diffBreaker.mark }}</div>
+                <div class="text-current" :class="{ hover_text: hover }">Iн={{ diffBreaker.nominalCurrent }}A</div>
             </div>
 
 
@@ -14,6 +14,13 @@
                 <div class="line" :class="{ hover_bg: hover }" />
                 <div class="lineA" :class="{ hover_border: hover }"></div>
             </div>
+
+
+            <div class="circle" :class="{ hover_border: hover }"></div>
+            <div class="arcLeft" :class="{ hover_border: hover }"></div>
+            <div class="arcTop" :class="{ hover_border: hover }"></div>
+            <div class="arcBottom" :class="{ hover_border: hover }"></div>
+
 
 
             <div class="inCable"></div>
@@ -29,12 +36,12 @@
             <div class="contact_pe"></div>
 
             <div class="fases" v-if="showPhases">
-                <div class="phaseLine" v-if="breaker.colPhase === 3" :class="{ hover_bg: hover }"></div>
+                <div class="phaseLine" v-if="diffBreaker.colPhase === 3" :class="{ hover_bg: hover }"></div>
                 <div class="phaseLine" :class="{ hover_bg: hover }"></div>
-                <div class="phaseLine" v-if="breaker.colPhase === 3" :class="{ hover_bg: hover }"></div>
+                <div class="phaseLine" v-if="diffBreaker.colPhase === 3" :class="{ hover_bg: hover }"></div>
             </div>
         </div>
-        <SectionV v-for="section in breaker.outContact.getSlaveSections()" :section="section" />
+        <SectionV v-for="section in diffBreaker.outContact.getSlaveSections()" :section="section" />
     </div>
 </template>
 
@@ -46,11 +53,13 @@ import { SectionLine } from '@/models/sectionline';
 import { useStore } from 'vuex';
 import { ref, watchEffect } from 'vue';
 import SectionV from './SectionV.vue';
+import { Fuse } from '@/models/fuse';
+import { DiffBreaker } from '@/models/diffBreaker';
 
 const store = useStore().state
 const props = defineProps({
-    breaker: {
-        type: Breaker,
+    diffBreaker: {
+        type: DiffBreaker,
         required: true
     },
     showPhases: {
@@ -62,7 +71,7 @@ const props = defineProps({
 const hover = ref(false)
 
 watchEffect(() => {
-    if (store.selectedObject === props.breaker) {
+    if (store.selectedObject === props.diffBreaker) {
         hover.value = true
     } else {
         hover.value = false
@@ -73,6 +82,39 @@ watchEffect(() => {
 </script>
 
 <style scoped>
+.arcLeft{
+    position: absolute;
+    top: 55px;
+    left: 5px;
+    border-left: 2px solid var(--scheme-line-color);
+    width: 20px;
+    height: 34px;
+}
+.arcTop{
+    position: absolute;
+    top: 55px;
+    left: 5px;
+    border-top: 2px solid var(--scheme-line-color);
+    width: 15px;
+    height: 34px;
+}
+.arcBottom{
+    position: absolute;
+    top: 55px;
+    left: 5px;
+    border-bottom: 2px solid var(--scheme-line-color);
+    width: 10px;
+    height: 34px;
+}
+.circle{
+    position: absolute;
+    top: calc(50% + 24px);
+ 
+    border: 2px solid var(--scheme-line-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 18px;
+}
 .inCable{
     width: 200px;
     height: 20px;

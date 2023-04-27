@@ -21,6 +21,12 @@
             <PropsContainer title="Автомат" v-if="(store.selectedObject instanceof Breaker)">
                 <BreakerProps :breaker="store.selectedObject" />
             </PropsContainer>
+            <PropsContainer title="Предохранитель" v-if="(store.selectedObject instanceof Fuse)">
+                <FuseProps :fuse="store.selectedObject" />
+            </PropsContainer>
+            <PropsContainer title="Дифф Автомат" v-if="(store.selectedObject instanceof DiffBreaker)">
+                <DiffBreakerProps :diff-breaker="store.selectedObject" />
+            </PropsContainer>
 
             <PropsContainer title="Пусковое устройство" v-if="(store.selectedObject instanceof Contactor)">
                 <ContactorProps :contactor="store.selectedObject" />
@@ -45,6 +51,8 @@
 
 <script setup lang="ts">
 
+import DiffBreakerProps from "./DiffBreakerProps.vue";
+import FuseProps from "./FuseProps.vue";
 import StampProps from "./StampProps.vue";
 import PanelProps from "./PanelProps.vue";
 import ContactorProps from "./ContactorProps.vue";
@@ -61,6 +69,8 @@ import { Breaker } from "@/models/breaker";
 import { Contactor } from "@/models/contactor";
 import { useStore } from "vuex";
 import { Stamp } from "@/models/settings/stamp";
+import { Fuse } from "@/models/fuse";
+import { DiffBreaker } from "@/models/diffBreaker";
 
 
 const store = useStore().state
@@ -116,7 +126,7 @@ const props = defineProps({
     height: 100%;
     color: var(--sidebar-text-color);
     background: var(--sidebar-bg-color);
-    overflow: auto;
+    overflow: visible;
 }
 
 .show {

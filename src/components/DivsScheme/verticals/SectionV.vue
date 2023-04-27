@@ -29,7 +29,8 @@
 
 
         </div>
-
+        <DiffBreakerV :diff-breaker="diffBreaker" :show-phases="true" v-if="diffBreakerShow" />
+        <FuseV :fuse="fuse" :showPhases="true" v-if="fuseShow" />
         <BreakerV :breaker="breaker" :showPhases="true" v-if="breakerShow" />
         <ConsV :consumer="consumer" v-if="consumerShow" />
         <ContactorV :contactor="contactor" v-if="contactorShow" />
@@ -48,8 +49,11 @@ import { useStore } from 'vuex';
 import { reactive, ref, watch, watchEffect, computed } from 'vue';
 import { Breaker } from '@/models/breaker';
 import { Contactor } from '@/models/contactor';
-import { CommutateApparate } from '@/models/commutateApparate';
-import { Panel } from '@/models/panel';
+import FuseV from './FuseV.vue';
+import DiffBreakerV from './DiffBreakerV.vue';
+import { Fuse } from '@/models/fuse';
+import { DiffBreaker } from '@/models/diffBreaker';
+
 
 
 const store = useStore().state
@@ -61,10 +65,12 @@ const hover = ref(false)
 let breaker: Breaker
 let consumer: Consumer
 let contactor: Contactor
+let fuse: Fuse
+let diffBreaker: DiffBreaker
 
 function showPopup(event: MouseEvent) {
     store.showPopup.x = event.clientX,
-        store.showPopup.y = event.clientY
+    store.showPopup.y = event.clientY
     store.showPopup.componentIndx = 0
     store.showPopup.args = props.section
     store.showPopup.show = true
@@ -75,6 +81,24 @@ const props = defineProps({
         type: SectionLine,
         required: true
     }
+})
+
+const fuseShow = computed(() => {
+    if (props.section.endContact != null) {
+        if (props.section.endContact.ownDevice instanceof Fuse) {
+            fuse = props.section.endContact.ownDevice as Fuse
+            return true
+        } else return false
+    } else return false
+})
+
+const diffBreakerShow = computed(() => {
+    if (props.section.endContact != null) {
+        if (props.section.endContact.ownDevice instanceof DiffBreaker) {
+            diffBreaker = props.section.endContact.ownDevice as DiffBreaker
+            return true
+        } else return false
+    } else return false
 })
 
 const breakerShow = computed(() => {

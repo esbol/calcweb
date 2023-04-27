@@ -17,7 +17,7 @@
             </td>
             <td>
                 <div class="prop-value-input">
-                    <TextInput :input-value="breaker.nameOfPlane" @focusout="breaker.nameOfPlane = $event.target.value"
+                    <TextInput :input-value="diffBreaker.nameOfPlane" @focusout="diffBreaker.nameOfPlane = $event.target.value"
                         :can-edite="true" />
 
                 </div>
@@ -29,8 +29,8 @@
                 <div class="name-prop">Марка</div>
             </td>
             <td>
-                <div class="prop-value-input"><Select :selected-value="breaker" :options="Breakers" :display-path="'mark'"
-                    @change="setBreakerMark" /></div>
+                <div class="prop-value-input"><Select :selected-value="diffBreaker" :options="DiffBreakers" :display-path="'mark'"
+                    @change="setDiffBreakerMark" /></div>
             </td>
         </tr>
         <tr>
@@ -38,7 +38,7 @@
                 <div class="name-prop">Кол. фаз</div>
             </td>
             <td>
-                <div class="prop-value">{{ breaker.colPhase }}</div>
+                <div class="prop-value">{{ diffBreaker.colPhase }}</div>
             </td>
         </tr>
         <tr>
@@ -46,7 +46,7 @@
                 <div class="name-prop">Iрасч.</div>
             </td>
             <td>
-                <div class="prop-value">{{ breaker.innerSection.modeMax.current.toFixed(3) }}</div>
+                <div class="prop-value">{{ diffBreaker.innerSection.modeMax.current.toFixed(3) }}</div>
             </td>
         </tr>
 
@@ -56,7 +56,7 @@
                 <div class="name-prop">Номинальный ток</div>
             </td>
             <td>
-                <div class="prop-value">{{ breaker.nominalCurrent }}</div>
+                <div class="prop-value">{{ diffBreaker.nominalCurrent }}</div>
             </td>
         </tr>
     </table>
@@ -67,52 +67,54 @@
 import TextInput from './UI/TextInput.vue';
 import Select from './UI/Select.vue'
 
-import { Breakers } from '@/models/bd/breakers';
-import { Fuses } from '@/models/bd/fuses';
+
+
 import { Breaker } from '@/models/breaker';
-import { Fuse } from '@/models/fuse';
+
 import { ref } from 'vue';
 import { replaceCommApparate } from '@/models/schemeActions/schemeactions';
 import { useStore } from 'vuex';
-import { DiffBreakers } from '@/models/bd/diffbreakers';
 import { DiffBreaker } from '@/models/diffBreaker';
+import { Breakers } from '@/models/bd/breakers';
+import { Fuse } from '@/models/fuse';
+import { Fuses } from '@/models/bd/fuses';
+import { DiffBreakers } from '@/models/bd/diffbreakers';
 
 const props = defineProps({
-    breaker: {
-        type: Breaker,
+    diffBreaker: {
+        type: DiffBreaker,
         required: true
     }
 })
 
 const store = useStore().state
 
-const appType = ref({type:'Автоматический выключатель' })
-const appTypes: Array<object> = [{type:'Автоматический выключатель' },{type:'Дифф. автомат' }, {type: 'Предохранитель'}]
+const appType = ref({type:'Дифф. автомат' })
+const appTypes: Array<object> = [{type:'Автоматический выключатель' }, {type:'Дифф. автомат' }, {type: 'Предохранитель'}]
 
 function changeAppType(option: any){
     console.log(option);
     
     if(option.type == appType.value.type) return
-    if(option.type == 'Предохранитель'){
+    if(option.type == 'Автоматический выключатель'){
+        const breaker = new Breaker(Breakers[0].mark)
+        const indx = props.diffBreaker.nameOfPlane.match(/\d+/)?.[0] || ""
+        breaker.nameOfPlane = 'QF' + indx
+        replaceCommApparate(props.diffBreaker, breaker)
+        store.selectedObject = breaker
+
+    }else if(option.type == 'Предохранитель'){
         const fuse = new Fuse(Fuses[0].mark)
-        const indx = props.breaker.nameOfPlane.match(/\d+/)?.[0] || ""
+        const indx = props.diffBreaker.nameOfPlane.match(/\d+/)?.[0] || ""
         fuse.nameOfPlane = 'FU' + indx
-        replaceCommApparate(props.breaker, fuse)
+        replaceCommApparate(props.diffBreaker, fuse)
         store.selectedObject = fuse
-        console.log(fuse);
-        
-    }else if(option.type == 'Дифф. автомат'){
-        const diffBreaker = new DiffBreaker(DiffBreakers[0].mark)
-        const indx = props.breaker.nameOfPlane.match(/\d+/)?.[0] || ""
-        diffBreaker.nameOfPlane = 'QFD' + indx
-        replaceCommApparate(props.breaker, diffBreaker)
-        store.selectedObject = diffBreaker
     }
 }
 
 
-function setBreakerMark(option: any) {
-    props.breaker.mark = option.mark
+function setDiffBreakerMark(option: any) {
+    props.diffBreaker.mark = option.mark
 }
 
 

@@ -13,7 +13,7 @@
         </div>
         <div class="select-window" v-if="open">
 
-            <div class="item" v-for="option in options" @click="selectedChange(option)">
+            <div style="white-space: nowrap;" class="item" v-for="option in options" @click="selectedChange(option)">
                 {{ getOptionValue(option) }}
             </div>
         </div>
@@ -89,11 +89,11 @@ function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
     position: absolute;
     top: 100%;
     left: 0;
-    width: 100%;
+    min-width: 100%;
     border: 1px solid var(--main-border-color);
     background: red;
     box-shadow: 2px 2px 1px gray;
-    z-index: 2000;
+    z-index: 5000;
 }
 
 .selected-item {

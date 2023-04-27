@@ -1,11 +1,14 @@
 import { Breakers } from "../bd/breakers"
 import { Cables } from "../bd/cables"
 import { Contactors } from "../bd/contactors"
+import { Fuses } from "../bd/fuses"
 import { Breaker } from "../breaker"
+import { CommutateApparate } from "../commutateApparate"
 import { Consumer } from "../consumer"
 import { Contact } from "../contact"
 import { Contactor } from "../contactor"
 import { Device } from "../device"
+import { Fuse } from "../fuse"
 import { Panel } from "../panel"
 import { defaults } from "../schemedefs"
 import { SectionLine } from "../sectionline"
@@ -188,5 +191,23 @@ function rename(panel: Panel) {
         contactors.forEach(c => {
             c.nameOfPlane = 'KM' + (contactors.indexOf(c) + 1)
         })
+    })
+}
+
+export function replaceCommApparate(oldApp: CommutateApparate, newApp: CommutateApparate){
+    const oldInSupplyes: Array<SectionLine> = oldApp.inContact.getSupplySections()
+    const oldInSlaves: Array<SectionLine> = oldApp.inContact.getSlaveSections()
+
+    const oldOutSlaves: Array<SectionLine> = oldApp.outContact.getSlaveSections()
+
+    oldInSupplyes.forEach(s=>{
+        s.setEndContact(newApp.inContact)
+    })
+    oldInSlaves.forEach(s=>{
+        if(s.id != oldApp.innerSection.id)
+        s.setStartContact(newApp.inContact)
+    })
+    oldOutSlaves.forEach(s=>{
+        s.setStartContact(newApp.outContact)
     })
 }

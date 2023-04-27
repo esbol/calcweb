@@ -14,10 +14,15 @@ export class Contactor extends CommutateApparate {
         return false
     }
 
-    constructor(mark: string) {
+    constructor(mark?: string) {
         super(mark)
         this.innerSection.nameOfPlane = 'innerContactor'
         
     }
 
+    toJSON(){
+        return Object.assign(super.toJSON(), {
+            type: 'Contactor'
+        })
+    }
 }

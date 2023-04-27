@@ -18,15 +18,15 @@ export class Panel extends Device {
     }
     constructor() {
         super()
-        this.inApparate = new Breaker(Breakers[0].mark)
-        this.inApparate.nameOfPlane = 'inApparate'
+        const inApparate = new Breaker(Breakers[0].mark)
+        inApparate.nameOfPlane = 'QF'
         this.s1Section  = new SectionLine()
         this.outContact  = new Contact(this)
         this.s1Section.setStartContact(this.inContact)
-        this.s1Section.setEndContact(this.inApparate.inContact)
+        this.s1Section.setEndContact(inApparate.inContact)
 
         this.uniteSection  = new SectionLine()
-        this.uniteSection.setStartContact(this.inApparate.outContact)
+        this.uniteSection.setStartContact(inApparate.outContact)
         this.uniteSection.setEndContact(this.outContact)
         
      
@@ -43,8 +43,20 @@ export class Panel extends Device {
     outContact: Contact
     uniteSection: SectionLine;
     s1Section: SectionLine;
-    inApparate: CommutateApparate;
+   
     
+    //#region inApparate
+
+    public get inApparate() : CommutateApparate | null {
+        const app = this.outContact.getSupplySections()[0].startContact?.ownDevice
+        if(app != null){
+            if(app instanceof CommutateApparate){
+                return app as CommutateApparate
+            }else return null
+        }else return null
+    }
+  
+    //#endregion
 
     //#region bus
     private _bus: Bus = new Bus();
@@ -224,7 +236,6 @@ export class Panel extends Device {
             outContactId: this.outContact.id,
             s1SectionId: this.s1Section.id,
             uniteSectionId: this.uniteSection.id,
-            inApparateId: this.inApparate.id,
             type: 'Panel'
         })
     }
