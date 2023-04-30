@@ -19,8 +19,8 @@ export function addContactor(section: SectionLine) {
 
     let endDevice: Device = new Consumer()
 
-    if(section.endContact?.ownDevice !== null)
-    if (section.endContact) endDevice = section.endContact.ownDevice
+    if (section.endContact?.ownDevice !== null)
+        if (section.endContact) endDevice = section.endContact.ownDevice
 
 
 
@@ -68,7 +68,7 @@ export function addContactor(section: SectionLine) {
 
     section.nameOfPlane = section.nameOfPlane + '-1'
 
-    section.getSupplyPanels().forEach(p =>{
+    section.getSupplyPanels().forEach(p => {
         p.calc()
         rename(p)
     })
@@ -89,11 +89,11 @@ export function addConsumer(contact: Contact) {
 
     // const panels = getSupplyPanels(contact)
 
-    if(contact.ownDevice != null)
-    contact.ownDevice.getSupplyPanels().forEach(p => {
-        p.calc()
-        rename(p)
-    })
+    if (contact.ownDevice != null)
+        contact.ownDevice.getSupplyPanels().forEach(p => {
+            p.calc()
+            rename(p)
+        })
 
 }
 
@@ -102,8 +102,8 @@ export function deleteObject(object: any) {
         const sl = object as SectionLine
         if (sl.startContact != null) {
             sl.startContact.removeSection(sl)
-            if(sl.startContact.ownDevice != null)
-            delEmpty(sl.startContact.ownDevice)
+            if (sl.startContact.ownDevice != null)
+                delEmpty(sl.startContact.ownDevice)
         }
 
         sl.getSupplyPanels().forEach(p => {
@@ -130,10 +130,10 @@ export function deleteObject(object: any) {
 }
 
 export function addOneConsumerFeeder(panel: Panel) {
-    
-    
+
+
     const breaker = new Breaker(Breakers[0].mark)
-   
+
     breaker.nameOfPlane = 'QF' + (panel.outContact.getSlaveSections().length + 1).toString()
     const sBreaker = new SectionLine()
     sBreaker.description = 'sBreaker'
@@ -184,7 +184,7 @@ function rename(panel: Panel) {
     //--contactor
     const contactors: Array<Contactor> = new Array<Contactor>()
     panel.uniteSection.subDevices.forEach(d => {
-       
+
         if (d instanceof Contactor) {
             contactors.push(d as Contactor)
         }
@@ -194,20 +194,50 @@ function rename(panel: Panel) {
     })
 }
 
-export function replaceCommApparate(oldApp: CommutateApparate, newApp: CommutateApparate){
+
+export function addCommApparateToFeeder(supplContact: Contact, newApp: CommutateApparate, section: SectionLine){
+    const sBreaker = new SectionLine()
+    sBreaker.setStartContact(supplContact)
+    sBreaker.setEndContact(newApp.inContact)
+    section.setStartContact(newApp.outContact)
+}
+
+
+export function replaceCommApparate(oldApp: CommutateApparate, newApp: CommutateApparate | null) {
     const oldInSupplyes: Array<SectionLine> = oldApp.inContact.getSupplySections()
     const oldInSlaves: Array<SectionLine> = oldApp.inContact.getSlaveSections()
 
     const oldOutSlaves: Array<SectionLine> = oldApp.outContact.getSlaveSections()
 
-    oldInSupplyes.forEach(s=>{
-        s.setEndContact(newApp.inContact)
-    })
-    oldInSlaves.forEach(s=>{
-        if(s.id != oldApp.innerSection.id)
-        s.setStartContact(newApp.inContact)
-    })
-    oldOutSlaves.forEach(s=>{
-        s.setStartContact(newApp.outContact)
-    })
+
+    if (newApp == null) {
+        const supplayContact = oldApp.inContact.getSupplySections()[0].startContact
+        const supplaySection = oldApp.inContact.getSupplySections()[0]
+        const indx = supplayContact?.sectionLines.indexOf(supplaySection)
+
+        if (supplayContact != null){
+            oldOutSlaves.forEach(s => {
+                s.setStartContact(supplayContact)
+            })
+            supplayContact.removeSection(supplaySection)
+
+            
+        }
+            
+
+
+    } else {
+        oldInSupplyes.forEach(s => {
+            s.setEndContact(newApp.inContact)
+        })
+        oldInSlaves.forEach(s => {
+            if (s.id != oldApp.innerSection.id)
+                s.setStartContact(newApp.inContact)
+        })
+        oldOutSlaves.forEach(s => {
+            s.setStartContact(newApp.outContact)
+        })
+    }
+
+
 }

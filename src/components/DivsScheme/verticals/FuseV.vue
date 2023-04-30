@@ -132,7 +132,7 @@ watchEffect(() => {
     background: var(--scheme-line-color);
     position: absolute;
     right: 17px;
-    top: 154px;
+    top: 145px;
 }
 
 .contact_f {
@@ -157,7 +157,7 @@ watchEffect(() => {
 
 .line_pe_angle {
     position: absolute;
-    bottom: 0;
+    bottom: -22px;
     left: 50%;
     width: 2px;
     height: 25px;
@@ -170,10 +170,10 @@ watchEffect(() => {
 
 .line_0_angle {
     position: absolute;
-    top: 100%;
+    top: 95px;
     right: 0;
     width: 2px;
-    height: 27px;
+    height: 28px;
     transform: rotate(40deg);
     transform-origin: top;
     background: var(--scheme-line-color);
@@ -184,7 +184,7 @@ watchEffect(() => {
     top: 16px;
     right: 15px;
     width: 2px;
-    height: 110px;
+    height: 95px;
     background: var(--scheme-line-color);
 }
 
@@ -255,7 +255,7 @@ watchEffect(() => {
     cursor: pointer;
     position: relative;
     width: 70px;
-    height: 180px;
+    height: 150px;
     border: 0px dashed gray;
     display: flex;
     flex-direction: column;
@@ -296,5 +296,6 @@ watchEffect(() => {
     overflow: visible;
     position: relative;
     height: 40px;
+    top: 15px;
 }
 </style>

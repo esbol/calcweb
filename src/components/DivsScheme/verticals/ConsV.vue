@@ -7,7 +7,7 @@
             {{ consumer.installPower }}
         </div>
         <div class="frame-current" :class="{ hover_text: hover }">
-            {{ consumer.current.toFixed(2) }}
+            {{ Number(consumer.current.toFixed(2)).toString().replace('.', ',') }}
         </div>
         <div class="frame-description" :class="{ hover_text: hover }">
             <div class="descr_text">{{ consumer.description }}</div>

@@ -1,5 +1,5 @@
 <template>
-    <div class="container-props">
+    <div class="container-props ">
         <div class="header no-select" @click="show = !show">
             <div class="header-title">
                 <div v-if="show" class="material-symbols-outlined">

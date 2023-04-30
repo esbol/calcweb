@@ -76,6 +76,8 @@ import { replaceCommApparate } from '@/models/schemeActions/schemeactions';
 import { useStore } from 'vuex';
 import { DiffBreakers } from '@/models/bd/diffbreakers';
 import { DiffBreaker } from '@/models/diffBreaker';
+import { BreakerPower } from '@/models/breakerPower';
+import { BreakersPower } from '@/models/bd/breakersPower';
 
 const props = defineProps({
     breaker: {
@@ -87,12 +89,13 @@ const props = defineProps({
 const store = useStore().state
 
 const appType = ref({type:'Автоматический выключатель' })
-const appTypes: Array<object> = [{type:'Автоматический выключатель' },{type:'Дифф. автомат' }, {type: 'Предохранитель'}]
+const appTypes: Array<object> = [{type:'Дифф. автомат' }, {type: 'Предохранитель'}, {type: 'Выключатель нагрузки'}]
 
 function changeAppType(option: any){
-    console.log(option);
+   
     
     if(option.type == appType.value.type) return
+    console.log(option);
     if(option.type == 'Предохранитель'){
         const fuse = new Fuse(Fuses[0].mark)
         const indx = props.breaker.nameOfPlane.match(/\d+/)?.[0] || ""
@@ -107,6 +110,15 @@ function changeAppType(option: any){
         diffBreaker.nameOfPlane = 'QFD' + indx
         replaceCommApparate(props.breaker, diffBreaker)
         store.selectedObject = diffBreaker
+    }else if(option.type == 'Выключатель нагрузки'){
+        const breakerPower = new BreakerPower(BreakersPower[0].mark)
+        const indx = props.breaker.nameOfPlane.match(/\d+/)?.[0] || ""
+        breakerPower.nameOfPlane = 'QW' + indx
+        
+        console.log(breakerPower);
+        
+        replaceCommApparate(props.breaker, breakerPower)
+        store.selectedObject = breakerPower
     }
 }
 

@@ -13,6 +13,10 @@
 
 
             <div class="line-before" :class="{ hover_bg: hover }"></div>
+            <!-- <div class="contX">
+                <ContactX :hover="hover" />
+            </div> -->
+
 
             <div class="boxe">
                 <div class="line" :class="{ hover_bg: hover }" />
@@ -48,9 +52,7 @@
 
 <script setup lang="ts">
 
-import { Breaker } from '@/models/breaker';
-import { Contactor } from '@/models/contactor';
-import { SectionLine } from '@/models/sectionline';
+import ContactX from './ContactX.vue';
 import { useStore } from 'vuex';
 import { ref, watchEffect } from 'vue';
 import SectionV from './SectionV.vue';
@@ -88,39 +90,48 @@ watchEffect(() => {
 </script>
 
 <style scoped>
-.arcLeft{
+.contX{
+    position: absolute;
+    top: 78px;
+    left: 31px;
+}
+.arcLeft {
     position: absolute;
     top: 95px;
-    left: 5px;
+    left: 10px;
     border-left: 2px solid var(--scheme-line-color);
     width: 20px;
     height: 34px;
 }
-.arcTop{
+
+.arcTop {
     position: absolute;
     top: 95px;
-    left: 5px;
+    left: 10px;
     border-top: 2px solid var(--scheme-line-color);
-    width: 15px;
+    width: 10px;
     height: 34px;
 }
-.arcBottom{
+
+.arcBottom {
     position: absolute;
     top: 95px;
-    left: 5px;
+    left: 10px;
     border-bottom: 2px solid var(--scheme-line-color);
     width: 10px;
     height: 34px;
 }
-.circle{
+
+.circle {
     position: absolute;
-    top: calc(50% + 30px);
- 
+    top: 121px;
+
     border: 2px solid var(--scheme-line-color);
     border-radius: 50%;
-    width: 40px;
-    height: 18px;
+    width: 35px;
+    height: 15px;
 }
+
 .error {
     position: absolute;
     left: -5px;
@@ -168,7 +179,7 @@ watchEffect(() => {
     background: var(--scheme-line-color);
     position: absolute;
     right: 17px;
-    top: 154px;
+    top: 145px;
 }
 
 .contact_f {
@@ -193,7 +204,7 @@ watchEffect(() => {
 
 .line_pe_angle {
     position: absolute;
-    bottom: 0;
+    bottom: -22px;
     left: 50%;
     width: 2px;
     height: 25px;
@@ -291,13 +302,13 @@ watchEffect(() => {
     cursor: pointer;
     position: relative;
     width: 70px;
-    height: 180px;
+    height: 150px;
     border: 0px dashed gray;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    
+
 }
 
 .line-before {
@@ -307,7 +318,7 @@ watchEffect(() => {
 }
 
 .line-after {
-    height: 70px;
+    height: 39px;
     width: 3px;
     background-color: var(--scheme-line-color);
 }
@@ -342,5 +353,4 @@ watchEffect(() => {
     overflow: visible;
     position: relative;
     height: 30px;
-}
-</style>
+}</style>

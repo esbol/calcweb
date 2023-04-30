@@ -12,6 +12,7 @@ import { Pipe } from "../pipe";
 import { Contactor } from "../contactor";
 import { Fuse } from "../fuse";
 import { DiffBreaker } from "../diffBreaker";
+import { BreakerPower } from "../breakerPower";
 
 let devices: Array<Device> = []
 let sections: Array<SectionLine> = []
@@ -35,7 +36,7 @@ export function getPanels(jsonString: string) {
 
     const objJson: IJSON = JSON.parse(jsonString)
 
-    console.log(objJson);
+
     
 
     objJson.jsonContacts.forEach(cont => {
@@ -77,26 +78,38 @@ export function getPanels(jsonString: string) {
 
 
     objJson.jsonDevices.forEach(d => {
-
-        const myArray = d.split(",")
-        myArray.forEach(row => {
-            if (row.includes('type')) {
-
-                if (row.includes('Breaker')) createBreaker(d)
-                if (row.includes('Fuse')) createFuse(d)
-                if (row.includes('DiffBreaker')) createDiffBreaker(d)
-                if (row.includes('Contactor')) createContactor(d)
-                if (row.includes('Consumer')) createConsumer(d)
-            }
-        })
-
-        myArray.forEach(row => {
-            if (row.includes('Panel')) createPanel(d)
-        })
+        const objDev = JSON.parse(d)
+        console.log(objDev);
+        if(objDev.type == 'Breaker') createBreaker(d)
+        if(objDev.type == 'BreakerPower') createBreakerPower(d)
+        if(objDev.type == 'Fuse') createFuse(d)
+        if(objDev.type == 'DiffBreaker') createDiffBreaker(d)
+        if(objDev.type == 'Contactor') createContactor(d)
+        if(objDev.type == 'Consumer') createConsumer(d)
+        if(objDev.type == 'Panel') createPanel(d)
+        // const myArray = d.split(",")
+        // myArray.forEach(row => {
+        //     if (row.includes('type')) {
+             
+                
+        //         if (row.includes('Breaker')) createBreaker(d)
+        //         if (row.includes('BreakerPower')) createBreakerPower(d)
+        //         if (row.includes('Fuse')) createFuse(d)
+        //         if (row.includes('DiffBreaker')) createDiffBreaker(d)
+        //         if (row.includes('Contactor')) createContactor(d)
+        //         if (row.includes('Consumer')) createConsumer(d)
+        //     }
+        // })
+      
+        
+        // myArray.forEach(row => {
+        //     if (row.includes('Panel')) createPanel(d)
+        // })
     })
 
-
-
+    console.log(objJson);
+    
+    console.log(devices);
 
     const panels = new Array<Panel>()
     devices.forEach(d => {
@@ -107,7 +120,7 @@ export function getPanels(jsonString: string) {
         }
     })
 
-    console.log(panels);
+   
     
     return panels
 
@@ -128,6 +141,20 @@ function createBreaker(text: string) {
         outCon.ownDevice = breaker
     }
     devices.push(breaker)
+}
+function createBreakerPower(text: string) {
+    const breakerPower: BreakerPower = Object.assign(new BreakerPower(), JSON.parse(text))
+    const inCon = contacts.find(c => c.id == JSON.parse(text).inContactId)
+    if (inCon != undefined) {
+        breakerPower.inContact = inCon
+        inCon.ownDevice = breakerPower
+    }
+    const outCon = contacts.find(c => c.id == JSON.parse(text).outContactId)
+    if (outCon != undefined) {
+        breakerPower.outContact = outCon
+        outCon.ownDevice = breakerPower
+    }
+    devices.push(breakerPower)
 }
 function createFuse(text: string) {
     const fuse: Fuse = Object.assign(new Fuse(), JSON.parse(text))

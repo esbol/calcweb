@@ -39,7 +39,7 @@ export default createStore<IState>({
     setPanels(state, panels: Array<Panel>) {
       state.panels = panels
       state.selectedPanel = panels[0]
-      
+      panels.forEach(p=>p.calc())
       
     },
     addPanel(state, panel: Panel) {

@@ -3,6 +3,7 @@ import { CommutateApparate } from "../commutateApparate"
 import { Consumer } from "../consumer"
 import { Contact } from "../contact"
 import { Device } from "../device"
+import { CableMaterial } from "../normativs"
 import { SectionLine } from "../sectionline"
 
 
@@ -118,3 +119,4 @@ export function calc(secton: SectionLine) {
     secton.cable.calc()
     secton.pipe.calc()
 }
+

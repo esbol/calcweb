@@ -103,6 +103,17 @@ export class Cable extends ELObject {
     }
     //#endregion
 
+    //#region deltaU
+    private _deltaU: number = 0;
+    public get deltaU(): number {
+        return this._deltaU;
+    }
+    public set deltaU(v: number) {
+        this._deltaU = v;
+    }
+    //#endregion
+
+
     public calc() {
 
         if(this.sectionLine.isInPanel) return
@@ -137,6 +148,7 @@ export class Cable extends ELObject {
             this._square = cableData.square
         }
         
+        this.deltaU = this.calcDeltaU()
     
 
     }
@@ -196,6 +208,27 @@ export class Cable extends ELObject {
         }
 
         return br
+    }
+
+    private calcDeltaU(): number{
+        const CuActiveResistance = 0.0181
+        let dU = 0;
+        const section = this.sectionLine
+        if (section.cable.material == CableMaterial.Медь)
+        {
+            if (section.colPhase == 3)
+            {
+                dU = Math.sqrt(3) * section.modeMax.current * section.cable.length * (CuActiveResistance / section.cable.square * section.modeMax.cosf);
+                dU = dU / 3.8;
+            }
+            else
+            {
+                dU = 2 * section.modeMax.current* section.cable.length * (CuActiveResistance / section.cable.square * section.modeMax.cosf);
+                dU = dU / 2.2;
+            }
+        }
+    
+        return dU;
     }
 
     toJSON(){

@@ -1,6 +1,6 @@
 <template>
     <div class="back" @click="open=false" v-if="open"></div>
-    <div class="select-container">
+    <div class="select-container no-select">
 
         <div class="selected-item" @click="open = !open"> {{ getOptionValue(selectedValue) }}</div>
         <div class="btn no-select" @click="open = !open">

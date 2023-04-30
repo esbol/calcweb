@@ -79,6 +79,8 @@ import { Breakers } from '@/models/bd/breakers';
 import { Fuse } from '@/models/fuse';
 import { Fuses } from '@/models/bd/fuses';
 import { DiffBreakers } from '@/models/bd/diffbreakers';
+import { BreakerPower } from '@/models/breakerPower';
+import { BreakersPower } from '@/models/bd/breakersPower';
 
 const props = defineProps({
     diffBreaker: {
@@ -90,12 +92,13 @@ const props = defineProps({
 const store = useStore().state
 
 const appType = ref({type:'Дифф. автомат' })
-const appTypes: Array<object> = [{type:'Автоматический выключатель' }, {type:'Дифф. автомат' }, {type: 'Предохранитель'}]
+const appTypes: Array<object> = [{type:'Автоматический выключатель' }, {type: 'Предохранитель'}, {type: 'Выключатель нагрузки'}]
 
 function changeAppType(option: any){
+   
+    if(option.type == appType.value.type) return
     console.log(option);
     
-    if(option.type == appType.value.type) return
     if(option.type == 'Автоматический выключатель'){
         const breaker = new Breaker(Breakers[0].mark)
         const indx = props.diffBreaker.nameOfPlane.match(/\d+/)?.[0] || ""
@@ -109,6 +112,15 @@ function changeAppType(option: any){
         fuse.nameOfPlane = 'FU' + indx
         replaceCommApparate(props.diffBreaker, fuse)
         store.selectedObject = fuse
+    }else if(option.type == 'Выключатель нагрузки'){
+        const breakerPower = new BreakerPower(BreakersPower[0].mark)
+        const indx = props.diffBreaker.nameOfPlane.match(/\d+/)?.[0] || ""
+        breakerPower.nameOfPlane = 'QW' + indx
+        
+        console.log(breakerPower);
+        
+        replaceCommApparate(props.diffBreaker, breakerPower)
+        store.selectedObject = breakerPower
     }
 }
 

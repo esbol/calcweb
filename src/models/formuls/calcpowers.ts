@@ -1,3 +1,5 @@
+import { CableMaterial } from "../normativs"
+import { SectionLine } from "../sectionline"
 
 
 export function calcCurrentBySPower(spower: number, voltage: number, colPhase: number): number {
@@ -33,3 +35,4 @@ export function calcSPower(ratedPower: number, ratedQPower: number): number {
 
     return Math.sqrt(ratedPower * ratedPower + ratedQPower * ratedQPower)
 } 
+

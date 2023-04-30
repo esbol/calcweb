@@ -1,18 +1,16 @@
 <template>
-    
- 
     <div class="s">
+        <NoApparateV :section="section" :show-phases="true" v-if="noApparateShow" />
 
-        <div class="section-container" v-if="!section.isInPanel" @click="store.selectedObject = section"
-            >
+        <div class="section-container" v-if="!section.isInPanel" @click="store.selectedObject = section">
             <div class="text_left" :class="{ hover_text: hover }">
-                {{ section.nameOfPlane }}-{{ section.cable.mark }} - {{ section.cable.colCores }}x{{ section.cable.square }}
-                -
-                {{ section.cable.length }}м
+                {{ section.nameOfPlane }}-{{ Number(section.modeMax.ratedPower.toFixed(2)).toString().replace('.', ',') }}-{{ section.modeMax.cosf.toFixed(2).replace('.', ',') }}-{{
+                    Number(section.modeMax.current.toFixed(1)).toString().replace('.', ',') }}-{{ section.cable.length }}-{{ Number(section.cable.deltaU.toFixed(1)).toString().replace('.', ',') }}%
             </div>
             <div class="line" :class="{ hover_bg: hover }" />
             <div class="text_rigth" :class="{ hover_text: hover }">
-                {{ section.pipe.mark }}.{{ section.pipe.diametr }} - {{ section.pipe.length }} м
+                {{ section.cable.mark }}-{{ section.cable.colCores }}x{{ section.cable.square.toString().replace('.', ',') }}-{{ section.pipe.mark }}.{{
+                    section.pipe.diametr }}-{{ section.pipe.length }}
             </div>
             <div class="section" :class="{ hover_border: hover }">
 
@@ -29,17 +27,19 @@
 
 
         </div>
+        <BreakerPowerV :breaker-power="breakerPower" :show-phases="true" v-if="breakerPowerShow" />
         <DiffBreakerV :diff-breaker="diffBreaker" :show-phases="true" v-if="diffBreakerShow" />
         <FuseV :fuse="fuse" :showPhases="true" v-if="fuseShow" />
         <BreakerV :breaker="breaker" :showPhases="true" v-if="breakerShow" />
         <ConsV :consumer="consumer" v-if="consumerShow" />
         <ContactorV :contactor="contactor" v-if="contactorShow" />
     </div>
-    
 </template>
 
 <script setup lang="ts">
 
+import BreakerPowerV from './BreakerPowerV.vue';
+import NoApparateV from './NoApparateV.vue';
 import ContactorV from './ContactorV.vue';
 import BreakerV from './BreakerV.vue';
 import ConsV from './ConsV.vue';
@@ -53,6 +53,9 @@ import FuseV from './FuseV.vue';
 import DiffBreakerV from './DiffBreakerV.vue';
 import { Fuse } from '@/models/fuse';
 import { DiffBreaker } from '@/models/diffBreaker';
+import { Panel } from '@/models/panel';
+import { Contact } from '@/models/contact';
+import { BreakerPower } from '@/models/breakerPower';
 
 
 
@@ -63,6 +66,7 @@ const hover = ref(false)
 
 
 let breaker: Breaker
+let breakerPower: BreakerPower
 let consumer: Consumer
 let contactor: Contactor
 let fuse: Fuse
@@ -70,7 +74,7 @@ let diffBreaker: DiffBreaker
 
 function showPopup(event: MouseEvent) {
     store.showPopup.x = event.clientX,
-    store.showPopup.y = event.clientY
+        store.showPopup.y = event.clientY
     store.showPopup.componentIndx = 0
     store.showPopup.args = props.section
     store.showPopup.show = true
@@ -81,6 +85,15 @@ const props = defineProps({
         type: SectionLine,
         required: true
     }
+})
+
+const noApparateShow = computed(() => {
+    if (props.section.startContact != null) {
+        if (props.section.startContact.ownDevice instanceof Panel) {
+            if (!props.section.isInPanel)
+                return true
+        } else return false
+    } else return false
 })
 
 const fuseShow = computed(() => {
@@ -109,6 +122,16 @@ const breakerShow = computed(() => {
         } else return false
     } else return false
 })
+
+const breakerPowerShow = computed(() => {
+    if (props.section.endContact != null) {
+        if (props.section.endContact.ownDevice instanceof BreakerPower) {
+            breakerPower = props.section.endContact.ownDevice as BreakerPower
+            return true
+        } else return false
+    } else return false
+})
+
 
 const contactorShow = computed(() => {
     if (props.section.endContact != null) {
@@ -144,7 +167,7 @@ const consumerShow = computed(() => {
 //             //--если консюмер или панель на конце
 //             else return 452 + 'px'
 //         }
-        
+
 //     } else return 0 + 'px'
 // })
 
@@ -167,20 +190,14 @@ watchEffect(() => {
 </script>
 
 <style scoped>
-
-
-    
-
-
-
-
-.s{
+.s {
     display: flex;
     flex-direction: column;
     align-items: center;
     flex-grow: 1;
     height: 100%;
 }
+
 .label_hover {
     transform: scale(1.5);
 }
@@ -217,7 +234,7 @@ span {
     border: 0px dashed gray;
     min-height: 212px;
     height: 100%;
-    
+
 }
 
 .selected {
@@ -234,7 +251,7 @@ span {
     transform-origin: left;
     width: auto;
     white-space: nowrap;
-  
+
 }
 
 .text_rigth {
@@ -254,7 +271,7 @@ span {
     left: calc(50% - 1px);
     width: 3px;
     height: 100%;
-   
+
     background-color: var(--scheme-line-color);
 }
 

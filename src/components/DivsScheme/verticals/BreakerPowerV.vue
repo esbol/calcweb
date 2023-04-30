@@ -1,38 +1,46 @@
 <template>
     <div class="b">
-        <div class="breakerIn-container" @click="store.selectedObject = fuse">
+        <div class="breaker-container" @click="store.selectedObject = breakerPower">
+
             <div class="text">
-                <div class="text-name" :class="{ hover_text: hover }">{{ fuse.nameOfPlane }}</div>
-                <div class="text-mark" :class="{ hover_text: hover }">{{ fuse.mark }}</div>
-                <div class="text-current" :class="{ hover_text: hover }">Iн={{ fuse.nominalCurrent }}A</div>
+                <div class="error" v-if="error">
+                    <div class="error_text">Нет номинала автомата</div>
+                </div>
+                <div class="text-name" :class="{ hover_text: hover }">{{ breakerPower.nameOfPlane }}</div>
+                <div class="text-mark" :class="{ hover_text: hover }">{{ breakerPower.mark }}</div>
+                <div class="text-current" :class="{ hover_text: hover }">Iн={{ breakerPower.nominalCurrent }}A</div>
             </div>
 
 
             <div class="line-before" :class="{ hover_bg: hover }"></div>
 
-            <div class="boxe" :class="{ hover_border: hover }">
+            <div class="boxe">
+                <div class="circle" :class="{ hover_border: hover }"></div>
+                <div class="line_cont" :class="{ hover_border: hover }"></div>
+                <div class="line" :class="{ hover_bg: hover }" />
+              
             </div>
 
 
-            <div class="inCable"></div>
+
             <div class="line-after" :class="{ hover_bg: hover }"></div>
 
             <div class="line_0" :class="{ hover_bg: hover }">
-
+                <div class="line_0_angle" :class="{ hover_bg: hover }"></div>
             </div>
-            <div class="line_0_angle" :class="{ hover_bg: hover }"></div>
-            <div class="line_pe" :class="{ line_pe_hover: hover }"></div>
+
+            <div class="line_pe_angle"></div>
             <div class="contact_0"></div>
             <div class="contact_f"></div>
             <div class="contact_pe"></div>
 
             <div class="fases" v-if="showPhases">
-                <div class="phaseLine" v-if="fuse.colPhase === 3" :class="{ hover_bg: hover }"></div>
+                <div class="phaseLine" v-if="breakerPower.colPhase === 3" :class="{ hover_bg: hover }"></div>
                 <div class="phaseLine" :class="{ hover_bg: hover }"></div>
-                <div class="phaseLine" v-if="fuse.colPhase === 3" :class="{ hover_bg: hover }"></div>
+                <div class="phaseLine" v-if="breakerPower.colPhase === 3" :class="{ hover_bg: hover }"></div>
             </div>
         </div>
-        <SectionV v-for="section in fuse.outContact.getSlaveSections()" :section="section" />
+        <SectionV v-for="section in breakerPower.outContact.getSlaveSections()" :section="section" />
     </div>
 </template>
 
@@ -44,12 +52,12 @@ import { SectionLine } from '@/models/sectionline';
 import { useStore } from 'vuex';
 import { ref, watchEffect } from 'vue';
 import SectionV from './SectionV.vue';
-import { Fuse } from '@/models/fuse';
+import { BreakerPower } from '@/models/breakerPower';
 
 const store = useStore().state
 const props = defineProps({
-    fuse: {
-        type: Fuse,
+    breakerPower: {
+        type: BreakerPower,
         required: true
     },
     showPhases: {
@@ -59,12 +67,18 @@ const props = defineProps({
 })
 
 const hover = ref(false)
+const error = ref(false)
 
 watchEffect(() => {
-    if (store.selectedObject === props.fuse) {
+    if (store.selectedObject === props.breakerPower) {
         hover.value = true
     } else {
         hover.value = false
+    }
+    if (props.breakerPower.nominalCurrent == -1) {
+        error.value = true
+    } else {
+        error.value = false
     }
 })
 
@@ -72,23 +86,71 @@ watchEffect(() => {
 </script>
 
 <style scoped>
-.inCable{
-    width: 200px;
-    height: 20px;
+.line_cont{
     position: absolute;
-    left: 34px;
-    top: -10px;
-    border-left: 3px solid var(--scheme-line-color);
-    border-top: 3px solid var(--scheme-line-color);
+    top: -2px;
+    left: 10px;
+    width: 10px;
+    height: 2px;
+    border: 1px solid var(--scheme-line-color);
 }
+.circle{
+    position: absolute;
+    top: -2px;
+    left: 12px;
+    width: 7px;
+    height: 7px;
+    border: 2px solid var(--scheme-line-color);
+    border-radius: 50%;
+}
+.error {
+    position: absolute;
+    left: -5px;
+    top: -5px;
+    width: 50px;
+    height: 60px;
+    border: 2px dashed red;
+
+}
+
+.error:hover .error_text {
+    visibility: visible;
+}
+
+.error_text {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 110%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.error_text::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+}
+
 .contact_pe {
     width: 8px;
     height: 8px;
     border-radius: 50%;
     background: var(--scheme-line-color);
     position: absolute;
-    right: 1px;
-    bottom: -32px;
+    right: 17px;
+    top: 145px;
 }
 
 .contact_f {
@@ -97,8 +159,8 @@ watchEffect(() => {
     border-radius: 50%;
     background: var(--scheme-line-color);
     position: absolute;
-    right: 30px;
-    bottom: -6px;
+    right: 31px;
+    top: -5px;
 }
 
 .contact_0 {
@@ -107,42 +169,40 @@ watchEffect(() => {
     border-radius: 50%;
     background: var(--scheme-line-color);
     position: absolute;
-    right: 15px;
-    bottom: -20px;
+    right: 17px;
+    top: 8px;
 }
 
-.line_pe {
+.line_pe_angle {
     position: absolute;
-    bottom: -28px;
-    right: 4px;
+    bottom: -20px;
+    left: 50%;
     width: 2px;
-    height: 88px;
-    background-image: linear-gradient(to bottom, var(--scheme-line-color) 80%, rgba(255, 255, 255, 0) 0%);
-    background-size: 25px 25px;
+    height: 25px;
+    transform: rotate(30deg);
+    transform-origin: bottom;
+    background: var(--scheme-line-color);
+}
 
-}
-.line_pe_hover{
-    background-image: linear-gradient(to bottom, var(--scheme-line-hover-color) 80%, rgba(255, 255, 255, 0) 0%);
-}
 
 
 .line_0_angle {
     position: absolute;
-    top: 0;
-    left: 36px;
-    width: 57px;
-    height: 2px;
-    transform: rotate(60deg);
-    transform-origin: left;
+    top: 95px;
+    right: 0;
+    width: 2px;
+    height: 25px;
+    transform: rotate(30deg);
+    transform-origin: top;
     background: var(--scheme-line-color);
 }
 
 .line_0 {
     position: absolute;
-    top: 26px;
-    right: 18px;
+    top: 16px;
+    right: 20px;
     width: 2px;
-    height: 97px;
+    height: 95px;
     background: var(--scheme-line-color);
 }
 
@@ -158,7 +218,7 @@ watchEffect(() => {
     height: 13px;
     border: 0px solid red;
     position: absolute;
-    top: 12px;
+    top: 40px;
     left: calc(50% -10px);
     display: flex;
     justify-content: space-around;
@@ -174,8 +234,8 @@ watchEffect(() => {
 
 .text {
     position: absolute;
-    left: -35px;
-    top: 30px;
+    left: 60px;
+    top: 40px;
 }
 
 .text-name {
@@ -209,17 +269,17 @@ watchEffect(() => {
     border-color: var(--scheme-line-hover-color) !important;
 }
 
-.breakerIn-container {
+.breaker-container {
     cursor: pointer;
     position: relative;
     width: 70px;
-    height: 110px;
+    height: 150px;
     border: 0px dashed gray;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    
 }
 
 .line-before {
@@ -229,7 +289,7 @@ watchEffect(() => {
 }
 
 .line-after {
-    height: 40px;
+    height: 50px;
     width: 3px;
     background-color: var(--scheme-line-color);
 }
@@ -259,10 +319,10 @@ watchEffect(() => {
 }
 
 .boxe {
-    width: 18px;
-    border: 2px solid var(--scheme-line-color);
+    width: 30px;
+    border: 0px dashed gray;
     overflow: visible;
-    position: absolute;
-    height: 32px;
+    position: relative;
+    height: 30px;
 }
 </style>

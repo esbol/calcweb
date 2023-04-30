@@ -82,22 +82,22 @@ watchEffect(() => {
 
 .pe_left {
     width: 2px;
-    height: 137px;
+    height: 127px;
     position: absolute;
     left: 10px;
     top: 25px;
     background-image: linear-gradient(to bottom, var(--scheme-line-color) 80%, rgba(255, 255, 255, 0) 0%);
-    background-size: 25px 25px;
+    background-size: 20px 20px;
 }
 
 .pe_rigth {
     width: 2px;
-    height: 137px;
+    height: 127px;
     position: absolute;
     left: calc(100% - 10px);
     top: 25px;
     background-image: linear-gradient(to bottom, var(--scheme-line-color) 80%, rgba(255, 255, 255, 0) 0%);
-    background-size: 25px 25px;
+    background-size: 20px 20px;
 }
 
 .pe_bottom {
@@ -105,9 +105,9 @@ watchEffect(() => {
     height: 2px;
     position: absolute;
     left: 10px;
-    top: 160px;
+    top: 151px;
     background-image: linear-gradient(to right, var(--scheme-line-color) 80%, rgba(255, 255, 255, 0) 0%);
-    background-size: 25px 25px;
+    background-size: 20px 20px;
 }
 
 .l_end1,

@@ -23,6 +23,8 @@
                     :fuse="store.selectedPanel.inApparate" />
                 <DiffBreakerInV :showPhases="true" v-if="store.selectedPanel.inApparate instanceof DiffBreaker"
                     :diffBreaker="store.selectedPanel.inApparate" />
+                    <BreakerInPower :show-phases="true" v-if="store.selectedPanel.inApparate instanceof BreakerPower"
+                    :breaker-power="store.selectedPanel.inApparate"/>
             </div>
 
 
@@ -55,6 +57,7 @@
 
 <script setup lang="ts">
 //#region import
+import BreakerInPower from './DivsScheme/verticals/BreakerInPower.vue'
 import Bokovic from './DivsScheme/formats/Bokovic.vue'
 import PipesTable from './DivsScheme/verticals/PipesTable.vue'
 import CablesTable from './DivsScheme/verticals/CablesTable.vue'
@@ -83,6 +86,7 @@ import { Breaker } from '@/models/breaker'
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { DiffBreaker } from '@/models/diffBreaker'
+import { BreakerPower } from '@/models/breakerPower'
 
 //#endregion
 

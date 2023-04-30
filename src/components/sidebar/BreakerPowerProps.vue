@@ -17,7 +17,7 @@
             </td>
             <td>
                 <div class="prop-value-input">
-                    <TextInput :input-value="fuse.nameOfPlane" @focusout="fuse.nameOfPlane = $event.target.value"
+                    <TextInput :input-value="breakerPower.nameOfPlane" @focusout="breakerPower.nameOfPlane = $event.target.value"
                         :can-edite="true" />
 
                 </div>
@@ -29,8 +29,8 @@
                 <div class="name-prop">Марка</div>
             </td>
             <td>
-                <div class="prop-value-input"><Select :selected-value="fuse" :options="Fuses" :display-path="'mark'"
-                    @change="setFuseMark" /></div>
+                <div class="prop-value-input"><Select :selected-value="breakerPower" :options="Breakers" :display-path="'mark'"
+                    @change="setBreakerMark" /></div>
             </td>
         </tr>
         <tr>
@@ -38,7 +38,7 @@
                 <div class="name-prop">Кол. фаз</div>
             </td>
             <td>
-                <div class="prop-value">{{ fuse.colPhase }}</div>
+                <div class="prop-value">{{ breakerPower.colPhase }}</div>
             </td>
         </tr>
         <tr>
@@ -46,7 +46,7 @@
                 <div class="name-prop">Iрасч.</div>
             </td>
             <td>
-                <div class="prop-value">{{ fuse.innerSection.modeMax.current.toFixed(3) }}</div>
+                <div class="prop-value">{{ breakerPower.innerSection.modeMax.current.toFixed(3) }}</div>
             </td>
         </tr>
 
@@ -56,7 +56,7 @@
                 <div class="name-prop">Номинальный ток</div>
             </td>
             <td>
-                <div class="prop-value">{{ fuse.nominalCurrent }}</div>
+                <div class="prop-value">{{ breakerPower.nominalCurrent }}</div>
             </td>
         </tr>
     </table>
@@ -74,56 +74,57 @@ import { Fuse } from '@/models/fuse';
 import { ref } from 'vue';
 import { replaceCommApparate } from '@/models/schemeActions/schemeactions';
 import { useStore } from 'vuex';
-import { DiffBreaker } from '@/models/diffBreaker';
 import { DiffBreakers } from '@/models/bd/diffbreakers';
+import { DiffBreaker } from '@/models/diffBreaker';
 import { BreakerPower } from '@/models/breakerPower';
 import { BreakersPower } from '@/models/bd/breakersPower';
 
 const props = defineProps({
-    fuse: {
-        type: Fuse,
+    breakerPower: {
+        type: BreakerPower,
         required: true
     }
 })
 
 const store = useStore().state
 
-const appType = ref({type:'Предохранитель' })
-const appTypes: Array<object> = [{type:'Автоматический выключатель' }, {type:'Дифф. автомат' }, {type: 'Выключатель нагрузки'}]
+const appType = ref( {type: 'Выключатель нагрузки'})
+const appTypes: Array<object> = [{type:'Дифф. автомат' }, {type: 'Предохранитель'}, {type:'Автоматический выключатель' }]
 
 function changeAppType(option: any){
- 
+    
     
     if(option.type == appType.value.type) return
     console.log(option);
-    if(option.type == 'Автоматический выключатель'){
-        const breaker = new Breaker(Breakers[0].mark)
-        const indx = props.fuse.nameOfPlane.match(/\d+/)?.[0] || ""
-        breaker.nameOfPlane = 'QF' + indx
-        replaceCommApparate(props.fuse, breaker)
-        store.selectedObject = breaker
+    if(option.type == 'Предохранитель'){
+        const fuse = new Fuse(Fuses[0].mark)
+        const indx = props.breakerPower.nameOfPlane.match(/\d+/)?.[0] || ""
+        fuse.nameOfPlane = 'FU' + indx
+        replaceCommApparate(props.breakerPower, fuse)
+        store.selectedObject = fuse
+        console.log(fuse);
         
     }else if(option.type == 'Дифф. автомат'){
         const diffBreaker = new DiffBreaker(DiffBreakers[0].mark)
-        const indx = props.fuse.nameOfPlane.match(/\d+/)?.[0] || ""
+        const indx = props.breakerPower.nameOfPlane.match(/\d+/)?.[0] || ""
         diffBreaker.nameOfPlane = 'QFD' + indx
-        replaceCommApparate(props.fuse, diffBreaker)
+        replaceCommApparate(props.breakerPower, diffBreaker)
         store.selectedObject = diffBreaker
-    }else if(option.type == 'Выключатель нагрузки'){
-        const breakerPower = new BreakerPower(BreakersPower[0].mark)
-        const indx = props.fuse.nameOfPlane.match(/\d+/)?.[0] || ""
-        breakerPower.nameOfPlane = 'QW' + indx
+    }else if(option.type == 'Автоматический выключатель'){
+        const breaker = new Breaker(Breakers[0].mark)
+        const indx = props.breakerPower.nameOfPlane.match(/\d+/)?.[0] || ""
+        breaker.nameOfPlane = 'QW' + indx
         
-        console.log(breakerPower);
+
         
-        replaceCommApparate(props.fuse, breakerPower)
-        store.selectedObject = breakerPower
+        replaceCommApparate(props.breakerPower, breaker)
+        store.selectedObject = breaker
     }
 }
 
 
-function setFuseMark(option: any) {
-    props.fuse.mark = option.mark
+function setBreakerMark(option: any) {
+    props.breakerPower.mark = option.mark
 }
 
 
@@ -160,6 +161,7 @@ td {
     margin-left: 5px;
     display: flex;
     align-items: center;
+    user-select: none;
 }
 
 .prop-value {

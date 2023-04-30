@@ -27,6 +27,9 @@
             <PropsContainer title="Дифф Автомат" v-if="(store.selectedObject instanceof DiffBreaker)">
                 <DiffBreakerProps :diff-breaker="store.selectedObject" />
             </PropsContainer>
+            <PropsContainer title="Выключатель нагрузки" v-if="(store.selectedObject instanceof BreakerPower)">
+                <BreakerPowerProps :breaker-power="store.selectedObject" />
+            </PropsContainer>
 
             <PropsContainer title="Пусковое устройство" v-if="(store.selectedObject instanceof Contactor)">
                 <ContactorProps :contactor="store.selectedObject" />
@@ -51,6 +54,7 @@
 
 <script setup lang="ts">
 
+import BreakerPowerProps from "./BreakerPowerProps.vue";
 import DiffBreakerProps from "./DiffBreakerProps.vue";
 import FuseProps from "./FuseProps.vue";
 import StampProps from "./StampProps.vue";
@@ -71,6 +75,7 @@ import { useStore } from "vuex";
 import { Stamp } from "@/models/settings/stamp";
 import { Fuse } from "@/models/fuse";
 import { DiffBreaker } from "@/models/diffBreaker";
+import { BreakerPower } from "@/models/breakerPower";
 
 
 const store = useStore().state

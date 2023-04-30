@@ -85,7 +85,7 @@ watchEffect(() => {
 .arcLeft{
     position: absolute;
     top: 55px;
-    left: 5px;
+    left: 12px;
     border-left: 2px solid var(--scheme-line-color);
     width: 20px;
     height: 34px;
@@ -93,27 +93,27 @@ watchEffect(() => {
 .arcTop{
     position: absolute;
     top: 55px;
-    left: 5px;
+    left: 12px;
     border-top: 2px solid var(--scheme-line-color);
-    width: 15px;
+    width: 7px;
     height: 34px;
 }
 .arcBottom{
     position: absolute;
     top: 55px;
-    left: 5px;
+    left: 12px;
     border-bottom: 2px solid var(--scheme-line-color);
-    width: 10px;
+    width: 11px;
     height: 34px;
 }
 .circle{
     position: absolute;
-    top: calc(50% + 24px);
- 
+    top: 80px;
+    left: 22px;
     border: 2px solid var(--scheme-line-color);
     border-radius: 50%;
-    width: 40px;
-    height: 18px;
+    width: 35px;
+    height: 15px;
 }
 .inCable{
     width: 200px;
@@ -217,7 +217,7 @@ watchEffect(() => {
 
 .text {
     position: absolute;
-    left: -35px;
+    left: -40px;
     top: 30px;
 }
 
