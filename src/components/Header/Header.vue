@@ -43,7 +43,6 @@ const color = computed(() => {
 
 const savePanels = () => {
     store.dispatch('savePanels', store.state.panels);
- 
 
 };
 

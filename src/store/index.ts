@@ -36,6 +36,9 @@ export default createStore<IState>({
   getters: {
   },
   mutations: {
+    calcPanels(state){
+      state.panels.forEach(p=>p.calc())
+    },
     setPanels(state, panels: Array<Panel>) {
       state.panels = panels
       state.selectedPanel = panels[0]
@@ -48,6 +51,7 @@ export default createStore<IState>({
     }
   },
   actions: {
+  
     fetchPanels({ commit }) {
       const panelsJSON = localStorage.getItem('panels');
       if (panelsJSON) {

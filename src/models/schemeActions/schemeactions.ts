@@ -1,17 +1,22 @@
 import { Breakers } from "../bd/breakers"
+import { BreakersPower } from "../bd/breakersPower"
 import { Cables } from "../bd/cables"
 import { Contactors } from "../bd/contactors"
+import { DiffBreakers } from "../bd/diffbreakers"
 import { Fuses } from "../bd/fuses"
 import { Breaker } from "../breaker"
+import { BreakerPower } from "../breakerPower"
 import { CommutateApparate } from "../commutateApparate"
 import { Consumer } from "../consumer"
 import { Contact } from "../contact"
 import { Contactor } from "../contactor"
 import { Device } from "../device"
+import { DiffBreaker } from "../diffBreaker"
 import { Fuse } from "../fuse"
 import { Panel } from "../panel"
 import { defaults } from "../schemedefs"
 import { SectionLine } from "../sectionline"
+import { useStore } from "vuex"
 
 export function addContactor(section: SectionLine) {
 
@@ -167,10 +172,10 @@ function rename(panel: Panel) {
                 s.endContact.ownDevice.nameOfPlane = 'QF' + + (panel.outContact.getSlaveSections().indexOf(s) + 1)
             }
         }
-        //--consumer
-        s.subConsumers.forEach(c => {
-            c.nameOfPlane = defaults.consumerPrefix + (panel.uniteSection.subConsumers.indexOf(c) + 1)
-        })
+        // //--consumer
+        // s.subConsumers.forEach(c => {
+        //     c.nameOfPlane = defaults.consumerPrefix + (panel.uniteSection.subConsumers.indexOf(c) + 1)
+        // })
         //--sUnderContactor
         s.subConsumers.forEach(c => {
             if (c.inContact.getSupplySections()[0].startContact?.ownDevice instanceof Contactor) {
@@ -238,6 +243,38 @@ export function replaceCommApparate(oldApp: CommutateApparate, newApp: Commutate
             s.setStartContact(newApp.outContact)
         })
     }
+ 
+}
 
+export function changeAppType(currApp:CommutateApparate, option: any): CommutateApparate | null{
+    
+    if(option.type == 'Предохранитель'){
+        const fuse = new Fuse(Fuses[0].mark)
+        const indx = currApp.nameOfPlane.match(/\d+/)?.[0] || ""
+        fuse.nameOfPlane = 'FU' + indx
+        replaceCommApparate(currApp, fuse)
+        return fuse
+        
+    }else if(option.type == 'Дифф. автомат'){
+        const diffBreaker = new DiffBreaker(DiffBreakers[0].mark)
+        const indx = currApp.nameOfPlane.match(/\d+/)?.[0] || ""
+        diffBreaker.nameOfPlane = 'QFD' + indx
+        replaceCommApparate(currApp, diffBreaker)
+        return diffBreaker
+    }else if(option.type == 'Автоматический выключатель'){
+        const breaker = new Breaker(Breakers[0].mark)
+        const indx = currApp.nameOfPlane.match(/\d+/)?.[0] || ""
+        breaker.nameOfPlane = 'QF' + indx
+        replaceCommApparate(currApp, breaker)
+        return breaker
+    }else if(option.type == 'Выключатель нагрузки'){
+        const breakerPower = new BreakerPower(BreakersPower[0].mark)
+        const indx = currApp.nameOfPlane.match(/\d+/)?.[0] || ""
+        breakerPower.nameOfPlane = 'QW' + indx
+        replaceCommApparate(currApp, breakerPower)
+        return breakerPower
+    }else {
+        return null
+    }
 
 }

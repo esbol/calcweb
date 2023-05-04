@@ -20,16 +20,16 @@ export class Panel extends Device {
         super()
         const inApparate = new Breaker(Breakers[0].mark)
         inApparate.nameOfPlane = 'QF'
-        this.s1Section  = new SectionLine()
-        this.outContact  = new Contact(this)
+        this.s1Section = new SectionLine()
+        this.outContact = new Contact(this)
         this.s1Section.setStartContact(this.inContact)
         this.s1Section.setEndContact(inApparate.inContact)
 
-        this.uniteSection  = new SectionLine()
+        this.uniteSection = new SectionLine()
         this.uniteSection.setStartContact(inApparate.outContact)
         this.uniteSection.setEndContact(this.outContact)
-        
-     
+
+
         this.uniteSection.nameOfPlane = 'uniteSection'
         this.uniteSection.description = 'uniteSection'
         this.uniteSection.isInPanel = true
@@ -43,19 +43,19 @@ export class Panel extends Device {
     outContact: Contact
     uniteSection: SectionLine;
     s1Section: SectionLine;
-   
-    
+
+
     //#region inApparate
 
-    public get inApparate() : CommutateApparate | null {
+    public get inApparate(): CommutateApparate | null {
         const app = this.outContact.getSupplySections()[0].startContact?.ownDevice
-        if(app != null){
-            if(app instanceof CommutateApparate){
+        if (app != null) {
+            if (app instanceof CommutateApparate) {
                 return app as CommutateApparate
-            }else return null
-        }else return null
+            } else return null
+        } else return null
     }
-  
+
     //#endregion
 
     //#region bus
@@ -92,64 +92,81 @@ export class Panel extends Device {
 
         this.s1Section.calc()
 
-        this.s1Section.subSections.forEach(s =>{
-           
-            s.calc()
-        } )
+        const sections = this.s1Section.subSections
+        sections.sort((a, b) => a.subSections.length - b.subSections.length)
 
-        this.s1Section.subDevices.forEach(d => {
-            if (d instanceof CommutateApparate) {
-                d.calc()
+
+        sections.forEach(s => {
+            s.calc()
+            if(s.endContact != null){
+                if(s.endContact.ownDevice instanceof CommutateApparate){
+                    s.endContact.ownDevice.calc()
+                }
             }
         })
-        
-       
+        //корректировка по автомату
+        sections.forEach(s => {
+            s.calc()
+        })
 
-    
-    
+        for (const item of this.s1Section.subDevices) {
+            if (item.colPhase == 3) {
+                this.colPhase = 3
+                break
+            }
+        }
+
+
+
+
+
+
+
+
+
 
         this.calcColCables()
         this.calcColPipes()
     }
 
     public addFeeder() {
-               
+
         addOneConsumerFeeder(this)
-       
+
     }
 
-    private calcColCables(){
+    private calcColCables() {
         const cables = new Array<Cable>()
-        this.uniteSection.subSections.forEach(s=>{
-            if(!s.isInPanel){
-                if(s.cable.length > 0){
+        this.uniteSection.subSections.forEach(s => {
+            if (!s.isInPanel) {
+                if (s.cable.length > 0) {
                     cables.push(s.cable)
                 }
             }
         })
 
         const sumCables: Array<Cable> = new Array<Cable>()
-        cables.forEach(c=>{
+        cables.forEach(c => {
             const cable = new Cable(this.uniteSection)
             cable.mark = c.mark
             cable.square = c.square
             cable.colCores = c.colCores
 
-            cables.forEach(cab=>{
-                if(cab.mark == cable.mark && cab.colCores == cable.colCores && cab.square == cable.square){
+            cables.forEach(cab => {
+                if (cab.mark == cable.mark && cab.colCores == cable.colCores && cab.square == cable.square) {
                     cable.length += cab.length
                 }
             })
 
             let isSame = false
 
-            sumCables.forEach(cab=>{
-                if(cab.mark == cable.mark && cab.colCores == cable.colCores && cab.square == cable.square){
+            sumCables.forEach(cab => {
+                if (cab.mark == cable.mark && cab.colCores == cable.colCores && cab.square == cable.square) {
                     isSame = true
                 }
             })
 
-            if(!isSame) sumCables.push(cable)
+            if (!isSame) sumCables.push(cable)
         })
 
         sumCables.sort((a: Cable, b: Cable) => {
@@ -179,7 +196,7 @@ export class Panel extends Device {
             }
         })
 
-        
+
         const sumPipes: Array<Pipe> = new Array<Pipe>()
         pipes.forEach(c => {
             const pipe = new Pipe(this.uniteSection)
@@ -215,10 +232,10 @@ export class Panel extends Device {
             return 0
         })
         sumPipes.sort((a: Pipe, b: Pipe) => a.diametr - b.diametr)
-       
+
         this.pipes = sumPipes
-   
-        
+
+
     }
 
     //#region format
@@ -231,7 +248,7 @@ export class Panel extends Device {
     }
     //#endregion 
 
-    toJSON(){
+    toJSON() {
         return Object.assign(super.toJSON(), {
             outContactId: this.outContact.id,
             s1SectionId: this.s1Section.id,

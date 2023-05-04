@@ -9,9 +9,9 @@
             <span>PE</span>
         </div>
         <div class="fases">
-            <div class="phaseLine" :class="{ hover_bg: hover }" v-if="store.selectedPanel.uniteSection.colPhase == 3"></div>
+            <div class="phaseLine" :class="{ hover_bg: hover }" v-if="store.selectedPanel.colPhase == 3"></div>
             <div class="phaseLine" :class="{ hover_bg: hover }"></div>
-            <div class="phaseLine" :class="{ hover_bg: hover }" v-if="store.selectedPanel.uniteSection.colPhase == 3"></div>
+            <div class="phaseLine" :class="{ hover_bg: hover }" v-if="store.selectedPanel.colPhase == 3"></div>
         </div>
         <div class="l_end1"></div>
         <div class="l_end2"></div>

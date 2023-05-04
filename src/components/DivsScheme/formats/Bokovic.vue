@@ -95,6 +95,7 @@ watchEffect(() => {
     display: flex;
     justify-content: center;
     align-items: center;
+    
     /* border: 1px solid green; */
 }
 
@@ -103,6 +104,7 @@ watchEffect(() => {
     transform: rotate(-90deg);
     width: 200px;
     text-align: center;
+
     /* border: 1px solid red; */
 }
 
@@ -113,6 +115,7 @@ watchEffect(() => {
     height: 100%;
     width: 100%;
     text-align: center;
+   
     /* border: 1px solid brown; */
 }
 
@@ -130,6 +133,7 @@ watchEffect(() => {
 }
 
 .bokovic-container {
+ 
     display: flex;
     flex-direction: column;
     border-right: 1px solid var(--scheme-line-color);

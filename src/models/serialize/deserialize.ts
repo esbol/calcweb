@@ -79,7 +79,7 @@ export function getPanels(jsonString: string) {
 
     objJson.jsonDevices.forEach(d => {
         const objDev = JSON.parse(d)
-        console.log(objDev);
+     
         if(objDev.type == 'Breaker') createBreaker(d)
         if(objDev.type == 'BreakerPower') createBreakerPower(d)
         if(objDev.type == 'Fuse') createFuse(d)
@@ -87,29 +87,10 @@ export function getPanels(jsonString: string) {
         if(objDev.type == 'Contactor') createContactor(d)
         if(objDev.type == 'Consumer') createConsumer(d)
         if(objDev.type == 'Panel') createPanel(d)
-        // const myArray = d.split(",")
-        // myArray.forEach(row => {
-        //     if (row.includes('type')) {
-             
-                
-        //         if (row.includes('Breaker')) createBreaker(d)
-        //         if (row.includes('BreakerPower')) createBreakerPower(d)
-        //         if (row.includes('Fuse')) createFuse(d)
-        //         if (row.includes('DiffBreaker')) createDiffBreaker(d)
-        //         if (row.includes('Contactor')) createContactor(d)
-        //         if (row.includes('Consumer')) createConsumer(d)
-        //     }
-        // })
-      
-        
-        // myArray.forEach(row => {
-        //     if (row.includes('Panel')) createPanel(d)
-        // })
+       
     })
 
-    console.log(objJson);
-    
-    console.log(devices);
+   
 
     const panels = new Array<Panel>()
     devices.forEach(d => {

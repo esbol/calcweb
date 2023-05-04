@@ -8,7 +8,7 @@
             </td>
             <td>
                 <div class="prop-value-input"><Select :selected-value="appType" :options="appTypes" :display-path="'type'"
-                    @change="changeAppType" /></div>
+                    @change="changeType" /></div>
             </td>
         </tr>
         <tr>
@@ -72,12 +72,13 @@ import { Fuses } from '@/models/bd/fuses';
 import { Breaker } from '@/models/breaker';
 import { Fuse } from '@/models/fuse';
 import { ref } from 'vue';
-import { replaceCommApparate } from '@/models/schemeActions/schemeactions';
+import { changeAppType, replaceCommApparate } from '@/models/schemeActions/schemeactions';
 import { useStore } from 'vuex';
 import { DiffBreakers } from '@/models/bd/diffbreakers';
 import { DiffBreaker } from '@/models/diffBreaker';
 import { BreakerPower } from '@/models/breakerPower';
 import { BreakersPower } from '@/models/bd/breakersPower';
+import { CommutateApparate } from '@/models/commutateApparate';
 
 const props = defineProps({
     breakerPower: {
@@ -87,39 +88,16 @@ const props = defineProps({
 })
 
 const store = useStore().state
-
+const st = useStore()
 const appType = ref( {type: 'Выключатель нагрузки'})
 const appTypes: Array<object> = [{type:'Дифф. автомат' }, {type: 'Предохранитель'}, {type:'Автоматический выключатель' }]
+    
+   
 
-function changeAppType(option: any){
-    
-    
+function changeType(option: any){
     if(option.type == appType.value.type) return
-    console.log(option);
-    if(option.type == 'Предохранитель'){
-        const fuse = new Fuse(Fuses[0].mark)
-        const indx = props.breakerPower.nameOfPlane.match(/\d+/)?.[0] || ""
-        fuse.nameOfPlane = 'FU' + indx
-        replaceCommApparate(props.breakerPower, fuse)
-        store.selectedObject = fuse
-        console.log(fuse);
-        
-    }else if(option.type == 'Дифф. автомат'){
-        const diffBreaker = new DiffBreaker(DiffBreakers[0].mark)
-        const indx = props.breakerPower.nameOfPlane.match(/\d+/)?.[0] || ""
-        diffBreaker.nameOfPlane = 'QFD' + indx
-        replaceCommApparate(props.breakerPower, diffBreaker)
-        store.selectedObject = diffBreaker
-    }else if(option.type == 'Автоматический выключатель'){
-        const breaker = new Breaker(Breakers[0].mark)
-        const indx = props.breakerPower.nameOfPlane.match(/\d+/)?.[0] || ""
-        breaker.nameOfPlane = 'QW' + indx
-        
-
-        
-        replaceCommApparate(props.breakerPower, breaker)
-        store.selectedObject = breaker
-    }
+    store.selectedObject = changeAppType(props.breakerPower, option)
+    st.commit('calcPanels');
 }
 
 

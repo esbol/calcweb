@@ -85,21 +85,21 @@ function setColPhase(section: SectionLine): void {
     let col: number = 1
   
 
-    section.subDevices.forEach(c=> {
-        if(c.colPhase > col) col = c.colPhase
+    section.subDevices.forEach(d=> {
+        if(d.colPhase == 3) col = 3
     })
-
-    if(section.colPhase == 3){
-        if(col == 1){
-            if(section.subConsumers.length == 1){
-                section.colPhase = 1
-            }
-        }
-    }else{
-        if(col == 3){
-            section.colPhase = 3
-        }
-    }
+    section.colPhase = col
+    // if(section.colPhase == 3){
+    //     if(col == 1){
+    //         if(section.subConsumers.length == 1){
+    //             section.colPhase = 1
+    //         }
+    //     }
+    // }else{
+    //     if(col == 3){
+    //         section.colPhase = 3
+    //     }
+    // }
 
 
 }

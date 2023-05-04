@@ -19,10 +19,10 @@ export abstract class ELObject {
     public  set colPhase(v: number) {
         if (v == this._colPhase) return
         this._colPhase = v;
-        if(this instanceof CommutateApparate){
-            const ca = this as CommutateApparate
-            ca.innerSection.colPhase = v
-        }
+        // if(this instanceof CommutateApparate){
+        //     const ca = this as CommutateApparate
+        //     ca.innerSection.colPhase = v
+        // }
     }
     public get colPhase(): number {
         return this._colPhase

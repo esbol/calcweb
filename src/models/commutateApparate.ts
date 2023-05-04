@@ -46,24 +46,20 @@ export abstract class CommutateApparate extends Device {
 
 
     public calc() {
+        
+        this.colPhase = this.innerSection.colPhase
 
-
+     
         
 
-        this.innerSection.calc()
-       
-        let col = this.innerSection.colPhase
-
-        if(col == 3){
-            this.colPhase = 3
-        }else{
-            if(this.innerSection.subConsumers.length == 1){
-                this.colPhase = 1
-            }
-        }
+      
+      
+        
         
         let cur = this.innerSection.modeMax.current
-       
+        this.innerSection.subSections.forEach(s=>{
+            if(s.modeMax.current > cur) cur = s.modeMax.current
+        })
   
         for (let index = 0; index < this._possibleCurrents.length; index++) {
             const element = this._possibleCurrents[index];

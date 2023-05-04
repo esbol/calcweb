@@ -176,7 +176,15 @@ export class SectionLine {
         function recurcy(endC: Contact) {
             if(endC.ownDevice != null)
             if (devlist.includes(endC.ownDevice) === false) {
-                devlist.push(endC.ownDevice)
+                if(endC.ownDevice instanceof CommutateApparate){
+                    const coma = endC.ownDevice as CommutateApparate
+                    if(endC != coma.outContact){
+                        devlist.push(endC.ownDevice) 
+                    }
+                }else{
+                    devlist.push(endC.ownDevice)
+                }
+                
             }
 
             endC.sectionLines.forEach(s => {

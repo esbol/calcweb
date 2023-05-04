@@ -160,17 +160,15 @@ export class CalculationMode {
             this.installPower += g.installPower
             this.ratedPower += g.ratedPower
             this.ratedQPower += g.ratedQPower
+            this.ratedSPower += g.ratedSPower
         })
 
-        this.ratedSPower = Math.sqrt(this.ratedPower * this.ratedPower + this.ratedQPower * this.ratedQPower)
 
         if(this.ratedPower !== 0){
             this.tgf = this.ratedQPower / this.ratedPower
+            this.cosf = this.ratedPower / this.ratedSPower
+            this.current = calcCurrentBySPower(this.ratedSPower, this.section.voltage, this.section.colPhase)
         }
-
-        this.cosf = this.ratedPower / this.ratedSPower
-
-        this.current = calcCurrentBySPower(this.ratedSPower, this.section.voltage, this.section.colPhase)
     }
 
 }

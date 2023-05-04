@@ -4,7 +4,7 @@
             {{ consumer.nameOfPlane }}
         </div>
         <div class="frame-power" :class="{ hover_text: hover }">
-            {{ consumer.installPower }}
+            {{ Number(consumer.installPower.toFixed(2)).toString().replace('.', ',') }}
         </div>
         <div class="frame-current" :class="{ hover_text: hover }">
             {{ Number(consumer.current.toFixed(2)).toString().replace('.', ',') }}

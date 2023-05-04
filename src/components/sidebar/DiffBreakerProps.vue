@@ -8,7 +8,7 @@
             </td>
             <td>
                 <div class="prop-value-input"><Select :selected-value="appType" :options="appTypes" :display-path="'type'"
-                    @change="changeAppType" /></div>
+                        @change="changeType" /></div>
             </td>
         </tr>
         <tr>
@@ -17,8 +17,8 @@
             </td>
             <td>
                 <div class="prop-value-input">
-                    <TextInput :input-value="diffBreaker.nameOfPlane" @focusout="diffBreaker.nameOfPlane = $event.target.value"
-                        :can-edite="true" />
+                    <TextInput :input-value="diffBreaker.nameOfPlane"
+                        @focusout="diffBreaker.nameOfPlane = $event.target.value" :can-edite="true" />
 
                 </div>
             </td>
@@ -29,8 +29,8 @@
                 <div class="name-prop">Марка</div>
             </td>
             <td>
-                <div class="prop-value-input"><Select :selected-value="diffBreaker" :options="DiffBreakers" :display-path="'mark'"
-                    @change="setDiffBreakerMark" /></div>
+                <div class="prop-value-input"><Select :selected-value="diffBreaker" :options="DiffBreakers"
+                        :display-path="'mark'" @change="setDiffBreakerMark" /></div>
             </td>
         </tr>
         <tr>
@@ -72,7 +72,7 @@ import Select from './UI/Select.vue'
 import { Breaker } from '@/models/breaker';
 
 import { ref } from 'vue';
-import { replaceCommApparate } from '@/models/schemeActions/schemeactions';
+import { changeAppType, replaceCommApparate } from '@/models/schemeActions/schemeactions';
 import { useStore } from 'vuex';
 import { DiffBreaker } from '@/models/diffBreaker';
 import { Breakers } from '@/models/bd/breakers';
@@ -90,39 +90,16 @@ const props = defineProps({
 })
 
 const store = useStore().state
+const st = useStore()
+const appType = ref({ type: 'Дифф. автомат' })
+const appTypes: Array<object> = [{ type: 'Автоматический выключатель' }, { type: 'Предохранитель' }, { type: 'Выключатель нагрузки' }]
 
-const appType = ref({type:'Дифф. автомат' })
-const appTypes: Array<object> = [{type:'Автоматический выключатель' }, {type: 'Предохранитель'}, {type: 'Выключатель нагрузки'}]
-
-function changeAppType(option: any){
-   
-    if(option.type == appType.value.type) return
-    console.log(option);
-    
-    if(option.type == 'Автоматический выключатель'){
-        const breaker = new Breaker(Breakers[0].mark)
-        const indx = props.diffBreaker.nameOfPlane.match(/\d+/)?.[0] || ""
-        breaker.nameOfPlane = 'QF' + indx
-        replaceCommApparate(props.diffBreaker, breaker)
-        store.selectedObject = breaker
-
-    }else if(option.type == 'Предохранитель'){
-        const fuse = new Fuse(Fuses[0].mark)
-        const indx = props.diffBreaker.nameOfPlane.match(/\d+/)?.[0] || ""
-        fuse.nameOfPlane = 'FU' + indx
-        replaceCommApparate(props.diffBreaker, fuse)
-        store.selectedObject = fuse
-    }else if(option.type == 'Выключатель нагрузки'){
-        const breakerPower = new BreakerPower(BreakersPower[0].mark)
-        const indx = props.diffBreaker.nameOfPlane.match(/\d+/)?.[0] || ""
-        breakerPower.nameOfPlane = 'QW' + indx
-        
-        console.log(breakerPower);
-        
-        replaceCommApparate(props.diffBreaker, breakerPower)
-        store.selectedObject = breakerPower
-    }
+function changeType(option: any) {
+    if (option.type == appType.value.type) return
+    store.selectedObject = changeAppType(props.diffBreaker, option)
+    st.commit('calcPanels');
 }
+
 
 
 function setDiffBreakerMark(option: any) {

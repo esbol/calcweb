@@ -60,11 +60,11 @@
                 <div class="name-prop">Кол. фаз</div>
             </td>
             <td>
-                <div class="prop-value-input"><Select :selected-value="store.selectedPanel.uniteSection.colPhase"
+                <div class="prop-value-input"><Select :selected-value="store.selectedPanel.colPhase"
                         :display-path="'0'" :options="ColPhases" @change="setColPhase" /></div>
             </td>
         </tr>
-        <tr>
+        <tr class="subTitle">
             <td colspan="2">
                 <div class="name-prop"><strong>Электроприемники</strong></div>
             </td>
@@ -117,10 +117,11 @@ const store = useStore().state
 
 function setColPhase(n: number) {
     const panel = store.selectedPanel as Panel
-    panel.uniteSection.colPhase = n
+    panel.colPhase = n
+    if(panel.inApparate != null)
+    panel.inApparate.colPhase = n
     panel.calc()
     panel.uniteSection.getSupplyPanels().forEach(p => p.calc())
-
     
 }
 
@@ -178,7 +179,9 @@ const groups = computed(()=>{
 * {
     font-family: Arial, Helvetica, sans-serif
 }
-
+.subTitle {
+    background: var(--sidebar-title-bg-color);
+}
 table {
     width: 100%;
     border-collapse: collapse;
