@@ -21,6 +21,8 @@ export enum PipeMaterial {
     Сталь=3
 }
 
+
+
 export interface IPipeDiametr {
     cableSquare: number,
     cableColCores: number,

@@ -4,10 +4,15 @@ import { CommutateApparate } from "./commutateApparate";
 
 export class Breaker extends CommutateApparate {
     setDataFromDB(mark: string): boolean {
-        const breaker: IBreaker | undefined = Breakers.find(b=> b.mark === mark)
+        let breaker: IBreaker | undefined
+        if( this.specData.factory != ''){
+            breaker = Breakers.find(b=> b.mark === mark && b.factory == this.specData.factory)
+        }else  breaker = Breakers.find(b=> b.mark === mark)
+         
         if(breaker === undefined) return false
         else{
             this._possibleCurrents = breaker.possibleCurrents
+            this.specData.factory = breaker.factory
             return true
         }
     }

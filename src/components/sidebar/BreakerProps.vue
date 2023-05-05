@@ -26,17 +26,17 @@
 
         <tr>
             <td>
-                <div class="name-prop">Марка</div>
+                <div class="name-prop">Производитель</div>
             </td>
             <td>
-                <div class="prop-value-input"><Select :selected-value="breaker" :options="Breakers" :display-path="'mark'"
-                        @change="setBreakerMark" /></div>
+                <div class="prop-value-input"><SelectSimple :options="optionsFactories" :selected-value="breaker.specData.factory"
+                    @change="setBreakerFactory" /></div>
             </td>
         </tr>
         
         <tr>
             <td>
-                <div class="name-prop">Марка2</div>
+                <div class="name-prop">Марка</div>
             </td>
             <td>
                 <div class="prop-value-input"><SelectSimple :options="optionsMarks" :selected-value="breaker.mark"
@@ -70,10 +70,12 @@
             </td>
         </tr>
     </table>
+    <NewBreakerWindow v-if="newBreakerWindowShow" @clcClose="newBreakerWindowShow = !newBreakerWindowShow"/>
 </template>
 
 <script setup lang="ts">
 
+import NewBreakerWindow from '../Windows/NewBreakerWindow.vue';
 import SelectSimple from './UI/SelectSimple.vue';
 import TextInput from './UI/TextInput.vue';
 import Select from './UI/Select.vue'
@@ -89,6 +91,7 @@ import { DiffBreakers } from '@/models/bd/diffbreakers';
 import { DiffBreaker } from '@/models/diffBreaker';
 import { BreakerPower } from '@/models/breakerPower';
 import { BreakersPower } from '@/models/bd/breakersPower';
+import { IState } from '@/store';
 
 const props = defineProps({
     breaker: {
@@ -98,13 +101,21 @@ const props = defineProps({
 })
 
 onMounted(() => {
-    Breakers.forEach(b=>optionsMarks.push(b.mark))
-    optionsMarks.push('Добавить')
+    Breakers.forEach(b=>{
+       if(!optionsFactories.includes(b.factory)) optionsFactories.push(b.factory)
+    })
+    optionsFactories.push('+ Добавить...')
+
+    Breakers.filter(b=> b.factory == props.breaker.specData.factory && b.colPhase
+    == props.breaker.colPhase).forEach(b=> optionsMarks.push(b.mark))
+    optionsMarks.push('+ Добавить...')
 });
+
 const optionsMarks = new Array<string>()
+const newBreakerWindowShow = ref(false)
+const optionsFactories = new Array<string>()
 
-
-const store = useStore().state
+const store: IState = useStore().state
 const st = useStore()
 const appType = ref({ type: 'Автоматический выключатель' })
 const appTypes: Array<object> = [{ type: 'Дифф. автомат' }, { type: 'Предохранитель' }, { type: 'Выключатель нагрузки' }]
@@ -119,13 +130,28 @@ function changeType(option: any) {
 
 
 function setBreakerMark(option: any) {
-    if(option == 'Добавить'){
-        console.log('Новый марка');
-        
+    if(option == '+ Добавить...'){
+     
+        newBreakerWindowShow.value = true
     }else{
         props.breaker.mark = option
+        store.panels.forEach(p=>p.calc())
     }
     
+}
+function setBreakerFactory(option: string) {
+    if(option == '+ Добавить...'){
+ 
+        newBreakerWindowShow.value = true
+    }else{
+        const filBreakers = Breakers.filter(b=> b.factory == option && b.colPhase == props.breaker.colPhase)
+        optionsMarks.splice(0, optionsMarks.length)
+        filBreakers.forEach(b=> optionsMarks.push(b.mark))
+        optionsMarks.push('+ Добавить...')
+        props.breaker.specData.factory = option
+        props.breaker.mark = filBreakers[0].mark
+        store.panels.forEach(p=>p.calc())
+    }
 }
 
 

@@ -10,12 +10,12 @@ export class SpecData {
         this.note = note
     }
     public position: string = ''
-    public description: string 
-    public mark: string 
-    public code: string 
-    public factory: string 
-    public units: string 
-    public count: string 
-    public mass: string 
-    public note: string 
+    public description: string = ''
+    public mark: string = ''
+    public code: string = ''
+    public factory: string = ''
+    public units: string = ''
+    public count: string = ''
+    public mass: string = ''
+    public note: string = ''
 }
