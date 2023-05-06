@@ -34,6 +34,7 @@ export const Fuses: Array<IFuse> = [
     },
     //#endregion
     
+    //#region EKF
     {
         factory: 'EKF',
         mark: 'ПН2-250',
@@ -49,4 +50,5 @@ export const Fuses: Array<IFuse> = [
         mark: 'ПН2-600',
         possibleCurrents: [300, 400, 500, 600]
     },
+    //#endregion
 ]

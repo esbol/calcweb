@@ -175,12 +175,11 @@ watchEffect(() => {
 
 .text {
     position: absolute;
-    left: -35px;
+    left: -50px;
     top: 30px;
 }
 
 .text-name {
-
     color: var(--scheme-line-color);
 }
 

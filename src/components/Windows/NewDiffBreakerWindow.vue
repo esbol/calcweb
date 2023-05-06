@@ -1,7 +1,7 @@
 <template>
     <div class="popup-container">
         <div class="popup">
-            <div class="title">Новый автоматический выключатель</div>
+            <div class="title">Новый дифференциальный автомат</div>
             <table>
                 <col width="180px" />
                 <col width="350px" />

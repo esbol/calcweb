@@ -1,7 +1,7 @@
 <template>
     <div class="popup-container">
         <div class="popup">
-            <div class="title">Новый автоматический выключатель</div>
+            <div class="title">Новый предохранитель</div>
             <table>
                 <col width="180px" />
                 <col width="350px" />
@@ -11,7 +11,7 @@
                     </td>
                     <td>
                         <div class="prop-value-input">
-                            <TextInput :input-value="breaker.factory" @focusout="breaker.factory = $event.target.value"
+                            <TextInput :input-value="fuse.factory" @focusout="fuse.factory = $event.target.value"
                                 :can-edite="true" />
                         </div>
                     </td>
@@ -22,7 +22,7 @@
                     </td>
                     <td>
                         <div class="prop-value-input">
-                            <TextInput :input-value="breaker.mark" @focusout="breaker.mark = $event.target.value"
+                            <TextInput :input-value="fuse.mark" @focusout="fuse.mark = $event.target.value"
                                 :can-edite="true" />
 
                         </div>
@@ -36,40 +36,40 @@
                         <div class="prop-value">
                             <div class="chek-rows no-select">
                                 <div class="check-row1">
-                                    <input class="check" type="checkbox" v-on:change="setBreakerNominal(6)" id="6">
+                                    <input class="check" type="checkbox" v-on:change="setFuseNominal(6)" id="6">
                                     <label for="6">6</label>
-                                    <input class="check" type="checkbox" v-on:change="setBreakerNominal(10)" id="10">
+                                    <input class="check" type="checkbox" v-on:change="setFuseNominal(10)" id="10">
                                     <label for="10">10</label>
-                                    <input class="check" type="checkbox" v-on:change="setBreakerNominal(16)" id="16">
+                                    <input class="check" type="checkbox" v-on:change="setFuseNominal(16)" id="16">
                                     <label for="16">16</label>
-                                    <input class="check" type="checkbox" v-on:change="setBreakerNominal(20)" id="20">
+                                    <input class="check" type="checkbox" v-on:change="setFuseNominal(20)" id="20">
                                     <label for="20">20</label>
-                                    <input class="check" type="checkbox" v-on:change="setBreakerNominal(25)" id="25">
+                                    <input class="check" type="checkbox" v-on:change="setFuseNominal(25)" id="25">
                                     <label for="25">25</label>
-                                    <input class="check" type="checkbox" v-on:change="setBreakerNominal(32)" id="32">
+                                    <input class="check" type="checkbox" v-on:change="setFuseNominal(32)" id="32">
                                     <label for="32">32</label>
-                                    <input class="check" type="checkbox" v-on:change="setBreakerNominal(40)" id="40">
+                                    <input class="check" type="checkbox" v-on:change="setFuseNominal(40)" id="40">
                                     <label for="40">40</label>
-                                    <input class="check" type="checkbox" v-on:change="setBreakerNominal(50)" id="50">
+                                    <input class="check" type="checkbox" v-on:change="setFuseNominal(50)" id="50">
                                     <label for="50">50</label>
-                                    <input class="check" type="checkbox" v-on:change="setBreakerNominal(63)" id="63">
+                                    <input class="check" type="checkbox" v-on:change="setFuseNominal(63)" id="63">
                                     <label for="63">63</label>
                                 </div>
                                 <div class="check-row2">
 
-                                    <input class="check" type="checkbox" v-on:change="setBreakerNominal(80)" id="80">
+                                    <input class="check" type="checkbox" v-on:change="setFuseNominal(80)" id="80">
                                     <label for="80">80</label>
-                                    <input class="check" type="checkbox" v-on:change="setBreakerNominal(100)" id="100">
+                                    <input class="check" type="checkbox" v-on:change="setFuseNominal(100)" id="100">
                                     <label for="100">100</label>
-                                    <input class="check" type="checkbox" v-on:change="setBreakerNominal(160)" id="160">
+                                    <input class="check" type="checkbox" v-on:change="setFuseNominal(160)" id="160">
                                     <label for="160">160</label>
-                                    <input class="check" type="checkbox" v-on:change="setBreakerNominal(250)" id="250">
+                                    <input class="check" type="checkbox" v-on:change="setFuseNominal(250)" id="250">
                                     <label for="250">250</label>
-                                    <input class="check" type="checkbox" v-on:change="setBreakerNominal(400)" id="400">
+                                    <input class="check" type="checkbox" v-on:change="setFuseNominal(400)" id="400">
                                     <label for="400">400</label>
-                                    <input class="check" type="checkbox" v-on:change="setBreakerNominal(630)" id="630">
+                                    <input class="check" type="checkbox" v-on:change="setFuseNominal(630)" id="630">
                                     <label for="630">630</label>
-                                    <input class="check" type="checkbox" v-on:change="setBreakerNominal(1000)" id="1000">
+                                    <input class="check" type="checkbox" v-on:change="setFuseNominal(1000)" id="1000">
                                     <label for="1000">1000</label>
                                 </div>
                             </div>
@@ -79,23 +79,12 @@
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <div class="name-prop">Токовые характеристики</div>
-                    </td>
-                    <td>
-                        <div class="prop-value">
-                            <SelectSimple :options="optionsСharacters" :selected-value="CurrentCharacter[breaker.character]"
-                                @change="setBreakerCharacter" />
-
-                        </div>
-                    </td>
-                </tr>
+                
 
 
 
             </table>
-            <button @click="setNewBreaker">Применить</button>
+            <button @click="setNewFuse">Применить</button>
             <button @click="$emit('clcClose')">Отменить</button>
         </div>
         <div class="back" @click="$emit('clcClose')"></div>
@@ -107,8 +96,8 @@ import SelectSimple from '../sidebar/UI/SelectSimple.vue';
 import TextInput from '../sidebar/UI/TextInput.vue';
 import { useStore } from 'vuex';
 import { ref, defineEmits, computed, onMounted } from 'vue';
-import { CurrentCharacter, IBreaker } from '@/models/bd/breakers';
-import { Breakers } from '@/models/bd/breakers';
+import { Fuses, IFuse } from '@/models/bd/fuses';
+
 
 
 const props = defineProps({
@@ -118,48 +107,28 @@ const props = defineProps({
     }
 })
 
-const br: IBreaker = {
+const fu: IFuse = {
     factory: props.factory,
-    colPhase: 1,
     mark: '',
-    character: CurrentCharacter.C,
     possibleCurrents: []
 }
-const breaker = ref(br)
-const optionsСharacters = new Array<string>()
+const fuse = ref(fu)
+
 const store = useStore().state
 const emits = defineEmits(['clcClose'])
-onMounted(() => {
-    for (var enumMember in CurrentCharacter) {
-        var isValueProperty = Number(enumMember) >= 0
-        if (isValueProperty) {
-            optionsСharacters.push(CurrentCharacter[enumMember])
-        }
-    }
-});
 
-function setBreakerCharacter(option: string) {
-    if (option == 'A') breaker.value.character = CurrentCharacter.A
-    else if (option == 'B') breaker.value.character = CurrentCharacter.B
-    else if (option == 'C') breaker.value.character = CurrentCharacter.C
-    else if (option == 'D') breaker.value.character = CurrentCharacter.D
-}
 
-function setBreakerNominal(nominal: number) {
-    const index = breaker.value.possibleCurrents.indexOf(nominal, 0);
-    if (index > -1)breaker.value.possibleCurrents.splice(index, 1)
-    else breaker.value.possibleCurrents.push(nominal)
+function setFuseNominal(nominal: number) {
+    const index = fuse.value.possibleCurrents.indexOf(nominal, 0);
+    if (index > -1)fuse.value.possibleCurrents.splice(index, 1)
+    else fuse.value.possibleCurrents.push(nominal)
    
 }
 
-function setNewBreaker() {
-    Breakers.push(breaker.value)
-   
-    const selobj = store.selectedObject
+function setNewFuse() {
+    Fuses.push(fuse.value)
     store.selectedObject = null
-    
     emits('clcClose')
-
 }
 
 </script>

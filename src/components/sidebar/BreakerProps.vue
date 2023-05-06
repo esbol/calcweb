@@ -70,7 +70,7 @@
             </td>
         </tr>
     </table>
-    <NewBreakerWindow v-if="newBreakerWindowShow" @clcClose="newBreakerWindowShow = !newBreakerWindowShow"/>
+    <NewBreakerWindow v-if="newBreakerWindowShow" @clcClose="newBreakerWindowShow = !newBreakerWindowShow" :factory="factory"/>
 </template>
 
 <script setup lang="ts">
@@ -99,39 +99,32 @@ const props = defineProps({
         required: true
     }
 })
+const store: IState = useStore().state
+const st = useStore()
+
+//#region Marks Factories
+const optionsMarks = new Array<string>()
+const newBreakerWindowShow = ref(false)
+const optionsFactories = new Array<string>()
+const factory = ref('')
 
 onMounted(() => {
+    //добавляем в список производителей
     Breakers.forEach(b=>{
        if(!optionsFactories.includes(b.factory)) optionsFactories.push(b.factory)
     })
     optionsFactories.push('+ Добавить...')
 
+    //добавляем марки согласно производителя и фазности
     Breakers.filter(b=> b.factory == props.breaker.specData.factory && b.colPhase
     == props.breaker.colPhase).forEach(b=> optionsMarks.push(b.mark))
     optionsMarks.push('+ Добавить...')
 });
 
-const optionsMarks = new Array<string>()
-const newBreakerWindowShow = ref(false)
-const optionsFactories = new Array<string>()
-
-const store: IState = useStore().state
-const st = useStore()
-const appType = ref({ type: 'Автоматический выключатель' })
-const appTypes: Array<object> = [{ type: 'Дифф. автомат' }, { type: 'Предохранитель' }, { type: 'Выключатель нагрузки' }]
-
-function changeType(option: any) {
-    if (option.type == appType.value.type) return
-    store.selectedObject = changeAppType(props.breaker, option)
-   
-    st.commit('calcPanels');
-}
-
-
 
 function setBreakerMark(option: any) {
     if(option == '+ Добавить...'){
-     
+        factory.value = props.breaker.specData.factory
         newBreakerWindowShow.value = true
     }else{
         props.breaker.mark = option
@@ -141,18 +134,44 @@ function setBreakerMark(option: any) {
 }
 function setBreakerFactory(option: string) {
     if(option == '+ Добавить...'){
- 
+        //если выбран пункт "добавить"
+        factory.value = ''
         newBreakerWindowShow.value = true
     }else{
+        //сортируем автоматы по производителю и фазности
         const filBreakers = Breakers.filter(b=> b.factory == option && b.colPhase == props.breaker.colPhase)
+        
+        //очищаем опции выбора марок и заполняем новыми марками выбранного производителя
         optionsMarks.splice(0, optionsMarks.length)
         filBreakers.forEach(b=> optionsMarks.push(b.mark))
         optionsMarks.push('+ Добавить...')
+
+        //назначаем текущему автомату поле "производитель"
         props.breaker.specData.factory = option
+
+        //назначаем текущему автомату марку
         props.breaker.mark = filBreakers[0].mark
+
+        //запускаем расчет
         store.panels.forEach(p=>p.calc())
     }
 }
+//#endregion
+
+//#region Type Apparate
+const appType = ref({ type: 'Автоматический выключатель' })
+const appTypes: Array<object> = [{ type: 'Дифф. автомат' }, { type: 'Предохранитель' }, { type: 'Выключатель нагрузки' }]
+
+function changeType(option: any) {
+    if (option.type == appType.value.type) return
+    store.selectedObject = changeAppType(props.breaker, option)
+   
+    st.commit('calcPanels');
+}
+//#endregion
+
+
+
 
 
 </script>

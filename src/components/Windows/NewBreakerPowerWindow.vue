@@ -1,7 +1,7 @@
 <template>
     <div class="popup-container">
         <div class="popup">
-            <div class="title">Новый автоматический выключатель</div>
+            <div class="title">Новый выключатель нагрузки</div>
             <table>
                 <col width="180px" />
                 <col width="350px" />
@@ -11,7 +11,7 @@
                     </td>
                     <td>
                         <div class="prop-value-input">
-                            <TextInput :input-value="breaker.factory" @focusout="breaker.factory = $event.target.value"
+                            <TextInput :input-value="breakerPower.factory" @focusout="breakerPower.factory = $event.target.value"
                                 :can-edite="true" />
                         </div>
                     </td>
@@ -22,7 +22,7 @@
                     </td>
                     <td>
                         <div class="prop-value-input">
-                            <TextInput :input-value="breaker.mark" @focusout="breaker.mark = $event.target.value"
+                            <TextInput :input-value="breakerPower.mark" @focusout="breakerPower.mark = $event.target.value"
                                 :can-edite="true" />
 
                         </div>
@@ -79,23 +79,12 @@
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <div class="name-prop">Токовые характеристики</div>
-                    </td>
-                    <td>
-                        <div class="prop-value">
-                            <SelectSimple :options="optionsСharacters" :selected-value="CurrentCharacter[breaker.character]"
-                                @change="setBreakerCharacter" />
-
-                        </div>
-                    </td>
-                </tr>
+                
 
 
 
             </table>
-            <button @click="setNewBreaker">Применить</button>
+            <button @click="setNewBreakerPower">Применить</button>
             <button @click="$emit('clcClose')">Отменить</button>
         </div>
         <div class="back" @click="$emit('clcClose')"></div>
@@ -109,6 +98,7 @@ import { useStore } from 'vuex';
 import { ref, defineEmits, computed, onMounted } from 'vue';
 import { CurrentCharacter, IBreaker } from '@/models/bd/breakers';
 import { Breakers } from '@/models/bd/breakers';
+import { BreakersPower, IBreakerPower } from '@/models/bd/breakersPower';
 
 
 const props = defineProps({
@@ -118,48 +108,29 @@ const props = defineProps({
     }
 })
 
-const br: IBreaker = {
+const br: IBreakerPower = {
     factory: props.factory,
     colPhase: 1,
     mark: '',
-    character: CurrentCharacter.C,
     possibleCurrents: []
 }
-const breaker = ref(br)
-const optionsСharacters = new Array<string>()
+const breakerPower = ref(br)
+
 const store = useStore().state
 const emits = defineEmits(['clcClose'])
-onMounted(() => {
-    for (var enumMember in CurrentCharacter) {
-        var isValueProperty = Number(enumMember) >= 0
-        if (isValueProperty) {
-            optionsСharacters.push(CurrentCharacter[enumMember])
-        }
-    }
-});
 
-function setBreakerCharacter(option: string) {
-    if (option == 'A') breaker.value.character = CurrentCharacter.A
-    else if (option == 'B') breaker.value.character = CurrentCharacter.B
-    else if (option == 'C') breaker.value.character = CurrentCharacter.C
-    else if (option == 'D') breaker.value.character = CurrentCharacter.D
-}
 
 function setBreakerNominal(nominal: number) {
-    const index = breaker.value.possibleCurrents.indexOf(nominal, 0);
-    if (index > -1)breaker.value.possibleCurrents.splice(index, 1)
-    else breaker.value.possibleCurrents.push(nominal)
+    const index = breakerPower.value.possibleCurrents.indexOf(nominal, 0);
+    if (index > -1)breakerPower.value.possibleCurrents.splice(index, 1)
+    else breakerPower.value.possibleCurrents.push(nominal)
    
 }
 
-function setNewBreaker() {
-    Breakers.push(breaker.value)
-   
-    const selobj = store.selectedObject
+function setNewBreakerPower() {
+    BreakersPower.push(breakerPower.value)
     store.selectedObject = null
-    
     emits('clcClose')
-
 }
 
 </script>

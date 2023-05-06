@@ -4,10 +4,15 @@ import { CommutateApparate } from "./commutateApparate";
 
 export class Fuse extends CommutateApparate {
     setDataFromDB(mark: string): boolean {
-        const fuse: IFuse | undefined = Fuses.find(f=> f.mark === mark)
+        let fuse: IFuse | undefined
+        if( this.specData.factory != ''){
+            fuse = Fuses.find(b=> b.mark === mark && b.factory == this.specData.factory)
+        }else  fuse = Fuses.find(b=> b.mark === mark)
+         
         if(fuse === undefined) return false
         else{
             this._possibleCurrents = fuse.possibleCurrents
+            this.specData.factory = fuse.factory
             return true
         }
     }

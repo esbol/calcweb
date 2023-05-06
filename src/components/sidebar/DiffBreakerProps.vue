@@ -26,11 +26,21 @@
 
         <tr>
             <td>
+                <div class="name-prop">Производитель</div>
+            </td>
+            <td>
+                <div class="prop-value-input"><SelectSimple :options="optionsFactories" :selected-value="diffBreaker.specData.factory"
+                    @change="setBreakerFactory" /></div>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>
                 <div class="name-prop">Марка</div>
             </td>
             <td>
-                <div class="prop-value-input"><Select :selected-value="diffBreaker" :options="DiffBreakers"
-                        :display-path="'mark'" @change="setDiffBreakerMark" /></div>
+                <div class="prop-value-input"><SelectSimple :options="optionsMarks" :selected-value="diffBreaker.mark"
+                        @change="setBreakerMark" /></div>
             </td>
         </tr>
         <tr>
@@ -60,27 +70,27 @@
             </td>
         </tr>
     </table>
+    <NewDiffBreakerWindow v-if="newBreakerWindowShow" @clcClose="newBreakerWindowShow = !newBreakerWindowShow" :factory="factory"/>
 </template>
 
 <script setup lang="ts">
 
 import TextInput from './UI/TextInput.vue';
 import Select from './UI/Select.vue'
+import SelectSimple from './UI/SelectSimple.vue';
+import NewDiffBreakerWindow from '../Windows/NewDiffBreakerWindow.vue';
 
 
 
-import { Breaker } from '@/models/breaker';
-
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { changeAppType, replaceCommApparate } from '@/models/schemeActions/schemeactions';
 import { useStore } from 'vuex';
 import { DiffBreaker } from '@/models/diffBreaker';
-import { Breakers } from '@/models/bd/breakers';
-import { Fuse } from '@/models/fuse';
-import { Fuses } from '@/models/bd/fuses';
+
+
 import { DiffBreakers } from '@/models/bd/diffbreakers';
-import { BreakerPower } from '@/models/breakerPower';
-import { BreakersPower } from '@/models/bd/breakersPower';
+
+import { IState } from '@/store';
 
 const props = defineProps({
     diffBreaker: {
@@ -88,9 +98,68 @@ const props = defineProps({
         required: true
     }
 })
-
-const store = useStore().state
+const store: IState = useStore().state
 const st = useStore()
+
+
+//#region Marks Factories
+const optionsMarks = new Array<string>()
+const newBreakerWindowShow = ref(false)
+const optionsFactories = new Array<string>()
+const factory = ref('')
+
+onMounted(() => {
+    //добавляем в список производителей
+    DiffBreakers.forEach(b=>{
+       if(!optionsFactories.includes(b.factory)) optionsFactories.push(b.factory)
+    })
+    optionsFactories.push('+ Добавить...')
+
+    //добавляем марки согласно производителя и фазности
+    DiffBreakers.filter(b=> b.factory == props.diffBreaker.specData.factory && b.colPhase
+    == props.diffBreaker.colPhase).forEach(b=> optionsMarks.push(b.mark))
+    optionsMarks.push('+ Добавить...')
+});
+
+
+function setBreakerMark(option: any) {
+    if(option == '+ Добавить...'){
+        factory.value = props.diffBreaker.specData.factory
+        newBreakerWindowShow.value = true
+    }else{
+        props.diffBreaker.mark = option
+        store.panels.forEach(p=>p.calc())
+    }
+    
+}
+function setBreakerFactory(option: string) {
+    if(option == '+ Добавить...'){
+        //если выбран пункт "добавить"
+        factory.value = ''
+        newBreakerWindowShow.value = true
+    }else{
+        //сортируем автоматы по производителю и фазности
+        const filBreakers = DiffBreakers.filter(b=> b.factory == option && b.colPhase == props.diffBreaker.colPhase)
+        
+        //очищаем опции выбора марок и заполняем новыми марками выбранного производителя
+        optionsMarks.splice(0, optionsMarks.length)
+        filBreakers.forEach(b=> optionsMarks.push(b.mark))
+        optionsMarks.push('+ Добавить...')
+
+        //назначаем текущему автомату поле "производитель"
+        props.diffBreaker.specData.factory = option
+
+        //назначаем текущему автомату марку
+        props.diffBreaker.mark = filBreakers[0].mark
+
+        //запускаем расчет
+        store.panels.forEach(p=>p.calc())
+    }
+}
+//#endregion
+
+
+
 const appType = ref({ type: 'Дифф. автомат' })
 const appTypes: Array<object> = [{ type: 'Автоматический выключатель' }, { type: 'Предохранитель' }, { type: 'Выключатель нагрузки' }]
 
@@ -102,9 +171,7 @@ function changeType(option: any) {
 
 
 
-function setDiffBreakerMark(option: any) {
-    props.diffBreaker.mark = option.mark
-}
+
 
 
 </script>

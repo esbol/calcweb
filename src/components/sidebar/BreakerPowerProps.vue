@@ -26,11 +26,21 @@
 
         <tr>
             <td>
+                <div class="name-prop">Производитель</div>
+            </td>
+            <td>
+                <div class="prop-value-input"><SelectSimple :options="optionsFactories" :selected-value="breakerPower.specData.factory"
+                    @change="setBreakerFactory" /></div>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>
                 <div class="name-prop">Марка</div>
             </td>
             <td>
-                <div class="prop-value-input"><Select :selected-value="breakerPower" :options="Breakers" :display-path="'mark'"
-                    @change="setBreakerMark" /></div>
+                <div class="prop-value-input"><SelectSimple :options="optionsMarks" :selected-value="breakerPower.mark"
+                        @change="setBreakerMark" /></div>
             </td>
         </tr>
         <tr>
@@ -60,25 +70,24 @@
             </td>
         </tr>
     </table>
+    <NewBreakerPowerWindow v-if="newBreakerWindowShow" @clcClose="newBreakerWindowShow = !newBreakerWindowShow" :factory="factory"/>
 </template>
 
 <script setup lang="ts">
 
+import NewBreakerPowerWindow from '../Windows/NewBreakerPowerWindow.vue';
 import TextInput from './UI/TextInput.vue';
 import Select from './UI/Select.vue'
+import SelectSimple from './UI/SelectSimple.vue';
 
-import { Breakers } from '@/models/bd/breakers';
-import { Fuses } from '@/models/bd/fuses';
-import { Breaker } from '@/models/breaker';
-import { Fuse } from '@/models/fuse';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { changeAppType, replaceCommApparate } from '@/models/schemeActions/schemeactions';
 import { useStore } from 'vuex';
-import { DiffBreakers } from '@/models/bd/diffbreakers';
-import { DiffBreaker } from '@/models/diffBreaker';
+
 import { BreakerPower } from '@/models/breakerPower';
 import { BreakersPower } from '@/models/bd/breakersPower';
-import { CommutateApparate } from '@/models/commutateApparate';
+
+import { IState } from '@/store';
 
 const props = defineProps({
     breakerPower: {
@@ -86,24 +95,79 @@ const props = defineProps({
         required: true
     }
 })
-
-const store = useStore().state
+const store: IState = useStore().state
 const st = useStore()
+
+//#region Marks Factories
+const optionsMarks = new Array<string>()
+const newBreakerWindowShow = ref(false)
+const optionsFactories = new Array<string>()
+const factory = ref('')
+
+onMounted(() => {
+    //добавляем в список производителей
+    BreakersPower.forEach(b=>{
+       if(!optionsFactories.includes(b.factory)) optionsFactories.push(b.factory)
+    })
+    optionsFactories.push('+ Добавить...')
+
+    //добавляем марки согласно производителя и фазности
+    BreakersPower.filter(b=> b.factory == props.breakerPower.specData.factory && b.colPhase
+    == props.breakerPower.colPhase).forEach(b=> optionsMarks.push(b.mark))
+    optionsMarks.push('+ Добавить...')
+});
+
+
+function setBreakerMark(option: any) {
+    if(option == '+ Добавить...'){
+        factory.value = props.breakerPower.specData.factory
+        newBreakerWindowShow.value = true
+    }else{
+        props.breakerPower.mark = option
+        store.panels.forEach(p=>p.calc())
+    }
+    
+}
+function setBreakerFactory(option: string) {
+    if(option == '+ Добавить...'){
+        //если выбран пункт "добавить"
+        factory.value = ''
+        newBreakerWindowShow.value = true
+    }else{
+        //сортируем автоматы по производителю и фазности
+        const filBreakers = BreakersPower.filter(b=> b.factory == option && b.colPhase == props.breakerPower.colPhase)
+        
+        //очищаем опции выбора марок и заполняем новыми марками выбранного производителя
+        optionsMarks.splice(0, optionsMarks.length)
+        filBreakers.forEach(b=> optionsMarks.push(b.mark))
+        optionsMarks.push('+ Добавить...')
+
+        //назначаем текущему автомату поле "производитель"
+        props.breakerPower.specData.factory = option
+
+        //назначаем текущему автомату марку
+        props.breakerPower.mark = filBreakers[0].mark
+
+        //запускаем расчет
+        store.panels.forEach(p=>p.calc())
+    }
+}
+//#endregion
+
+
+
+//#region Type
 const appType = ref( {type: 'Выключатель нагрузки'})
 const appTypes: Array<object> = [{type:'Дифф. автомат' }, {type: 'Предохранитель'}, {type:'Автоматический выключатель' }]
     
-   
-
 function changeType(option: any){
     if(option.type == appType.value.type) return
     store.selectedObject = changeAppType(props.breakerPower, option)
     st.commit('calcPanels');
 }
+//#endregion
 
 
-function setBreakerMark(option: any) {
-    props.breakerPower.mark = option.mark
-}
 
 
 </script>
