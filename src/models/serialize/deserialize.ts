@@ -13,6 +13,8 @@ import { Contactor } from "../contactor";
 import { Fuse } from "../fuse";
 import { DiffBreaker } from "../diffBreaker";
 import { BreakerPower } from "../breakerPower";
+import { SpecData } from "../SpecData";
+import { Breakers } from "../bd/breakers";
 
 let devices: Array<Device> = []
 let sections: Array<SectionLine> = []
@@ -28,7 +30,7 @@ interface IJSON {
 
 export function getPanels(jsonString: string) {
 
-    
+
 
     devices = []
     sections = []
@@ -37,7 +39,7 @@ export function getPanels(jsonString: string) {
     const objJson: IJSON = JSON.parse(jsonString)
 
 
-    
+
 
     objJson.jsonContacts.forEach(cont => {
         const contact: Contact = Object.assign(new Contact(), JSON.parse(cont))
@@ -79,30 +81,30 @@ export function getPanels(jsonString: string) {
 
     objJson.jsonDevices.forEach(d => {
         const objDev = JSON.parse(d)
-     
-        if(objDev.type == 'Breaker') createBreaker(d)
-        if(objDev.type == 'BreakerPower') createBreakerPower(d)
-        if(objDev.type == 'Fuse') createFuse(d)
-        if(objDev.type == 'DiffBreaker') createDiffBreaker(d)
-        if(objDev.type == 'Contactor') createContactor(d)
-        if(objDev.type == 'Consumer') createConsumer(d)
-        if(objDev.type == 'Panel') createPanel(d)
-       
+
+        if (objDev.type == 'Breaker') createBreaker(d)
+        if (objDev.type == 'BreakerPower') createBreakerPower(d)
+        if (objDev.type == 'Fuse') createFuse(d)
+        if (objDev.type == 'DiffBreaker') createDiffBreaker(d)
+        if (objDev.type == 'Contactor') createContactor(d)
+        if (objDev.type == 'Consumer') createConsumer(d)
+        if (objDev.type == 'Panel') createPanel(d)
+
     })
 
-   
+
 
     const panels = new Array<Panel>()
     devices.forEach(d => {
         if (d instanceof Panel) {
             const pan = d as Panel
-            if(!panels.includes(pan))
-            panels.push(pan)
+            if (!panels.includes(pan))
+                panels.push(pan)
         }
     })
 
-   
-    
+
+
     return panels
 
 }
@@ -110,17 +112,38 @@ export function getPanels(jsonString: string) {
 
 
 function createBreaker(text: string) {
-    const breaker: Breaker = Object.assign(new Breaker(), JSON.parse(text))
-    const inCon = contacts.find(c => c.id == JSON.parse(text).inContactId)
+    const objBr = JSON.parse(text)
+    const sp = objBr.specData
+    const ibr = Breakers.find(b => b.factory == sp.factory && b.mark == objBr.mark)
+    
+
+    if (ibr == undefined){
+        Breakers.push({
+            factory: sp.factory,
+            mark: objBr.mark,
+            colPhase: objBr.colPhase,
+            character: objBr.currentCharacter,
+            possibleCurrents: [objBr.nominalCurrent]
+        })
+    } 
+    
+    
+    const breaker: Breaker = Object.assign(new Breaker(), objBr)
+    const inCon = contacts.find(c => c.id == objBr.inContactId)
     if (inCon != undefined) {
         breaker.inContact = inCon
         inCon.ownDevice = breaker
     }
-    const outCon = contacts.find(c => c.id == JSON.parse(text).outContactId)
+    const outCon = contacts.find(c => c.id == objBr.outContactId)
     if (outCon != undefined) {
         breaker.outContact = outCon
         outCon.ownDevice = breaker
     }
+
+    breaker.specData = new SpecData(sp.description, sp.mark, sp.code, sp.factory, sp.units, sp.count, sp.mass, sp.note)
+    //по новой задаем марку, т.к. от производителя зависит марка
+    breaker.mark = objBr.mark
+
     devices.push(breaker)
 }
 function createBreakerPower(text: string) {
@@ -135,6 +158,7 @@ function createBreakerPower(text: string) {
         breakerPower.outContact = outCon
         outCon.ownDevice = breakerPower
     }
+    setSpecDataToDevice(text, breakerPower)
     devices.push(breakerPower)
 }
 function createFuse(text: string) {
@@ -149,6 +173,7 @@ function createFuse(text: string) {
         fuse.outContact = outCon
         outCon.ownDevice = fuse
     }
+    setSpecDataToDevice(text, fuse)
     devices.push(fuse)
 }
 function createDiffBreaker(text: string) {
@@ -163,6 +188,7 @@ function createDiffBreaker(text: string) {
         diffBreaker.outContact = outCon
         outCon.ownDevice = diffBreaker
     }
+    setSpecDataToDevice(text, diffBreaker)
     devices.push(diffBreaker)
 }
 function createContactor(text: string) {
@@ -177,6 +203,7 @@ function createContactor(text: string) {
         contactor.outContact = outCon
         outCon.ownDevice = contactor
     }
+    setSpecDataToDevice(text, contactor)
     devices.push(contactor)
 }
 function createPanel(text: string) {
@@ -202,7 +229,7 @@ function createPanel(text: string) {
     const unite = sections.find(s => s.id == JSON.parse(text).uniteSectionId)
     if (unite != undefined) panel.uniteSection = unite
 
-   
+    setSpecDataToDevice(text, panel)
     devices.push(panel)
 }
 function createConsumer(text: string) {
@@ -212,5 +239,14 @@ function createConsumer(text: string) {
         cons.inContact = inCon
         inCon.ownDevice = cons
     }
+    setSpecDataToDevice(text, cons)
     devices.push(cons)
+}
+
+
+
+
+function setSpecDataToDevice(text: string, device: Device) {
+    const sp = JSON.parse(text).specData
+    device.specData = new SpecData(sp.description, sp.mark, sp.code, sp.factory, sp.units, sp.count, sp.mass, sp.note)
 }

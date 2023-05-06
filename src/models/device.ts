@@ -75,6 +75,17 @@ export abstract class Device extends ELObject {
         return Object.assign(super.toJSON(), {
             inContactId: this.inContact.id,
             mark: this.mark,
+            specData: {
+                factory: this.specData.factory,
+                position: this.specData.position,
+                description: this.specData.description,
+                mark: this.specData.mark,
+                code: this.specData.code,
+                units: this.specData.units,
+                count: this.specData.count,
+                mass: this.specData.mass,
+                note: this.specData.note,
+            }
         })
     }
 

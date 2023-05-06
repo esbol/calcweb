@@ -1,4 +1,4 @@
-import { Breakers, IBreaker } from './bd/breakers';
+import { Breakers, CurrentCharacter, IBreaker } from './bd/breakers';
 
 import { CommutateApparate } from "./commutateApparate";
 
@@ -17,6 +17,16 @@ export class Breaker extends CommutateApparate {
         }
     }
 
+    //#region currentCharacter
+    protected _currentCharacter: CurrentCharacter = CurrentCharacter.C
+    public get currentCharacter(): CurrentCharacter {
+        return this._currentCharacter;
+    }
+    public set currentCharacter(v: CurrentCharacter) {
+        this._currentCharacter = v
+    }
+    //#endregion
+
     constructor(mark?: string){
         super(mark)
         this.description = 'breaker'
@@ -28,7 +38,8 @@ export class Breaker extends CommutateApparate {
     
     toJSON(){
         return Object.assign(super.toJSON(), {
-            type: 'Breaker'
+            type: 'Breaker',
+            currentCharacter: this.currentCharacter
         })
     }
 }

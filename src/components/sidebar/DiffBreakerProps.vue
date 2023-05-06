@@ -29,18 +29,21 @@
                 <div class="name-prop">Производитель</div>
             </td>
             <td>
-                <div class="prop-value-input"><SelectSimple :options="optionsFactories" :selected-value="diffBreaker.specData.factory"
-                    @change="setBreakerFactory" /></div>
+                <div class="prop-value-input">
+                    <SelectSimple :options="optionsFactories" :selected-value="diffBreaker.specData.factory"
+                        @change="setBreakerFactory" />
+                </div>
             </td>
         </tr>
-        
+
         <tr>
             <td>
                 <div class="name-prop">Марка</div>
             </td>
             <td>
-                <div class="prop-value-input"><SelectSimple :options="optionsMarks" :selected-value="diffBreaker.mark"
-                        @change="setBreakerMark" /></div>
+                <div class="prop-value-input">
+                    <SelectSimple :options="optionsMarks" :selected-value="diffBreaker.mark" @change="setBreakerMark" />
+                </div>
             </td>
         </tr>
         <tr>
@@ -70,7 +73,8 @@
             </td>
         </tr>
     </table>
-    <NewDiffBreakerWindow v-if="newBreakerWindowShow" @clcClose="newBreakerWindowShow = !newBreakerWindowShow" :factory="factory"/>
+    <NewDiffBreakerWindow v-if="newBreakerWindowShow" @clcClose="newBreakerWindowShow = !newBreakerWindowShow"
+        :factory="factory" />
 </template>
 
 <script setup lang="ts">
@@ -82,7 +86,7 @@ import NewDiffBreakerWindow from '../Windows/NewDiffBreakerWindow.vue';
 
 
 
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watchEffect } from 'vue';
 import { changeAppType, replaceCommApparate } from '@/models/schemeActions/schemeactions';
 import { useStore } from 'vuex';
 import { DiffBreaker } from '@/models/diffBreaker';
@@ -109,41 +113,51 @@ const optionsFactories = new Array<string>()
 const factory = ref('')
 
 onMounted(() => {
+    reloadOptions()
+});
+watchEffect(() => {
+    props.diffBreaker
+    reloadOptions()
+})
+function reloadOptions() {
+    optionsFactories.splice(0, optionsFactories.length)
     //добавляем в список производителей
-    DiffBreakers.forEach(b=>{
-       if(!optionsFactories.includes(b.factory)) optionsFactories.push(b.factory)
+    DiffBreakers.forEach(b => {
+        if (!optionsFactories.includes(b.factory)) optionsFactories.push(b.factory)
     })
     optionsFactories.push('+ Добавить...')
 
+    optionsMarks.splice(0, optionsMarks.length)
     //добавляем марки согласно производителя и фазности
-    DiffBreakers.filter(b=> b.factory == props.diffBreaker.specData.factory && b.colPhase
-    == props.diffBreaker.colPhase).forEach(b=> optionsMarks.push(b.mark))
+    DiffBreakers.filter(b => b.factory == props.diffBreaker.specData.factory && b.colPhase
+        == props.diffBreaker.colPhase).forEach(b => optionsMarks.push(b.mark))
     optionsMarks.push('+ Добавить...')
-});
+}
+
 
 
 function setBreakerMark(option: any) {
-    if(option == '+ Добавить...'){
+    if (option == '+ Добавить...') {
         factory.value = props.diffBreaker.specData.factory
         newBreakerWindowShow.value = true
-    }else{
+    } else {
         props.diffBreaker.mark = option
-        store.panels.forEach(p=>p.calc())
+        store.panels.forEach(p => p.calc())
     }
-    
+
 }
 function setBreakerFactory(option: string) {
-    if(option == '+ Добавить...'){
+    if (option == '+ Добавить...') {
         //если выбран пункт "добавить"
         factory.value = ''
         newBreakerWindowShow.value = true
-    }else{
+    } else {
         //сортируем автоматы по производителю и фазности
-        const filBreakers = DiffBreakers.filter(b=> b.factory == option && b.colPhase == props.diffBreaker.colPhase)
-        
+        const filBreakers = DiffBreakers.filter(b => b.factory == option && b.colPhase == props.diffBreaker.colPhase)
+
         //очищаем опции выбора марок и заполняем новыми марками выбранного производителя
         optionsMarks.splice(0, optionsMarks.length)
-        filBreakers.forEach(b=> optionsMarks.push(b.mark))
+        filBreakers.forEach(b => optionsMarks.push(b.mark))
         optionsMarks.push('+ Добавить...')
 
         //назначаем текущему автомату поле "производитель"
@@ -153,7 +167,7 @@ function setBreakerFactory(option: string) {
         props.diffBreaker.mark = filBreakers[0].mark
 
         //запускаем расчет
-        store.panels.forEach(p=>p.calc())
+        store.panels.forEach(p => p.calc())
     }
 }
 //#endregion
@@ -224,5 +238,4 @@ td {
     width: 100%;
     border-left: 1px solid var(--main-border-color);
 
-}
-</style>
+}</style>

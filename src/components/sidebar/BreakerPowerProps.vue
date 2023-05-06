@@ -8,7 +8,7 @@
             </td>
             <td>
                 <div class="prop-value-input"><Select :selected-value="appType" :options="appTypes" :display-path="'type'"
-                    @change="changeType" /></div>
+                        @change="changeType" /></div>
             </td>
         </tr>
         <tr>
@@ -17,8 +17,8 @@
             </td>
             <td>
                 <div class="prop-value-input">
-                    <TextInput :input-value="breakerPower.nameOfPlane" @focusout="breakerPower.nameOfPlane = $event.target.value"
-                        :can-edite="true" />
+                    <TextInput :input-value="breakerPower.nameOfPlane"
+                        @focusout="breakerPower.nameOfPlane = $event.target.value" :can-edite="true" />
 
                 </div>
             </td>
@@ -29,18 +29,21 @@
                 <div class="name-prop">Производитель</div>
             </td>
             <td>
-                <div class="prop-value-input"><SelectSimple :options="optionsFactories" :selected-value="breakerPower.specData.factory"
-                    @change="setBreakerFactory" /></div>
+                <div class="prop-value-input">
+                    <SelectSimple :options="optionsFactories" :selected-value="breakerPower.specData.factory"
+                        @change="setBreakerFactory" />
+                </div>
             </td>
         </tr>
-        
+
         <tr>
             <td>
                 <div class="name-prop">Марка</div>
             </td>
             <td>
-                <div class="prop-value-input"><SelectSimple :options="optionsMarks" :selected-value="breakerPower.mark"
-                        @change="setBreakerMark" /></div>
+                <div class="prop-value-input">
+                    <SelectSimple :options="optionsMarks" :selected-value="breakerPower.mark" @change="setBreakerMark" />
+                </div>
             </td>
         </tr>
         <tr>
@@ -70,7 +73,8 @@
             </td>
         </tr>
     </table>
-    <NewBreakerPowerWindow v-if="newBreakerWindowShow" @clcClose="newBreakerWindowShow = !newBreakerWindowShow" :factory="factory"/>
+    <NewBreakerPowerWindow v-if="newBreakerWindowShow" @clcClose="newBreakerWindowShow = !newBreakerWindowShow"
+        :factory="factory" />
 </template>
 
 <script setup lang="ts">
@@ -80,7 +84,7 @@ import TextInput from './UI/TextInput.vue';
 import Select from './UI/Select.vue'
 import SelectSimple from './UI/SelectSimple.vue';
 
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watchEffect } from 'vue';
 import { changeAppType, replaceCommApparate } from '@/models/schemeActions/schemeactions';
 import { useStore } from 'vuex';
 
@@ -105,41 +109,48 @@ const optionsFactories = new Array<string>()
 const factory = ref('')
 
 onMounted(() => {
+    reloadOptions()
+});
+watchEffect(() => {
+    props.breakerPower
+    reloadOptions()
+})
+function reloadOptions() {
+    optionsFactories.splice(0, optionsFactories.length)
     //добавляем в список производителей
-    BreakersPower.forEach(b=>{
-       if(!optionsFactories.includes(b.factory)) optionsFactories.push(b.factory)
+    BreakersPower.forEach(b => {
+        if (!optionsFactories.includes(b.factory)) optionsFactories.push(b.factory)
     })
     optionsFactories.push('+ Добавить...')
 
+    optionsMarks.splice(0, optionsMarks.length)
     //добавляем марки согласно производителя и фазности
-    BreakersPower.filter(b=> b.factory == props.breakerPower.specData.factory && b.colPhase
-    == props.breakerPower.colPhase).forEach(b=> optionsMarks.push(b.mark))
+    BreakersPower.filter(b => b.factory == props.breakerPower.specData.factory && b.colPhase
+        == props.breakerPower.colPhase).forEach(b => optionsMarks.push(b.mark))
     optionsMarks.push('+ Добавить...')
-});
-
-
+}
 function setBreakerMark(option: any) {
-    if(option == '+ Добавить...'){
+    if (option == '+ Добавить...') {
         factory.value = props.breakerPower.specData.factory
         newBreakerWindowShow.value = true
-    }else{
+    } else {
         props.breakerPower.mark = option
-        store.panels.forEach(p=>p.calc())
+        store.panels.forEach(p => p.calc())
     }
-    
+
 }
 function setBreakerFactory(option: string) {
-    if(option == '+ Добавить...'){
+    if (option == '+ Добавить...') {
         //если выбран пункт "добавить"
         factory.value = ''
         newBreakerWindowShow.value = true
-    }else{
+    } else {
         //сортируем автоматы по производителю и фазности
-        const filBreakers = BreakersPower.filter(b=> b.factory == option && b.colPhase == props.breakerPower.colPhase)
-        
+        const filBreakers = BreakersPower.filter(b => b.factory == option && b.colPhase == props.breakerPower.colPhase)
+
         //очищаем опции выбора марок и заполняем новыми марками выбранного производителя
         optionsMarks.splice(0, optionsMarks.length)
-        filBreakers.forEach(b=> optionsMarks.push(b.mark))
+        filBreakers.forEach(b => optionsMarks.push(b.mark))
         optionsMarks.push('+ Добавить...')
 
         //назначаем текущему автомату поле "производитель"
@@ -149,7 +160,7 @@ function setBreakerFactory(option: string) {
         props.breakerPower.mark = filBreakers[0].mark
 
         //запускаем расчет
-        store.panels.forEach(p=>p.calc())
+        store.panels.forEach(p => p.calc())
     }
 }
 //#endregion
@@ -157,11 +168,11 @@ function setBreakerFactory(option: string) {
 
 
 //#region Type
-const appType = ref( {type: 'Выключатель нагрузки'})
-const appTypes: Array<object> = [{type:'Дифф. автомат' }, {type: 'Предохранитель'}, {type:'Автоматический выключатель' }]
-    
-function changeType(option: any){
-    if(option.type == appType.value.type) return
+const appType = ref({ type: 'Выключатель нагрузки' })
+const appTypes: Array<object> = [{ type: 'Дифф. автомат' }, { type: 'Предохранитель' }, { type: 'Автоматический выключатель' }]
+
+function changeType(option: any) {
+    if (option.type == appType.value.type) return
     store.selectedObject = changeAppType(props.breakerPower, option)
     st.commit('calcPanels');
 }
@@ -221,5 +232,4 @@ td {
     width: 100%;
     border-left: 1px solid var(--main-border-color);
 
-}
-</style>
+}</style>

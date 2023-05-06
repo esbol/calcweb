@@ -109,6 +109,8 @@ import { useStore } from 'vuex';
 import { ref, defineEmits, computed, onMounted } from 'vue';
 import { CurrentCharacter, IBreaker } from '@/models/bd/breakers';
 import { Breakers } from '@/models/bd/breakers';
+import { IDiffBreaker } from '@/models/bd/diffbreakers';
+import { DiffBreakers } from '@/models/bd/diffbreakers';
 
 
 const props = defineProps({
@@ -118,9 +120,10 @@ const props = defineProps({
     }
 })
 
-const br: IBreaker = {
+const br: IDiffBreaker = {
     factory: props.factory,
     colPhase: 1,
+    deltaI: 30,
     mark: '',
     character: CurrentCharacter.C,
     possibleCurrents: []
@@ -153,7 +156,7 @@ function setBreakerNominal(nominal: number) {
 }
 
 function setNewBreaker() {
-    Breakers.push(breaker.value)
+    DiffBreakers.push(breaker.value)
    
     const selobj = store.selectedObject
     store.selectedObject = null

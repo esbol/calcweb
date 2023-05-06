@@ -1,4 +1,5 @@
 
+import { CurrentCharacter } from './bd/breakers';
 import { DiffBreakers, IDiffBreaker } from './bd/diffbreakers';
 
 import { CommutateApparate } from "./commutateApparate";
@@ -38,11 +39,22 @@ export class DiffBreaker extends CommutateApparate {
         this._deltaI = v
     }
     //#endregion
-
+    
+    //#region currentCharacter
+    protected _currentCharacter: CurrentCharacter = CurrentCharacter.C
+    public get currentCharacter(): CurrentCharacter {
+        return this._currentCharacter;
+    }
+    public set currentCharacter(v: CurrentCharacter) {
+        this._currentCharacter = v
+    }
+    //#endregion
 
     toJSON() {
         return Object.assign(super.toJSON(), {
-            type: 'DiffBreaker'
+            type: 'DiffBreaker',
+            currentCharacter: this.currentCharacter,
+            deltaI: this.deltaI
         })
     }
 }
