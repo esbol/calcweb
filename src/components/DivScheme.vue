@@ -29,7 +29,7 @@
 
 
             <div class="shinaDiv">
-                <BusV :bus="store.selectedPanel.bus" />
+                <BusV :panel="store.selectedPanel" />
 
 
 
@@ -167,14 +167,14 @@ async function printToPDF() {
 
 .cablesTable {
     position: absolute;
-    left: 80px;
-    bottom: 50px
+    right: 50px;
+    top: 350px
 }
 
 .pipesTable {
     position: absolute;
-    left: 530px;
-    bottom: 50px
+    right: 50px;
+    top: 600px
 }
 
 .cells {

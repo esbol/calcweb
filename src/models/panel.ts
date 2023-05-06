@@ -3,7 +3,7 @@ import { Contact } from "./contact";
 import { Device } from "./device";
 
 import { CommutateApparate } from './commutateApparate';
-import { Bus } from './bus';
+
 import { addOneConsumerFeeder } from './schemeActions/schemeactions';
 import { Cable } from './cable';
 import { Format } from './settings/format';
@@ -56,16 +56,6 @@ export class Panel extends Device {
         } else return null
     }
 
-    //#endregion
-
-    //#region bus
-    private _bus: Bus = new Bus();
-    public get bus(): Bus {
-        return this._bus;
-    }
-    public set bus(v: Bus) {
-        this._bus = v;
-    }
     //#endregion
 
     //#region cables

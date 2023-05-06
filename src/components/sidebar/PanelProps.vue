@@ -37,6 +37,26 @@
         </tr>
         <tr>
             <td>
+                <div class="name-prop">Qрасч.</div>
+            </td>
+            <td>
+                <div class="prop-value">
+                    {{ store.selectedPanel.uniteSection.modeMax.ratedQPower.toFixed(2) }}
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="name-prop">Sрасч.</div>
+            </td>
+            <td>
+                <div class="prop-value">
+                    {{ store.selectedPanel.uniteSection.modeMax.ratedSPower.toFixed(2) }}
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
                 <div class="name-prop">Iрасч.</div>
             </td>
             <td>

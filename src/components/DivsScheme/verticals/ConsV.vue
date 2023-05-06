@@ -1,16 +1,16 @@
 <template>
     <div @click="store.selectedObject = consumer" class="cons-container" :class="{ hover_border: hover }">
-        <div class="frame-name" :class="{ hover_text: hover }">
+        <div class="frame-name" :class="{ hover_text: hover, hover_border: hover }">
             {{ consumer.nameOfPlane }}
         </div>
-        <div class="frame-power" :class="{ hover_text: hover }">
+        <div class="frame-power" :class="{ hover_text: hover, hover_border: hover  }">
             {{ Number(consumer.installPower.toFixed(2)).toString().replace('.', ',') }}
         </div>
-        <div class="frame-current" :class="{ hover_text: hover }">
+        <div class="frame-current" :class="{ hover_text: hover, hover_border: hover  }">
             {{ Number(consumer.current.toFixed(2)).toString().replace('.', ',') }}
         </div>
-        <div class="frame-description" :class="{ hover_text: hover }">
-            <div class="descr_text">{{ consumer.description }}</div>
+        <div class="frame-description" :class="{ hover_border: hover }" >
+            <div class="descr_text" :class="{ hover_text: hover }">{{ consumer.description }}</div>
         </div>
     </div>
 </template>
@@ -34,6 +34,7 @@ watchEffect(() => {
 
     if (store.selectedObject === props.consumer) {
         hover.value = true
+        
     } else {
         hover.value = false
     }

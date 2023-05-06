@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 
-import { Bus } from '@/models/bus';
+
 import PanelPowers from './PanelPowers.vue';
 import { useStore } from 'vuex';
 import { ref, watchEffect, computed, PropType, onUnmounted } from 'vue';

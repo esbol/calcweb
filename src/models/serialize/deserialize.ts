@@ -14,17 +14,30 @@ import { Fuse } from "../fuse";
 import { DiffBreaker } from "../diffBreaker";
 import { BreakerPower } from "../breakerPower";
 import { SpecData } from "../SpecData";
-import { Breakers } from "../bd/breakers";
+import { Breakers, IBreaker } from "../bd/breakers";
+import { BreakersPower, IBreakerPower } from "../bd/breakersPower";
+import { Cables, ICable } from "../bd/cables";
+import { Contactors, IContactor } from "../bd/contactors";
+import { DiffBreakers, IDiffBreaker } from "../bd/diffbreakers";
+import { Fuses, IFuse } from "../bd/fuses";
+import { IPipe, Pipes } from "../bd/pipes";
 
 let devices: Array<Device> = []
 let sections: Array<SectionLine> = []
 let contacts: Array<Contact> = []
 
 interface IJSON {
+    jsonBDBreakers: Array<string>,
+    jsonBDBreakersPower: Array<string>,
+    jsonBDCables: Array<string>,
+    jsonBDContactors: Array<string>,
+    jsonBDDiffBreakers: Array<string>,
+    jsonBDFuses: Array<string>,
+    jsonBDPipes: Array<string>,
     jsonDevices: Array<string>,
     jsonSections: Array<string>,
     jsonContacts: Array<string>
-    jsonCables: Array<string>
+    jsonCables: Array<string>,
     jsonPipes: Array<string>
 }
 
@@ -36,10 +49,78 @@ export function getPanels(jsonString: string) {
     sections = []
     contacts = []
 
+
     const objJson: IJSON = JSON.parse(jsonString)
 
+    //#region setBDBreakers
+    const breakers: Array<IBreaker> = []
+    objJson.jsonBDBreakers.forEach(b => breakers.push(JSON.parse(b)))
 
+    breakers.forEach(br => {
+        const ibr = Breakers.find(b => b.factory == br.factory && b.mark == br.mark)
+        if (ibr == undefined) Breakers.push(br)
+    })
+    //#endregion
 
+    //#region setBDBreakersPower
+    const breakersPower: Array<IBreakerPower> = []
+    objJson.jsonBDBreakersPower.forEach(b => breakersPower.push(JSON.parse(b)))
+
+    breakersPower.forEach(br => {
+        const ibr = BreakersPower.find(b => b.factory == br.factory && b.mark == br.mark)
+        if (ibr == undefined) BreakersPower.push(br)
+    })
+    //#endregion
+
+    //#region setBDCables
+    const cables: Array<ICable> = []
+    objJson.jsonBDCables.forEach(b => cables.push(JSON.parse(b)))
+
+    cables.forEach(br => {
+        const ibr = Cables.find(b => b.mark == br.mark)
+        if (ibr == undefined) Cables.push(br)
+    })
+    //#endregion
+
+    //#region setBDContactors
+    const contactors: Array<IContactor> = []
+    objJson.jsonBDContactors.forEach(b => contactors.push(JSON.parse(b)))
+
+    contactors.forEach(br => {
+        const ibr = Contactors.find(b => b.mark == br.mark)
+        if (ibr == undefined) Contactors.push(br)
+    })
+    //#endregion
+
+    //#region setBDDiffBreakers
+    const diffBreakers: Array<IDiffBreaker> = []
+    objJson.jsonBDDiffBreakers.forEach(b => diffBreakers.push(JSON.parse(b)))
+
+    diffBreakers.forEach(br => {
+        const ibr = DiffBreakers.find(b => b.factory == br.factory && b.mark == br.mark)
+        if (ibr == undefined) DiffBreakers.push(br)
+    })
+    //#endregion
+
+    //#region setBDFuses
+    const fuses: Array<IFuse> = []
+    objJson.jsonBDFuses.forEach(b => fuses.push(JSON.parse(b)))
+
+    fuses.forEach(br => {
+        const ibr = Fuses.find(b => b.factory == br.factory && b.mark == br.mark)
+        if (ibr == undefined) Fuses.push(br)
+    })
+    //#endregion
+
+     //#region setBDPipes
+     const pipes: Array<IPipe> = []
+     objJson.jsonBDPipes.forEach(b => pipes.push(JSON.parse(b)))
+ 
+     pipes.forEach(br => {
+         const ibr = Pipes.find(b => b.mark == br.mark)
+         if (ibr == undefined) Pipes.push(br)
+     })
+     //#endregion
 
     objJson.jsonContacts.forEach(cont => {
         const contact: Contact = Object.assign(new Contact(), JSON.parse(cont))
@@ -115,9 +196,9 @@ function createBreaker(text: string) {
     const objBr = JSON.parse(text)
     const sp = objBr.specData
     const ibr = Breakers.find(b => b.factory == sp.factory && b.mark == objBr.mark)
-    
 
-    if (ibr == undefined){
+
+    if (ibr == undefined) {
         Breakers.push({
             factory: sp.factory,
             mark: objBr.mark,
@@ -125,9 +206,9 @@ function createBreaker(text: string) {
             character: objBr.currentCharacter,
             possibleCurrents: [objBr.nominalCurrent]
         })
-    } 
-    
-    
+    }
+
+
     const breaker: Breaker = Object.assign(new Breaker(), objBr)
     const inCon = contacts.find(c => c.id == objBr.inContactId)
     if (inCon != undefined) {

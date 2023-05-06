@@ -141,6 +141,7 @@ export class Consumer extends Device{
             count: this.count,
             installPower: this.installPower,
             cosf: this.cosf,
+            current: this.current,
             type: 'Consumer'
         })
     }

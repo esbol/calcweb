@@ -7,7 +7,7 @@
                 <PanelBrowser />
             </PropsContainer>
 
-            <PropsContainer :title="store.selectedPanel.nameOfPlane" v-if="(store.selectedPanel != null)">
+            <PropsContainer :title="store.selectedPanel.nameOfPlane" v-if="(store.selectedObject instanceof Panel)">
                 <PanelProps />
             </PropsContainer>
           
@@ -61,7 +61,6 @@ import StampProps from "./StampProps.vue";
 import PanelProps from "./PanelProps.vue";
 import ContactorProps from "./ContactorProps.vue";
 import PropsContainer from "./PropsContainer.vue";
-import { Bus } from "@/models/bus";
 import BusProps from "./BusProps.vue";
 import BreakerProps from "./BreakerProps.vue";
 import ConsProps from "./ConsProps.vue";
@@ -76,6 +75,7 @@ import { Stamp } from "@/models/settings/stamp";
 import { Fuse } from "@/models/fuse";
 import { DiffBreaker } from "@/models/diffBreaker";
 import { BreakerPower } from "@/models/breakerPower";
+import { Panel } from "@/models/panel";
 
 
 const store = useStore().state

@@ -1,9 +1,9 @@
 <template>
-    <div @click="store.selectedObject = bus" class="bus-container" :class="{ hover_border: hover }">
-        <div class="l_f"></div>
-        <div class="l_n"></div>
-        <div class="l_pe"></div>
-        <div class="text">
+    <div @click="store.selectedObject = panel" class="bus-container" :class="{ hover_border: hover }">
+        <div class="l_f" :class="{ hover_bg: hover }"></div>
+        <div class="l_n" :class="{ hover_bg: hover }"></div>
+        <div class="l_pe" :class="{ hover_bg_l_pe: hover }"></div>
+        <div class="text" :class="{ text_hover: hover }">
             <span>L<br></span>
             <span>N<br></span>
             <span>PE</span>
@@ -13,32 +13,33 @@
             <div class="phaseLine" :class="{ hover_bg: hover }"></div>
             <div class="phaseLine" :class="{ hover_bg: hover }" v-if="store.selectedPanel.colPhase == 3"></div>
         </div>
-        <div class="l_end1"></div>
-        <div class="l_end2"></div>
-        <div class="l_end3"></div>
-        <div class="l_end4"></div>
-        <div class="l_end5"></div>
-        <div class="l_end6"></div>
-        <div class="pe_left"></div>
-        <div class="pe_bottom"></div>
-        <div class="pe_rigth"></div>
+        <div class="l_end1" :class="{ hover_bg: hover }"></div>
+        <div class="l_end2" :class="{ hover_bg: hover }"></div>
+        <div class="l_end3" :class="{ hover_bg: hover }"></div>
+        <div class="l_end4" :class="{ hover_bg: hover }"></div>
+        <div class="l_end5" :class="{ hover_bg: hover }"></div>
+        <div class="l_end6" :class="{ hover_bg: hover }"></div>
+        <div class="pe_left" :class="{ pe_left_hover: hover }"></div>
+        <div class="pe_bottom" :class="{ hover_bg_l_pe: hover }"></div>
+        <div class="pe_rigth" :class="{ pe_left_hover: hover }"></div>
         <div class="contact"></div>
         <div class="contact2"></div>
-        <PanelPowers />
+        <PanelPowers :panel="panel" />
     </div>
 </template>
 
 <script setup lang="ts">
 
-import { Bus } from '@/models/bus';
+
 import PanelPowers from './PanelPowers.vue';
 import { useStore } from 'vuex';
 import { ref, watchEffect } from 'vue';
+import { Panel } from '@/models/panel';
 
 const store = useStore().state
 const props = defineProps({
-    bus: {
-        type: Bus,
+    panel: {
+        type: Panel,
         required: true
     }
 })
@@ -46,8 +47,9 @@ const hover = ref(false)
 
 watchEffect(() => {
 
-    if (store.selectedObject === props.bus) {
+    if (store.selectedObject === props.panel) {
         hover.value = true
+        
     } else {
         hover.value = false
     }
@@ -88,6 +90,9 @@ watchEffect(() => {
     top: 25px;
     background-image: linear-gradient(to bottom, var(--scheme-line-color) 80%, rgba(255, 255, 255, 0) 0%);
     background-size: 20px 20px;
+}
+.pe_left_hover{
+    background-image: linear-gradient(to bottom, var(--scheme-line-hover-color) 80%, rgba(255, 255, 255, 0) 0%) !important;
 }
 
 .pe_rigth {
@@ -181,7 +186,9 @@ watchEffect(() => {
     top: -8px;
     color: var(--scheme-line-color);
 }
-
+.text_hover{
+    color: var(--scheme-line-hover-color);
+}
 .l_f {
     height: 4px;
     width: 100%;
@@ -203,12 +210,17 @@ watchEffect(() => {
     background-size: 25px 1px;
     margin-top: 10px;
 }
-
+.hover_bg_l_pe {
+    background-image: linear-gradient(to right, var(--scheme-line-hover-color) 80%, rgba(255, 255, 255, 0) 0%) !important;
+}
 
 
 .hover_border {
     border-color: var(--scheme-line-hover-color) !important;
     z-index: 1000 !important;
+}
+.hover_bg {
+    background-color: var(--scheme-line-hover-color) !important;
 }
 
 .bus-container {
