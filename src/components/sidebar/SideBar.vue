@@ -35,8 +35,8 @@
                 <ContactorProps :contactor="store.selectedObject" />
             </PropsContainer>
 
-            <PropsContainer title="Штамп" v-if="(store.selectedObject instanceof Stamp)">
-                <StampProps :stamp="store.selectedObject" />
+            <PropsContainer title="Лист" v-if="(store.selectedObject instanceof Format)">
+                <StampProps :stamp="store.selectedPanel.format.stamp" />
             </PropsContainer>
             
 
@@ -76,6 +76,7 @@ import { Fuse } from "@/models/fuse";
 import { DiffBreaker } from "@/models/diffBreaker";
 import { BreakerPower } from "@/models/breakerPower";
 import { Panel } from "@/models/panel";
+import { Format } from "@/models/settings/format";
 
 
 const store = useStore().state

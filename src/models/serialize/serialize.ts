@@ -15,6 +15,7 @@ import { Contactors } from "../bd/contactors";
 import { DiffBreakers } from "../bd/diffbreakers";
 import { Fuses } from "../bd/fuses";
 import { Pipes } from "../bd/pipes";
+import { Format } from "../settings/format";
 
 
 let panels = new Array<Panel>()
@@ -39,7 +40,8 @@ export function getJSON(panels1: Array<Panel>) {
         jsonSections: jsonSections,
         jsonContacts: jsonContacts,
         jsonCables: jsonCables,
-        jsonPipes: jsonPipes
+        jsonPipes: jsonPipes,
+        jsonFormats: jsonFormats
     })
 
 
@@ -58,12 +60,14 @@ let sections: Array<SectionLine> = []
 let contacts: Array<Contact> = []
 let cables: Array<Cable> = []
 let pipes: Array<Pipe> = []
+let formats: Array<Format> = []
 
 let jsonDevices: Array<string> = []
 let jsonSections: Array<string> = []
 let jsonContacts: Array<string> = []
 let jsonCables: Array<string> = []
 let jsonPipes: Array<string> = []
+let jsonFormats: Array<string> = []
 
 function setElements() {
 
@@ -72,17 +76,20 @@ function setElements() {
     contacts = []
     cables = []
     pipes = []
+    formats = []
 
     jsonDevices = []
     jsonSections = []
     jsonContacts = []
     jsonCables = []
     jsonPipes = []
+    jsonFormats = []
 
     panels.forEach(p => {
         const devs = p.s1Section.subDevices
         devs.forEach(d => {
             if (!devices.includes(d)) devices.push(d)
+            if(d instanceof Panel) formats.push(d.format)
         })
     })
     panels.forEach(p => {
@@ -144,6 +151,10 @@ function setJSONs() {
     pipes.forEach(pip => {
         const pipJSON = JSON.stringify(pip)
         jsonPipes.push(pipJSON)
+    })
+    formats.forEach(form => {
+        const forJSON = JSON.stringify(form)
+        jsonFormats.push(forJSON)
     })
 }
 

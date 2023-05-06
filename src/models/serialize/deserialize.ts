@@ -21,10 +21,13 @@ import { Contactors, IContactor } from "../bd/contactors";
 import { DiffBreakers, IDiffBreaker } from "../bd/diffbreakers";
 import { Fuses, IFuse } from "../bd/fuses";
 import { IPipe, Pipes } from "../bd/pipes";
+import { Format } from "../settings/format";
+import { Stamp } from "../settings/stamp";
 
 let devices: Array<Device> = []
 let sections: Array<SectionLine> = []
 let contacts: Array<Contact> = []
+let formats: Array<Format> = []
 
 interface IJSON {
     jsonBDBreakers: Array<string>,
@@ -38,7 +41,8 @@ interface IJSON {
     jsonSections: Array<string>,
     jsonContacts: Array<string>
     jsonCables: Array<string>,
-    jsonPipes: Array<string>
+    jsonPipes: Array<string>,
+    jsonFormats: Array<string>
 }
 
 export function getPanels(jsonString: string) {
@@ -48,7 +52,7 @@ export function getPanels(jsonString: string) {
     devices = []
     sections = []
     contacts = []
-
+    formats = []
 
     const objJson: IJSON = JSON.parse(jsonString)
 
@@ -122,14 +126,26 @@ export function getPanels(jsonString: string) {
      })
      //#endregion
 
+    objJson.jsonFormats.forEach(f=>{
+        const objFormat = JSON.parse(f)
+        const format: Format = Object.assign(new Format(), objFormat)
+       
+        
+        format.stamp = Object.assign(new Stamp(), objFormat.stamp)
+        formats.push(format)
+        
+    })
+
     objJson.jsonContacts.forEach(cont => {
         const contact: Contact = Object.assign(new Contact(), JSON.parse(cont))
         contacts.push(contact)
     })
-
+  
+    
     objJson.jsonSections.forEach(s => {
         const section: SectionLine = Object.assign(new SectionLine(), JSON.parse(s))
-
+      
+        
         const stCon = contacts.find(c => c.id == JSON.parse(s).startContactId)
         if (stCon != undefined) {
             section.setStartContact(stCon)
@@ -184,7 +200,8 @@ export function getPanels(jsonString: string) {
         }
     })
 
-
+    
+    
 
     return panels
 
@@ -311,6 +328,15 @@ function createPanel(text: string) {
     if (unite != undefined) panel.uniteSection = unite
 
     setSpecDataToDevice(text, panel)
+    
+    const panelFormat = formats.find(f=>f.id==JSON.parse(text).formatId)
+      
+    if(panelFormat != undefined){
+        panel.format = panelFormat
+        
+        
+    } 
+
     devices.push(panel)
 }
 function createConsumer(text: string) {

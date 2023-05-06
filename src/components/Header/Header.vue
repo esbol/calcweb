@@ -4,18 +4,18 @@
             <Menu />
         </div> -->
         <div class="tools-row">
-            <FormatProps />
+            <div @click="getPanels" class="material-symbols-outlined btn">
+                folder_open
+            </div>
+            <div @click="savePanels" class="material-symbols-outlined btn">
+                save
+            </div>
+       
             <div class="grid" @click="state.showGrid = !state.showGrid">
                 <span class="material-symbols-outlined">
                     grid_4x4
                 </span>
 
-            </div>
-            <div @click="savePanels" class="material-symbols-outlined">
-                save
-            </div>
-            <div @click="getPanels" class="material-symbols-outlined">
-                folder_open
             </div>
         </div>
 
@@ -56,6 +56,9 @@ const getPanels = () => {
 </script>
 
 <style scoped>
+.btn{
+    margin-left: 5px;
+}
 .grid {
     color: v-bind(color);
     cursor: pointer;

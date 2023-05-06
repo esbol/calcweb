@@ -1,40 +1,33 @@
 <template>
-    <div class="format-container">
+    <div class="format-container" @click="store.selectedObject = store.selectedPanel.format">
         <div class="innerFrame">
 
         </div>
 
         <div class="stamp">
-            <Stamp />
+            <Stamp :stamp="store.selectedPanel.format.stamp"/>
         </div>
         <div class="sideStamp">
             <SideStamp />
         </div>
         <div class="formatSize">
         Формат: 
-        <span v-if="isStandart">{{ store.selectedPanel.format.name }}</span>
-        <span v-else>{{ store.selectedPanel.format.width }}x{{ store.selectedPanel.format.height }}</span>
+     
+        <span>{{ store.selectedPanel.format.width }}x{{ store.selectedPanel.format.height }}</span>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 
-import { computed, ref } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import Stamp from './Stamp.vue';
 import SideStamp from './SideStamp.vue';
 import { Format, FormatNames } from '@/models/settings/format';
 import { useStore} from 'vuex'
 
 const hover = ref(false)
-const isStandart = computed(() => {
-    const name = store.selectedPanel.format.name
-    if (FormatNames.includes(name)) {
-        return true
-    } else {
-        return false
-    }
-})
+const color = ref('var(--scheme-line-hover-color)')
 
 const store = useStore().state
 
@@ -47,6 +40,19 @@ const height = computed(() => {
     const scale = store.selectedPanel.format.pixelScale
     return store.selectedPanel.format.height * scale + 'px'
 })
+
+watchEffect(() => {
+   
+    if (store.selectedObject instanceof Format) {
+
+        color.value = 'var(--scheme-line-hover-color)'
+
+    } else {
+
+        color.value = 'var(--scheme-line-color)'
+    }
+})
+
 
 </script>
 
@@ -75,7 +81,7 @@ const height = computed(() => {
     
     width: calc(100% - 100px);
     height: calc(100% - 40px);
-    border: 2px solid var(--scheme-line-color);
+    border: 2px solid v-bind(color);
 }
 
 .text {

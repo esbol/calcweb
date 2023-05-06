@@ -1,5 +1,5 @@
 <template>
-    <div class="stamp-container" @click="store.selectedObject = stamp"
+    <div class="stamp-container" @click="store.selectedObject = store.selectedPanel.format"
         >
         
         <table >
@@ -126,23 +126,22 @@ import { Panel } from '@/models/panel';
 import { Stamp } from '@/models/settings/stamp';
 import { useStore } from 'vuex';
 import { ref, computed, watchEffect } from 'vue';
+import { Format } from '@/models/settings/format';
+
+const props = defineProps({
+    stamp: {
+        type: Stamp,
+        required: true
+    }
+})
 
 
-const stamp = ref(new Stamp())
 const color = ref('var(--scheme-line-hover-color)')
 const store = useStore().state
 
-stamp.value.authors.push({ position: 'ГИП', fullName: 'Иванов', date: '03/02' })
-stamp.value.shifr = '24-03.22-ЭОМ'
-stamp.value.buildingName = "Дом культуры"
-stamp.value.projectName = 'Капитальный ремонт дома культуры поселка "Жолымбет" Акмолинской области'
-stamp.value.companyName = 'ТОО "Сан-Саулет"'
-
 watchEffect(() => {
-    stamp.value.sheetName = 'Схема принципиальная щита ' + store.selectedPanel?.nameOfPlane
-
-    
-    if (store.selectedObject == stamp.value) {
+  
+    if (store.selectedObject instanceof Format) {
      
         color.value = 'var(--scheme-line-hover-color)'
         

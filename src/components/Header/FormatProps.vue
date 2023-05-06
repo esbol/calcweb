@@ -3,21 +3,16 @@
 
 
 
-        <div class="select-format"><Select :selected-value="format.name" :display-path="'0'" :options="options"
-                @change="setFormat" /></div>
+        <div class="select-format"></div>
 
 
         <div class="size"><span class="material-symbols-outlined">
                  width
             </span></div>
 
-
-
-
-
         <div class="height_width">
             <NumberInput :input-value="format.width" @focusout="format.width = parseFloat($event.target.value)"
-                :can-edite="!isStandart" />
+                :can-edite="true" />
         </div>
 
 
@@ -28,7 +23,7 @@
 
         <div class="height_width">
             <NumberInput :input-value="format.height" @focusout="format.height = parseFloat($event.target.value)"
-                :can-edite="!isStandart" />
+                :can-edite="false" />
         </div>
     </div>
 </template>
@@ -44,26 +39,9 @@ import { ref, computed } from 'vue';
 
 const format: Format = useStore().state.selectedPanel.format as Format
 
-const options: Array<string> = []
-FormatNames.forEach(n => options.push(n))
-options.push('Пользовательский')
-
 const store = useStore().state
 
-const isStandart = computed(() => {
-    const name = store.selectedPanel.format.name
-    if (FormatNames.includes(name)) {
-        return true
-    } else {
-        return false
-    }
-})
 
-
-
-function setFormat(n: string) {
-    store.selectedPanel.format.name = n
-}
 
 </script>
 
@@ -105,9 +83,9 @@ function setFormat(n: string) {
 .select-format {
     display: flex;
     align-items: center;
-    height: 100%;
-    width: 150px;
-    border: 1px solid var(--main-border-color);
+    height: 25px;
+    width: 100px;
+    border: 1px solid var(--main-text-disabled-color);
 
 }
 </style>

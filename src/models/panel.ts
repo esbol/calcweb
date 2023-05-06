@@ -39,6 +39,7 @@ export class Panel extends Device {
         this.s1Section.nameOfPlane = 's1Section'
         this.s1Section.description = 's1Section'
         this.s1Section.isInPanel = true
+        console.log(this.format.stamp);
     }
     outContact: Contact
     uniteSection: SectionLine;
@@ -243,7 +244,8 @@ export class Panel extends Device {
             outContactId: this.outContact.id,
             s1SectionId: this.s1Section.id,
             uniteSectionId: this.uniteSection.id,
-            type: 'Panel'
+            type: 'Panel',
+            formatId: this.format.id
         })
     }
 }

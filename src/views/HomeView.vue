@@ -7,7 +7,7 @@
     <DivScheme v-if="store.state.selectedPanel != null" />
 
   </div>
-  <div class="footer" >footer</div>
+  <!-- <div class="footer" >footer</div> -->
 </template>
 
 <script setup lang="ts">
@@ -31,8 +31,10 @@ const store = useStore()
 
 if (store.state.panels.length == 0) {
   const panel1 = new Panel()
+  panel1.addFeeder()
   store.state.panels.push(panel1)
-
+  
+  
   panel1.nameOfPlane = 'ШР1'
 }
 

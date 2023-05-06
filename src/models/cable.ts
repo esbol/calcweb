@@ -223,6 +223,8 @@ export class Cable extends ELObject {
             }
             else
             {
+                
+                
                 dU = 2 * section.modeMax.current* section.cable.length * (CuActiveResistance / section.cable.square * section.modeMax.cosf);
                 dU = dU / 2.2;
             }

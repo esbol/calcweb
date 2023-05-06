@@ -1,5 +1,5 @@
 <template>
-    <div class="bokovic-container">
+    <div class="bokovic-container no-select">
         <div class="row" style="height: 300px;">
             <div class="div-cell" style="width: 100px; height: 300px; border-right: 1px solid var(--scheme-line-color);">
                 <div class=vertical-text style="white-space: nowrap;">Распределительное устройство</div>
@@ -54,37 +54,6 @@
 </template>
 
 <script setup lang="ts">
-
-import { Panel } from '@/models/panel';
-import { Stamp } from '@/models/settings/stamp';
-import { useStore } from 'vuex';
-import { ref, computed, watchEffect } from 'vue';
-
-
-const stamp = ref(new Stamp())
-const color = ref('var(--scheme-line-hover-color)')
-const store = useStore().state
-
-stamp.value.authors.push({ position: 'ГИП', fullName: 'Иванов', date: '02/03' })
-stamp.value.shifr = '24-03.22-ЭОМ'
-stamp.value.buildingName = "Дом культуры"
-stamp.value.projectName = 'Капитальный ремонт дома культуры поселка "Жолымбет" Акмолинской области'
-stamp.value.companyName = 'ТОО "Сан-Саулет"'
-
-watchEffect(() => {
-    stamp.value.sheetName = 'Схема принципиальная щита ' + store.selectedPanel?.nameOfPlane
-
-
-    if (store.selectedObject == stamp.value) {
-
-        color.value = 'var(--scheme-line-hover-color)'
-
-    } else {
-
-        color.value = 'var(--scheme-line-color)'
-    }
-})
-
 
 
 </script>

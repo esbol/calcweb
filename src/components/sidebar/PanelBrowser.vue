@@ -37,6 +37,7 @@ function clickPanel(panel: Panel) {
 
 function addNewPanel() {
     const panel1 = new Panel()
+    panel1.addFeeder()
     store.panels.push(panel1)
 
     panel1.nameOfPlane = 'ШР' + store.panels.length

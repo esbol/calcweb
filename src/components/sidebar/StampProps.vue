@@ -4,6 +4,34 @@
         <col width="50%" />
         <tr>
             <td>
+                <div class="name-prop">Ширина</div>
+            </td>
+            <td>
+                <div class="prop-value-input">
+                    <NumberInput :input-value="store.selectedPanel.format.height" 
+                        :can-edite="false" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="name-prop">Длина</div>
+            </td>
+            <td>
+                <div class="prop-value-input">
+                    <NumberInput :input-value="store.selectedPanel.format.width" @focusout="store.selectedPanel.format.width = parseFloat($event.target.value)"
+                        :can-edite="true" />
+                </div>
+            </td>
+        </tr>
+        <tr class="subTitle">
+            <td >
+                <div class="name-prop "><strong>Штамп</strong></div>
+            </td><td></td>
+        </tr>
+       
+        <tr>
+            <td>
                 <div class="name-prop">Шифр</div>
             </td>
             <td>
@@ -94,11 +122,13 @@
 </template>
 
 <script setup lang="ts">
+import NumberInput from './UI/NumberInput.vue';
 import TextInput from './UI/TextInput.vue';
 import Select from './UI/Select.vue'
 import { Stamp } from '@/models/settings/stamp';
+import { useStore } from 'vuex';
 
-
+const store = useStore().state
 
 
 const props = defineProps({
@@ -122,7 +152,9 @@ table {
     border-collapse: collapse;
     border-spacing: 0px;
 }
-
+.subTitle {
+    background: var(--sidebar-title-bg-color);
+}
 tr {
     height: 25px;
     border-bottom: 1px solid var(--main-border-color);
