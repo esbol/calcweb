@@ -13,17 +13,25 @@ export interface IState {
   selectedObject: any | null
   showPopup: any
   showGrid: boolean
+  isModePrint: boolean
+  projects: Array<IProject>
+  currentProject: IProject
 
 }
-
+export interface IProject {
+  name: string,
+  panels: Array<Panel>
+}
 
 
 export default createStore<IState>({
   state: {
+    projects: [],
+    currentProject: { name: 'Новый проект', panels: []},
     panels: [],
     selectedPanel: null,
     selectedObject: null,
-
+    isModePrint: false,
     showPopup: {
       show: false,
       x: 0,
@@ -42,6 +50,8 @@ export default createStore<IState>({
     setPanels(state, panels: Array<Panel>) {
       state.panels = panels
       state.selectedPanel = panels[0]
+      console.log(panels);
+      
       panels.forEach(p=>p.calc())
       
     },

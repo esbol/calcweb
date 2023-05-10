@@ -8,7 +8,7 @@
                     Number(section.modeMax.current.toFixed(1)).toString().replace('.', ',') }}-{{ section.cable.length }}-{{ Number(section.cable.deltaU.toFixed(1)).toString().replace('.', ',') }}%
             </div>
             <div class="line" :class="{ hover_bg: hover }" />
-            <div class="text_rigth" :class="{ hover_text: hover }">
+            <div class="text_rigth" :class="{ hover_text: hover, color_text_warn: squareHi }">
                 {{ section.cable.mark }}-{{ section.cable.colCores }}x{{ section.cable.square.toString().replace('.', ',') }}-{{ section.pipe.mark }}.{{
                     section.pipe.diametr }}-{{ section.pipe.length }}
             </div>
@@ -151,28 +151,7 @@ const consumerShow = computed(() => {
     } else return false
 })
 
-// const height = computed(() => {
-//     if (props.section.startContact != null && props.section.endContact != null) {
-//         //--без автомата
-//         if (props.section.startContact.ownDevice instanceof Panel) {
-//             //--контактор
-//             if(props.section.endContact.ownDevice instanceof CommutateApparate) return 226 + 'px'
-//             //--если консюмер или панель на конце
-//             else return 452 + 'px'
-//         } 
-//         //--автомат
-//         else if (props.section.startContact.ownDevice instanceof CommutateApparate) {
-//             //--контактор
-//             if (props.section.endContact.ownDevice instanceof CommutateApparate) return 226 + 'px'
-//             //--если консюмер или панель на конце
-//             else return 452 + 'px'
-//         }
-
-//     } else return 0 + 'px'
-// })
-
-
-
+const squareHi = ref(false)
 watchEffect(() => {
     if (store.selectedObject === props.section) {
         hover.value = true
@@ -185,11 +164,20 @@ watchEffect(() => {
         hover.value = false
         labelShow.value = false
     }
+    if((props.section.cable.maxCurrent / props.section.modeMax.current) > 1.3 && props.section.cable.square > 2.5){
+        squareHi.value = true
+    }else{
+        squareHi.value = false
+    }
 })
 
 </script>
 
 <style scoped>
+.color_text_warn{
+    color: red;
+    font-weight: bold;
+}
 .s {
     display: flex;
     flex-direction: column;

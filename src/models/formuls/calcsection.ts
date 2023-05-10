@@ -89,17 +89,13 @@ function setColPhase(section: SectionLine): void {
         if(d.colPhase == 3) col = 3
     })
     section.colPhase = col
-    // if(section.colPhase == 3){
-    //     if(col == 1){
-    //         if(section.subConsumers.length == 1){
-    //             section.colPhase = 1
-    //         }
-    //     }
-    // }else{
-    //     if(col == 3){
-    //         section.colPhase = 3
-    //     }
-    // }
+    
+    if( section.nameOfPlane == 'uniteSection'){
+        
+        const pan = section.getSupplyPanels()[0]
+        if(pan != undefined)
+        section.colPhase = section.getSupplyPanels()[0].colPhase
+    }
 
 
 }

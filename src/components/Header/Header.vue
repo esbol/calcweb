@@ -1,5 +1,5 @@
 <template>
-    <div class="header_container no-select">
+    <div class="header_container no-select" >
         <!-- <div class="menu-row">
             <Menu />
         </div> -->
@@ -10,13 +10,13 @@
             <div @click="savePanels" class="material-symbols-outlined btn">
                 save
             </div>
-       
+
             <div class="grid" @click="state.showGrid = !state.showGrid">
                 <span class="material-symbols-outlined">
                     grid_4x4
                 </span>
-
             </div>
+            <img src="@/assets/pdf.svg" alt="" @click="print" class="pdf">
         </div>
 
     </div>
@@ -53,12 +53,27 @@ const getPanels = () => {
 }
 
 
+async function print() {
+
+
+    state.isModePrint = true
+    state.showGrid = false
+
+    console.log('print');
+
+}
+
+
 </script>
 
 <style scoped>
-.btn{
+.pdf{
+    height: 30px;
+}
+.btn {
     margin-left: 5px;
 }
+
 .grid {
     color: v-bind(color);
     cursor: pointer;

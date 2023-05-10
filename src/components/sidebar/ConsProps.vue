@@ -61,17 +61,17 @@
             </td>
             <td>
                 <div class="prop-value-input"><Select :selected-value="consumer.groupNameBySP" :display-path="'0'"
-                            :options="TypesBySP" @change="setTypeBySP" /></div>
+                        :options="TypesBySP" @change="setTypeBySP" /></div>
             </td>
         </tr>
-         <tr>
-                <td>
-                    <div class="name-prop">Режим</div>
-                </td>
-                <td>
-                    <div class="prop-value"><span v-for="name in consumer.calculationModesNames" >{{ name }}</span></div>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                <div class="name-prop">Режим</div>
+            </td>
+            <td>
+                <div class="prop-value"><span v-for="name in consumer.calculationModesNames">{{ name }}</span></div>
+            </td>
+        </tr>
         <tr>
             <td>
                 <div class="name-prop">Подключен к</div>
@@ -81,17 +81,26 @@
             </td>
         </tr>
         <tr>
-                <td>
-                    <div class="name-prop">Наименование</div>
-                </td>
-                <td>
-                    <div class="prop-value-input">
-                        <TextInput :input-value="consumer.description" @focusout="consumer.description = $event.target.value"
-                            :can-edite="true" />
+            <td>
+                <div class="name-prop">Наименование</div>
+            </td>
+            <td>
+                <div class="prop-value-input">
+                    <TextInput :input-value="consumer.description" @focusout="consumer.description = $event.target.value"
+                        :can-edite="true" />
 
-                    </div>
-                </td>
-            </tr>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="name-prop">Резервный</div>
+            </td>
+            <td>
+                <div class="prop-value-input"><Select :selected-value="isReserve" :display-path="'0'"
+                        :options="booleans" @change="setIsReserve" /></div>
+            </td>
+        </tr>
     </table>
 </template>
 
@@ -103,6 +112,24 @@ import Select from './UI/Select.vue'
 import { Consumer } from "@/models/consumer";
 import TextInput from "./UI/TextInput.vue";
 import NumberInput from "./UI/NumberInput.vue";
+import { ref, watchEffect } from 'vue';
+import { useStore } from 'vuex';
+import { IState } from '@/store';
+
+const store = useStore().state as IState
+//#region isReserve
+const booleans = ['Да', 'Нет']
+const isReserve = ref('Нет')
+watchEffect(() => {
+    if(props.consumer.isReserve == true) isReserve.value = 'Да'
+    else isReserve.value = 'Нет'
+})
+function setIsReserve(opt: any){
+    if(opt == 'Да') props.consumer.isReserve = true
+    else props.consumer.isReserve = false
+    store.panels.forEach(p=>p.calc())
+}
+//#endregion
 
 const props = defineProps({
     consumer: {
@@ -110,12 +137,11 @@ const props = defineProps({
         required: true
     }
 })
-function setTypeBySP(t: string){
+function setTypeBySP(t: string) {
     props.consumer.groupNameBySP = t
-    props.consumer.getSupplyPanels().forEach(p => 
-    {
-        p.calc()       
-        
+    props.consumer.getSupplyPanels().forEach(p => {
+        p.calc()
+
     })
 }
 function setColPhase(n: number) {
@@ -184,4 +210,5 @@ td {
     width: 100%;
     border-left: 1px solid var(--main-border-color);
 
-}</style>
+}
+</style>

@@ -10,19 +10,19 @@ export interface ICable {
 export const Cables: Array<ICable> = [
     { 
         mark : 'ВВГнг-(А)-ls',
-        possibleSquares : [10, 16, 20, 25, 32, 40, 50, 63],
+        possibleSquares : [1.5, 2.5, 4, 6, 10, 16, 25, 35, 50, 70, 95, 120],
         material: CableMaterial.Медь,
 
     },
     {
         mark: 'ВВГнг-(А)-FRls',
-        possibleSquares: [10, 16, 20, 25, 32, 40, 50, 63],
+        possibleSquares: [1.5, 2.5, 4, 6, 10, 16, 25, 35, 50, 70, 95, 120],
         material: CableMaterial.Медь,
   
     },
     {
         mark: 'AВВГнг-(А)-ls',
-        possibleSquares: [10, 16, 20, 25, 32, 40, 50, 63],
+        possibleSquares: [1.5, 2.5, 4, 6, 10, 16, 25, 35, 50, 70, 95, 120],
         material: CableMaterial.Алюминий,
       
     },

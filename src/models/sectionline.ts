@@ -133,6 +133,9 @@ export class SectionLine {
     public get calculationModes(): Array<CalculationMode> {
         return this._calculationModes;
     }
+    public set calculationModes(v: Array<CalculationMode>) {
+        this._calculationModes = v;
+    }
     //#endregion
 
 
@@ -272,8 +275,11 @@ export class SectionLine {
     }
 
     toJSON(){
+        let ids = new Array<string>()
+        this.calculationModes.forEach(m=>ids.push(m.id.toString()))
         return {
             id: this.id,
+            calculationsModesIds: ids,
             isInPanel: this.isInPanel,
             colPhase: this.colPhase,
             length: this.length,
@@ -283,7 +289,8 @@ export class SectionLine {
             endContactId: this.endContact?.id,
             cableId: this.cable.id,
             pipeId: this.pipe.id,
-            enviroment: this.enviroment
+            enviroment: this.enviroment,
+            modeMaxId:this.modeMax.id
         }
     }
 

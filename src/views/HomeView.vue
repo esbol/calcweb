@@ -24,8 +24,22 @@ import { Breakers } from '@/models/bd/breakers';
 import { useStore } from 'vuex';
 import { IState } from '@/store';
 
-
 const store = useStore()
+
+
+const onBeforeUnload = (event: BeforeUnloadEvent) => {
+  // localStorage.setItem('myData', myData.value);
+};
+
+// Добавить обработчик событий для 'beforeunload'
+window.addEventListener('beforeunload', onBeforeUnload);
+
+// Удалить обработчик событий при размонтировании компонента
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', onBeforeUnload);
+});
+
+
 
 
 

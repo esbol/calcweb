@@ -23,8 +23,8 @@
                     :fuse="store.selectedPanel.inApparate" />
                 <DiffBreakerInV :showPhases="true" v-if="store.selectedPanel.inApparate instanceof DiffBreaker"
                     :diffBreaker="store.selectedPanel.inApparate" />
-                    <BreakerInPower :show-phases="true" v-if="store.selectedPanel.inApparate instanceof BreakerPower"
-                    :breaker-power="store.selectedPanel.inApparate"/>
+                <BreakerInPower :show-phases="true" v-if="store.selectedPanel.inApparate instanceof BreakerPower"
+                    :breaker-power="store.selectedPanel.inApparate" />
             </div>
 
 
@@ -43,7 +43,7 @@
 
                         </div>
                     </TransitionGroup>
-                    <div class="plus">
+                    <div class="plus" v-if="!store.isModePrint">
                         <PlusV />
                     </div>
 
@@ -73,7 +73,7 @@ import PlusV from './DivsScheme/verticals/PlusV.vue'
 
 
 import Format from './DivsScheme/formats/Format.vue';
-import { reactive, ref, computed, onMounted, toRefs } from 'vue';
+import { reactive, ref, computed, onMounted, toRefs, watchEffect } from 'vue';
 
 import { addScale } from './DivsScheme/pan'
 import { useStore } from 'vuex'
@@ -87,10 +87,11 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { DiffBreaker } from '@/models/diffBreaker'
 import { BreakerPower } from '@/models/breakerPower'
+import { IState } from '@/store'
 
 //#endregion
 
-const store = useStore().state
+const store = useStore().state as IState
 const cables = new Array<Cable>()
 
 
@@ -110,13 +111,20 @@ onMounted(() => {
 })
 
 const width = computed(() => {
-    const scale = store.selectedPanel.format.pixelScale
-    return store.selectedPanel.format.width * scale + 'px'
+    if (store.selectedPanel != null) {
+        const scale = store.selectedPanel.format.pixelScale
+        return store.selectedPanel.format.width * scale + 'px'
+    }
+
+
 })
 
 const height = computed(() => {
-    const scale = store.selectedPanel.format.pixelScale
-    return store.selectedPanel.format.height * scale + 'px'
+    if (store.selectedPanel != null) {
+        const scale = store.selectedPanel.format.pixelScale
+        return store.selectedPanel.format.height * scale + 'px'
+    }
+
 })
 
 function clearSelect(event: MouseEvent) {
@@ -129,12 +137,22 @@ function clearSelect(event: MouseEvent) {
 
 const content = ref<HTMLDivElement | null>(null);
 
-async function printToPDF() {
-    if (!content.value) return;
+function sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+watchEffect(() => {
+    if (store.isModePrint) {
+    
+        printToPDF()
+    }
+})
+async function printToPDF(): Promise<boolean> {
+    if (!content.value) return false;
 
+    await sleep(100)
     // Создайте изображение с помощью html2canvas
     const canvas = await html2canvas(content.value, {
-        scale: 2,
+        scale: 3,
         useCORS: true,
     });
 
@@ -154,6 +172,9 @@ async function printToPDF() {
 
     // Сохраните PDF-файл
     pdf.save("output.pdf");
+
+    store.isModePrint = false
+    return true
 }
 
 </script>

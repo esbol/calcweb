@@ -79,7 +79,7 @@
                 <div class="name-prop">Сечение</div>
             </td>
             <td>
-                <div class="prop-value">{{ section.cable.square }}</div>
+                <SelectSimple :options="section.cable.possibleSquares" :selected-value="section.cable.square.toString()" @change="setCableSquare" />
             </td>
         </tr>
 
@@ -130,6 +130,7 @@
 </template>
 
 <script setup lang="ts">
+import SelectSimple from './UI/SelectSimple.vue';
 import TextInput from './UI/TextInput.vue';
 import Select from './UI/Select.vue'
 import { Cables } from "@/models/bd/cables";
@@ -144,7 +145,12 @@ const props = defineProps({
         required: true
     }
 })
-
+function setCableSquare(option: any) {
+    props.section.cable.square = parseFloat(option)
+    props.section.getSupplyPanels().forEach(p => p.calc())
+    console.log(props.section.cable.square);
+    
+}
 function setCableLenght(option: any) {
     props.section.cable.length = parseFloat(option)
     props.section.getSupplyPanels().forEach(p => p.calc())

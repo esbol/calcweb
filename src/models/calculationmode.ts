@@ -5,25 +5,29 @@ import { GroupBySP } from './groupbysp';
 import { calcCurrentBySPower } from './formuls/calcpowers'
 
 export class CalculationMode {
-    constructor(name: string, section: SectionLine){
+    constructor(name: string, section: SectionLine) {
         this.name = name
         this._section = section
-        
+
     }
-   
+    id: number = Math.random()
+
     //#region section
     private _section: SectionLine;
     public get section(): SectionLine {
         return this._section;
     }
+    public set section(v: SectionLine) {
+        this._section = v;
+    }
     //#endregion
 
     //#region name
-    private _name : string = '';
-    public get name() : string {
+    private _name: string = '';
+    public get name(): string {
         return this._name;
     }
-    public set name(v : string) {
+    public set name(v: string) {
         this._name = v;
     }
     //#endregion
@@ -111,34 +115,34 @@ export class CalculationMode {
 
 
 
-    public calc(){
+    public calc() {
         this.setGroupsBySP()
         this.groupsBySPList.forEach(g => g.calc())
-        
+
         this.calcPowers()
     }
 
-    private setGroupsBySP():void {
-        
-      
-        
+    private setGroupsBySP(): void {
+
+
+
         //добавляем группу если ее нет
-         this.consumers.forEach(c => {
-            let group = this.groupsBySPList.find(g=> g.groupName === c.groupNameBySP) 
-           
-            
-            if(group === undefined){
-               this.groupsBySPList.push(new GroupBySP(c.groupNameBySP))
-             
+        this.consumers.forEach(c => {
+            let group = this.groupsBySPList.find(g => g.groupName === c.groupNameBySP)
+
+
+            if (group === undefined) {
+                this.groupsBySPList.push(new GroupBySP(c.groupNameBySP))
+
             }
         });
         //список групп для удаления
         const forDel = new Array<GroupBySP>()
         this.groupsBySPList.forEach(g => {
             const consumer = this.consumers.find(cons => cons.groupNameBySP === g.groupName)
-            if(consumer === undefined) forDel.push(g)
+            if (consumer === undefined) forDel.push(g)
         })
-        forDel.forEach(g=> this.groupsBySPList.splice(
+        forDel.forEach(g => this.groupsBySPList.splice(
             this.groupsBySPList.indexOf(g), 1
         ))
 
@@ -150,13 +154,13 @@ export class CalculationMode {
 
     }
 
-    private calcPowers(){
+    private calcPowers() {
         this.installPower = 0
         this.ratedPower = 0
         this.ratedQPower = 0
         this.ratedSPower = 0
 
-        this.groupsBySPList.forEach(g=>{
+        this.groupsBySPList.forEach(g => {
             this.installPower += g.installPower
             this.ratedPower += g.ratedPower
             this.ratedQPower += g.ratedQPower
@@ -164,11 +168,30 @@ export class CalculationMode {
         })
 
 
-        if(this.ratedPower !== 0){
+        if (this.ratedPower !== 0) {
             this.tgf = this.ratedQPower / this.ratedPower
             this.cosf = this.ratedPower / this.ratedSPower
             this.current = calcCurrentBySPower(this.ratedSPower, this.section.voltage, this.section.colPhase)
         }
     }
 
+    toJSON() {
+        let ids = new Array<string>()
+        this.groupsBySPList.forEach(g=>ids.push(g.id.toString()))
+        return {
+            id: this.id,
+            sectionId: this.section.id,
+            name: this.name,
+            groupsBySPListIds: ids,
+            installPower: this.installPower,
+            ratedPower: this.ratedPower,
+            ratedQPower: this.ratedQPower,
+            ratedSPower: this.ratedSPower,
+            cosf: this.cosf,
+            current: this.current,
+            currentA: this.currentA,
+            currentB: this.currentB,
+            currentC: this.currentC,
+        }
+    }
 }

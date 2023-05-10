@@ -25,26 +25,32 @@ export class Panel extends Device {
         this.s1Section.setStartContact(this.inContact)
         this.s1Section.setEndContact(inApparate.inContact)
 
-        this.uniteSection = new SectionLine()
-        this.uniteSection.setStartContact(inApparate.outContact)
-        this.uniteSection.setEndContact(this.outContact)
+        const uniteSection = new SectionLine()
+        uniteSection.setStartContact(inApparate.outContact)
+        uniteSection.setEndContact(this.outContact)
 
 
-        this.uniteSection.nameOfPlane = 'uniteSection'
-        this.uniteSection.description = 'uniteSection'
-        this.uniteSection.isInPanel = true
+        uniteSection.nameOfPlane = 'uniteSection'
+        uniteSection.description = 'uniteSection'
+        uniteSection.isInPanel = true
+
         this.description = 'panel'
         this.inContact.description = 'panelInCont'
         this.outContact.description = 'panelOutCont'
         this.s1Section.nameOfPlane = 's1Section'
         this.s1Section.description = 's1Section'
         this.s1Section.isInPanel = true
-        console.log(this.format.stamp);
+  
     }
     outContact: Contact
-    uniteSection: SectionLine;
+    
     s1Section: SectionLine;
 
+     //#region uniteSection
+     public get uniteSection(): SectionLine{
+        return this.outContact.getSupplySections()[0]
+    }
+    //#endregion
 
     //#region inApparate
 
@@ -107,8 +113,7 @@ export class Panel extends Device {
             }
         }
 
-
-
+      
 
 
 

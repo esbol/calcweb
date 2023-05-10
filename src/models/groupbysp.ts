@@ -2,6 +2,8 @@ import { Consumer } from "./consumer";
 
 export class GroupBySP {
     constructor(groupName: string){ this.groupName = groupName}
+    
+    id: number = Math.random()
 
     //#region groupName
     private _groupName: string = '';
@@ -77,17 +79,31 @@ export class GroupBySP {
         let q = 0
         let s = 0
         this.consumers.forEach(c => { 
-            c.calc()
-            i += c.installPower
-            r += c.ratedPower
-            q += c.ratedQPower
-            s += c.ratedSPower
-            this.consumersCount += c.count
+            if(c.isReserve == false){
+                c.calc()
+                i += c.installPower
+                r += c.ratedPower
+                q += c.ratedQPower
+                s += c.ratedSPower
+                this.consumersCount += c.count
+            }
+            
         });
         this.installPower = i
         this.ratedPower = r * this.kSprosa
         this.ratedQPower = q * this.kSprosa
         this.ratedSPower = s * this.kSprosa
     }
-
+    toJSON(){
+        return {
+            id: this.id,
+            groupName: this.groupName,
+            consumersCount: this.consumersCount,
+            kSprosa: this.kSprosa,
+            installPower: this.installPower,
+            ratedPower: this.ratedPower,
+            ratedQPower: this.ratedQPower,
+            ratedSPower: this.ratedSPower,
+        }
+    }
 }

@@ -93,6 +93,13 @@ export class Consumer extends Device{
     public set tgf(v: number) { this._tgf = v; }
     //#endregion
 
+
+     //#region isReserve
+     private _isReserve: boolean = false;
+     public get isReserve(): boolean { return this._isReserve; }
+     public set isReserve(v: boolean) { this._isReserve = v; }
+     //#endregion
+
     //#region current
     private _current: number = 0;
     public get current(): number { return this._current; }
