@@ -3,14 +3,17 @@
 <template>
     <div class="side-container" :class="{ show: show }">
         <div class="wrapper" v-if="show">
-            <PropsContainer title="Панели">
+
+            <!-- <PropsContainer title="Проекты">
+                <ProjectsBrowser />
+            </PropsContainer> -->
+            <PropsContainer title="Панели" v-if="store.selectedPanel != null">
                 <PanelBrowser />
             </PropsContainer>
-
             <PropsContainer :title="store.selectedPanel.nameOfPlane" v-if="(store.selectedObject instanceof Panel)">
                 <PanelProps />
             </PropsContainer>
-          
+
             <PropsContainer title="Участок сети" v-if="(store.selectedObject instanceof SectionLine)">
                 <SectionProps :section="store.selectedObject" />
             </PropsContainer>
@@ -38,7 +41,8 @@
             <PropsContainer title="Лист" v-if="(store.selectedObject instanceof Format)">
                 <StampProps :stamp="store.selectedPanel.format.stamp" />
             </PropsContainer>
-            
+
+
 
         </div>
         <div class="splitter">
@@ -49,11 +53,17 @@
 
 
         </div>
+        <div class="tools">
+            <Tools />
+        </div>
+
     </div>
 </template>
 
 <script setup lang="ts">
 
+import Tools from "./Tools.vue";
+import ProjectsBrowser from "./ProjectsBrowser.vue";
 import BreakerPowerProps from "./BreakerPowerProps.vue";
 import DiffBreakerProps from "./DiffBreakerProps.vue";
 import FuseProps from "./FuseProps.vue";
@@ -95,8 +105,14 @@ const props = defineProps({
 
 
 <style scoped>
+.tools{
+    width: 280px;
+    margin-left: 5px;
+    position: absolute;
+    bottom: 20px;
+}
 .wrapper {
-
+    position: relative;
     height: 100%;
 }
 

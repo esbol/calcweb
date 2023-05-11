@@ -1,7 +1,7 @@
 import { Panel } from '@/models/panel'
 import { Format } from '@/models/settings/format'
 import Flatted, { parse, stringify, toJSON, fromJSON } from 'flatted';
-import { createStore, Module } from 'vuex'
+import { createStore, Module, Store, useStore } from 'vuex'
 import { plainToClass, classToPlain, Exclude, Expose, Transform } from 'class-transformer';
 import { getJSON } from '@/models/serialize/serialize';
 import { getPanels } from '@/models/serialize/deserialize';
@@ -14,11 +14,12 @@ export interface IState {
   showPopup: any
   showGrid: boolean
   isModePrint: boolean
+  selectedProject: IProject | null
   projects: Array<IProject>
-  currentProject: IProject
 
 }
 export interface IProject {
+  id: number,
   name: string,
   panels: Array<Panel>
 }
@@ -27,7 +28,7 @@ export interface IProject {
 export default createStore<IState>({
   state: {
     projects: [],
-    currentProject: { name: 'Новый проект', panels: []},
+    selectedProject: null,
     panels: [],
     selectedPanel: null,
     selectedObject: null,

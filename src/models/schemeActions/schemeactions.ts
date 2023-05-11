@@ -1,3 +1,4 @@
+import { IState } from "@/store"
 import { Breakers } from "../bd/breakers"
 import { BreakersPower } from "../bd/breakersPower"
 import { Cables } from "../bd/cables"
@@ -103,6 +104,7 @@ export function addConsumer(contact: Contact) {
 }
 
 export function deleteObject(object: any) {
+   
     if (object instanceof SectionLine) {
         const sl = object as SectionLine
         if (sl.startContact != null) {

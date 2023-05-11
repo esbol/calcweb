@@ -1,15 +1,17 @@
 <template>
     <div class="plus-container">
+        <div class="printshow" v-show="!store.state.isModePrint">
+            <div class="line" :class="{ hover_border: hover }" />
 
-        <div class="line" :class="{ hover_border: hover }" />
-
-        <div class="plus_btn" @click="addFeeder" @mouseenter="hov" @mouseleave="hover = false"
-            :class="{ hover_border: hover }">
-            <div class="circle" :class="{ hover_border: hover }">
-                <div class="plus_g" :class="{ hover_border: hover }"></div>
-                <div class="plus_v" :class="{ hover_border: hover }"></div>
+            <div class="plus_btn" @click="addFeeder" @mouseenter="hov" @mouseleave="hover = false"
+                :class="{ hover_border: hover }">
+                <div class="circle" :class="{ hover_border: hover }">
+                    <div class="plus_g" :class="{ hover_border: hover }"></div>
+                    <div class="plus_v" :class="{ hover_border: hover }"></div>
+                </div>
             </div>
         </div>
+
 
 
     </div>
@@ -24,7 +26,7 @@ const hover = ref(false)
 
 const store = useStore()
 
-function addFeeder(){
+function addFeeder() {
     store.state.selectedPanel.addFeeder();
 }
 
@@ -84,7 +86,7 @@ function hov() {
     cursor: pointer;
     position: relative;
     width: 70px;
-    
+
     border: 0px dashed gray;
     display: flex;
     flex-direction: column;
@@ -92,7 +94,4 @@ function hov() {
     align-items: center;
 
 }
-
-
-
 </style>

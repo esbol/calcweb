@@ -43,7 +43,7 @@
 
                         </div>
                     </TransitionGroup>
-                    <div class="plus" v-if="!store.isModePrint">
+                    <div class="plus">
                         <PlusV />
                     </div>
 
@@ -100,6 +100,9 @@ function handleKeyDown(event: KeyboardEvent) {
     console.log(event.code);
 
     if (event.code === "Delete" || event.keyCode === 46) {
+        if (store.selectedPanel != null) {
+            if (store.selectedPanel.outContact.getSlaveSections().length < 2) return
+        }
         deleteObject(store.selectedObject)
     }
     // printToPDF()
@@ -142,7 +145,6 @@ function sleep(ms: number): Promise<void> {
 }
 watchEffect(() => {
     if (store.isModePrint) {
-    
         printToPDF()
     }
 })
@@ -174,6 +176,7 @@ async function printToPDF(): Promise<boolean> {
     pdf.save("output.pdf");
 
     store.isModePrint = false
+
     return true
 }
 

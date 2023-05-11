@@ -1,10 +1,10 @@
 <template>
-  <div class="header" >
+  <!-- <div class="header" >
    <Header />
-  </div>
+  </div> -->
   <div class="main"  :class="{ sidehidden: sideShow === false, sideshow: sideShow === true }">
     <SideBar :show="sideShow" />
-    <DivScheme v-if="store.state.selectedPanel != null" />
+    <DivScheme v-if="store.selectedPanel != null" />
 
   </div>
   <!-- <div class="footer" >footer</div> -->
@@ -22,14 +22,16 @@ import { Breaker } from '@/models/breaker';
 import { Breakers } from '@/models/bd/breakers';
 
 import { useStore } from 'vuex';
-import { IState } from '@/store';
+import { IProject, IState } from '@/store';
 
-const store = useStore()
-
+const store = useStore().state as IState
+const st = useStore()
 
 const onBeforeUnload = (event: BeforeUnloadEvent) => {
   // localStorage.setItem('myData', myData.value);
+  st.dispatch('savePanels', store.panels);
 };
+
 
 // Добавить обработчик событий для 'beforeunload'
 window.addEventListener('beforeunload', onBeforeUnload);
@@ -39,20 +41,28 @@ onBeforeUnmount(() => {
   window.removeEventListener('beforeunload', onBeforeUnload);
 });
 
+onMounted(() => {
+  st.dispatch('fetchPanels');
+})
 
+if(store.projects.length == 0){
+  const proj: IProject = {id: Math.random(), name: 'Новый проект', panels: []}
+  store.selectedProject = proj
+  store.projects.push(proj)
+  store.panels = proj.panels
+}
 
-
-
-if (store.state.panels.length == 0) {
+if (store.panels.length == 0) {
   const panel1 = new Panel()
   panel1.addFeeder()
-  store.state.panels.push(panel1)
+  store.panels.push(panel1)
   
   
   panel1.nameOfPlane = 'ШР1'
 }
 
-store.state.selectedPanel = store.state.panels[0]
+
+store.selectedPanel = store.panels[0]
 
 const sideShow = ref(true)
 
