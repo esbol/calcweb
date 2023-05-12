@@ -46,7 +46,8 @@ interface IJSON {
     jsonCalculationModes: Array<string>,
 }
 
-export function getPanels(jsonString: string) {
+export function getPanels(jsonString: string):Array<Panel> {
+
 
     //#region Elements Array init
     const devices: Array<Device> = []

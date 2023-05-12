@@ -77,7 +77,7 @@
                 <div class="name-prop">Подключен к</div>
             </td>
             <td>
-                <div class="prop-value">{{ consumer.getSupplyPanels()[0].nameOfPlane }}</div>
+                <div class="prop-value">{{consumer.getSupplyPanels().length > 0 ? consumer.getSupplyPanels()[0].nameOfPlane : '' }}</div>
             </td>
         </tr>
         <tr>

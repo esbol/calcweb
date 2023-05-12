@@ -45,16 +45,16 @@ export default createStore<IState>({
   getters: {
   },
   mutations: {
-    calcPanels(state){
-      state.panels.forEach(p=>p.calc())
+    calcPanels(state) {
+      state.panels.forEach(p => p.calc())
     },
     setPanels(state, panels: Array<Panel>) {
       state.panels = panels
       state.selectedPanel = panels[0]
       console.log(panels);
-      
-      panels.forEach(p=>p.calc())
-      
+
+      panels.forEach(p => p.calc())
+
     },
     addPanel(state, panel: Panel) {
       state.panels.push(panel)
@@ -62,13 +62,21 @@ export default createStore<IState>({
     }
   },
   actions: {
-  
+
     fetchPanels({ commit }) {
       const panelsJSON = localStorage.getItem('panels');
-      if (panelsJSON) {
-        const deserialized = getPanels(panelsJSON)
-        commit('setPanels', deserialized);
-      }
+      
+      // if (panelsJSON) {
+      //   try {
+      //     const deserialized = getPanels(panelsJSON)
+      //     if(deserialized.length > 0)
+      //     commit('setPanels', deserialized);
+      //   } catch (error) {
+      //     console.log(error);
+          
+      //   }
+
+      // }
     },
     savePanels({ state }) {
       const panelsJSON = getJSON(state.panels)

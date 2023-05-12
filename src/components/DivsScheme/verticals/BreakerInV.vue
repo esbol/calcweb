@@ -160,7 +160,6 @@ watchEffect(() => {
     border: 0px solid red;
     position: absolute;
     top: 12px;
-    left: calc(50% -10px);
     display: flex;
     justify-content: space-around;
     flex-direction: column;

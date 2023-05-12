@@ -47,7 +47,7 @@ export abstract class Device extends ELObject {
             contact.getSupplySections().forEach(s => {
                 if (s.startContact != null) {
                     if (s.startContact.ownDevice != null)
-                        if (s.startContact.ownDevice.constructor.name == 'Panel') {
+                        if (s.startContact.ownDevice.constructor.name == "Panel") {
                             if (!spanels.includes(s.startContact.ownDevice as Panel)) {
                                 spanels.push(s.startContact.ownDevice as Panel)
                             }
