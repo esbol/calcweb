@@ -277,9 +277,11 @@ export class SectionLine {
     toJSON(){
         let ids = new Array<string>()
         this.calculationModes.forEach(m=>ids.push(m.id.toString()))
+        let subConsumersIds = new Array<string>()
+        this.subConsumers.forEach(m=>subConsumersIds.push(m.id.toString()))
         return {
             id: this.id,
-            calculationsModesIds: ids,
+            calculationModesIds: ids,
             isInPanel: this.isInPanel,
             colPhase: this.colPhase,
             length: this.length,
@@ -290,7 +292,8 @@ export class SectionLine {
             cableId: this.cable.id,
             pipeId: this.pipe.id,
             enviroment: this.enviroment,
-            modeMaxId:this.modeMax.id
+            modeMaxId:this.modeMax.id,
+            subConsumersIds: subConsumersIds
         }
     }
 

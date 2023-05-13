@@ -5,6 +5,7 @@ import { CableMaterial, ICableCurrentPUE, PUECurrents, CableEnviroment } from '.
 import { ELObject } from "./elobject";
 import { CommutateApparate } from './commutateApparate';
 import { Contact } from './contact';
+import { SpecData } from './SpecData';
 
 export class Cable extends ELObject {
     setDataFromDB(mark: string): boolean {
@@ -112,7 +113,15 @@ export class Cable extends ELObject {
         this._deltaU = v;
     }
     //#endregion
-
+    //#region specData
+    private _specData: SpecData = new SpecData('', '', '', '', '', '', '', '');
+    public get specData(): SpecData {
+        return this._specData;
+    }
+    public set specData(v: SpecData) {
+        this._specData = v;
+    }
+    //#endregion
 
     public calc() {
 
@@ -144,14 +153,14 @@ export class Cable extends ELObject {
 
 
         if (cableData != null) {
-            
+
 
             if (this._square < cableData.square) {
                 this._square = cableData.square
                 this._maxCurrent = cableData.current
-            }else{
+            } else {
                 const mCur = this.getPUEMaxCurrent(this._square)?.current
-                if(mCur != undefined) this._maxCurrent = mCur
+                if (mCur != undefined) this._maxCurrent = mCur
             }
 
         }
@@ -161,7 +170,7 @@ export class Cable extends ELObject {
 
     }
 
-    private getPUEMaxCurrent(square: number): ICableCurrentPUE | null{
+    private getPUEMaxCurrent(square: number): ICableCurrentPUE | null {
         let cableData: ICableCurrentPUE | null = null
 
 

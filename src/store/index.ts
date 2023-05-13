@@ -66,17 +66,17 @@ export default createStore<IState>({
     fetchPanels({ commit }) {
       const panelsJSON = localStorage.getItem('panels');
       
-      // if (panelsJSON) {
-      //   try {
-      //     const deserialized = getPanels(panelsJSON)
-      //     if(deserialized.length > 0)
-      //     commit('setPanels', deserialized);
-      //   } catch (error) {
-      //     console.log(error);
+      if (panelsJSON) {
+        try {
+          const deserialized = getPanels(panelsJSON)
+          if(deserialized.length > 0)
+          commit('setPanels', deserialized);
+        } catch (error) {
+          console.log(error);
           
-      //   }
+        }
 
-      // }
+      }
     },
     savePanels({ state }) {
       const panelsJSON = getJSON(state.panels)
