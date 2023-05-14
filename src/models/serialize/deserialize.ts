@@ -190,7 +190,9 @@ export function getPanels(jsonString: string):Array<Panel> {
         if (mMax != undefined) section.modeMax = mMax
 
         section.calculationModes.splice(0, section.calculationModes.length)
-        const calcIds: Array<string> = objSection.calculationsModesIds
+        const calcIds: Array<string> = objSection.calculationModesIds
+
+        
         calcIds.forEach(i => {
             const mode = calculationModes.find(c => c.id == Number(i))
 

@@ -175,6 +175,8 @@ export function getJSON(panels: Array<Panel>) {
         //#region set Sections and Cables & Pipes
         panels.forEach(p => {
             sections.push(p.s1Section)
+            p.cables.forEach(c=> cables.push(c))
+            p.pipes.forEach(c=> pipes.push(c))
             const sects = p.s1Section.subSections
             sects.forEach(s => {
                 if (!sections.includes(s)) {
