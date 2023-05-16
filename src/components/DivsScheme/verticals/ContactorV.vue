@@ -3,12 +3,12 @@
         <div class="text" v-if="contactor.outContact.getSlaveSections().length === 1" :class="{ hover_text: hover }">
             <span>{{ contactor.nameOfPlane }}<br></span>
             <span>{{ contactor.mark }}<br></span>
-            <span>In={{ contactor.nominalCurrent }}A<br></span>
+            <span v-if="contactor.mark != 'Комплектно'">In={{ contactor.nominalCurrent }}A<br></span>
         </div>
         <div v-else class="text_w" :class="{ hover_text: hover }">
             <span>{{ contactor.nameOfPlane }}<br></span>
             <span>{{ contactor.mark }}<br></span>
-            <span>In={{ contactor.nominalCurrent }}A<br></span>
+            <span v-if="contactor.mark != 'Комплектно'">In={{ contactor.nominalCurrent }}A<br></span>
         </div>
         <div class="line-before" :class="{ hover_bg: hover }"></div>
 
@@ -122,7 +122,7 @@ watchEffect(() => {
 }
 
 .text_w {
-    top: -50px;
+    bottom: 25px;
     position: absolute;
     left: 0;
 }

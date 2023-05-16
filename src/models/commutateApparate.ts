@@ -44,6 +44,7 @@ export abstract class CommutateApparate extends Device {
     }
     //#endregion
 
+    public isInApparate: boolean = false
 
     public calc() {
         
@@ -60,7 +61,13 @@ export abstract class CommutateApparate extends Device {
         this.innerSection.subSections.forEach(s=>{
             if(s.modeMax.current > cur) cur = s.modeMax.current
         })
-  
+
+        if(this.isInApparate) {
+            if(cur < 25 ){
+                cur = 24
+            }
+        }
+        
         for (let index = 0; index < this._possibleCurrents.length; index++) {
             const element = this._possibleCurrents[index];
             if(element > cur){
@@ -70,9 +77,7 @@ export abstract class CommutateApparate extends Device {
             this._nominalCurrent = -1
         }
        
-
-        
-
+       
     }
 
     toJSON(){

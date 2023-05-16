@@ -20,28 +20,28 @@ export const Breakers: Array<IBreaker> = [
         colPhase: 1,
         mark: 'ВА47-29',
         character: CurrentCharacter.C,
-        possibleCurrents: [10, 16, 20, 25, 32, 40, 50, 63]
+        possibleCurrents: [ 16,  25, 32, 40, 50, 63]
     },
     {
         factory: 'IEK',
         colPhase: 3,
         mark: 'ВА47-29',
         character: CurrentCharacter.C,
-        possibleCurrents: [10, 16, 20, 25, 32, 40, 50, 63]
+        possibleCurrents: [ 16,  25, 32, 40, 50, 63]
     },
     {
         factory: 'IEK',
         colPhase: 1,
         mark: 'ВА47-100',
         character: CurrentCharacter.C,
-        possibleCurrents: [10, 16, 20, 25, 32, 40, 50, 63, 80, 100]
+        possibleCurrents: [ 16, 25, 32, 40, 50, 63, 80, 100]
     },
     {
         factory: 'IEK',
         colPhase: 3,
         mark: 'ВА47-100',
         character: CurrentCharacter.C,
-        possibleCurrents: [10, 16, 20, 25, 32, 40, 50, 63, 80, 100]
+        possibleCurrents: [ 16, 25, 32, 40, 50, 63, 80, 100]
     },
     //#endregion
 
@@ -51,42 +51,42 @@ export const Breakers: Array<IBreaker> = [
         colPhase: 1,
         mark: 'ВА47-63',
         character: CurrentCharacter.C,
-        possibleCurrents: [10, 16, 20, 25, 32, 40, 50, 63]
+        possibleCurrents: [ 16,  25, 32, 40, 50, 63]
     },
     {
         factory: 'EKF',
         colPhase: 3,
         mark: 'ВА47-63',
         character: CurrentCharacter.C,
-        possibleCurrents: [10, 16, 20, 25, 32, 40, 50, 63]
+        possibleCurrents: [ 16,  25, 32, 40, 50, 63]
     },
     {
         factory: 'EKF',
         colPhase: 1,
         mark: 'ВА47-100',
         character: CurrentCharacter.C,
-        possibleCurrents: [10, 16, 20, 25, 32, 40, 50, 63, 80, 100]
+        possibleCurrents: [ 16,  25, 32, 40, 50, 63, 80, 100]
     },
     {
         factory: 'EKF',
         colPhase: 3,
         mark: 'ВА47-100',
         character: CurrentCharacter.C,
-        possibleCurrents: [10, 16, 20, 25, 32, 40, 50, 63, 80, 100]
+        possibleCurrents: [ 16,  25, 32, 40, 50, 63, 80, 100]
     },
     {
         factory: 'EKF',
         colPhase: 1,
         mark: 'ВА47-125',
         character: CurrentCharacter.C,
-        possibleCurrents: [10, 16, 20, 25, 32, 40, 50, 63, 80, 100, 125]
+        possibleCurrents: [ 16,  25, 32, 40, 50, 63, 80, 100, 125]
     },
     {
         factory: 'EKF',
         colPhase: 3,
         mark: 'ВА47-125',
         character: CurrentCharacter.C,
-        possibleCurrents: [10, 16, 20, 25, 32, 40, 50, 63, 80, 100, 125]
+        possibleCurrents: [ 16, 25, 32, 40, 50, 63, 80, 100, 125]
     },
     //#endregion
 ]

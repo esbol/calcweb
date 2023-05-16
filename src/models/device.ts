@@ -37,6 +37,24 @@ export abstract class Device extends ELObject {
 
     //#endregion 
 
+    //#region deltaU
+    private _deltaU: number = 0;
+    public get deltaU(): number {
+        return this._deltaU;
+    }
+    public set deltaU(v: number) {
+        this._deltaU = v;
+    }
+    //#endregion
+
+    //#region allowDeltaU
+    private _allowDeltaU: number = 3;
+    public get allowDeltaU(): number { return this._allowDeltaU; }
+    public set allowDeltaU(v: number) {
+        if (v === this._allowDeltaU) return
+        this._allowDeltaU = v;
+    }
+    //#endregion
 
     //#region getSupplyPanels
 
@@ -75,6 +93,8 @@ export abstract class Device extends ELObject {
         return Object.assign(super.toJSON(), {
             inContactId: this.inContact.id,
             mark: this.mark,
+            deltaU: this.deltaU,
+            allowDeltaU: this.allowDeltaU,
             specData: {
                 factory: this.specData.factory,
                 position: this.specData.position,

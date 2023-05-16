@@ -20,6 +20,7 @@ export class Panel extends Device {
         super()
         const inApparate = new Breaker(Breakers[0].mark)
         inApparate.nameOfPlane = 'QF'
+        inApparate.isInApparate = true
         this.s1Section = new SectionLine()
         this.outContact = new Contact(this)
         this.s1Section.setStartContact(this.inContact)

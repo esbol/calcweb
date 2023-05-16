@@ -17,4 +17,8 @@ export const Contactors: Array<IContactor> = [
         mark: 'AVB',
         possibleCurrents: [10, 16, 20, 25, 32, 40, 50, 63]
     },
+    {
+        mark: 'Комплектно',
+        possibleCurrents: [10, 16, 20, 25, 32, 40, 50, 63]
+    },
 ]

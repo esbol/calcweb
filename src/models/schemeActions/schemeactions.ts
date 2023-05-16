@@ -58,7 +58,7 @@ export function addContactor(section: SectionLine) {
 
 
     const contactor = new Contactor(Contactors[0].mark)
-
+    contactor.nameOfPlane = 'KM'
 
     section.setEndContact(contactor.inContact)
 
@@ -78,6 +78,9 @@ export function addContactor(section: SectionLine) {
         p.calc()
         rename(p)
     })
+
+
+    
 }
 
 export function addConsumer(contact: Contact) {
@@ -188,17 +191,7 @@ function rename(panel: Panel) {
 
     })
 
-    //--contactor
-    const contactors: Array<Contactor> = new Array<Contactor>()
-    panel.uniteSection.subDevices.forEach(d => {
-
-        if (d instanceof Contactor) {
-            contactors.push(d as Contactor)
-        }
-        contactors.forEach(c => {
-            c.nameOfPlane = 'KM' + (contactors.indexOf(c) + 1)
-        })
-    })
+    
 }
 
 

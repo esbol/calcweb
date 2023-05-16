@@ -287,7 +287,8 @@ export class Cable extends ELObject {
             square: this.square,
             length: this.length,
             material: this.material,
-            maxCurrent: this.maxCurrent
+            maxCurrent: this.maxCurrent,
+            deltaU: this.deltaU
         })
     }
 }

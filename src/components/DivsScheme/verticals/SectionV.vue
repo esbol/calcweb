@@ -4,13 +4,17 @@
 
         <div class="section-container" v-if="!section.isInPanel" @click="store.selectedObject = section">
             <div class="text_left" :class="{ hover_text: hover }">
-                {{ section.nameOfPlane }}-{{ Number(section.modeMax.ratedPower.toFixed(2)).toString().replace('.', ',') }}-{{ section.modeMax.cosf.toFixed(2).replace('.', ',') }}-{{
-                    Number(section.modeMax.current.toFixed(1)).toString().replace('.', ',') }}-{{ section.cable.length }}-{{ Number(section.cable.deltaU.toFixed(1)).toString().replace('.', ',') }}%
+                {{ section.nameOfPlane }}-{{ Number(section.modeMax.ratedPower.toFixed(2)).toString().replace('.', ',')
+                }}-{{ section.modeMax.cosf.toFixed(2).replace('.', ',') }}-{{
+    Number(section.modeMax.current.toFixed(1)).toString().replace('.', ',') }}-{{ section.cable.length }}-<span
+                    :class="{ hover_text: hover, color_text_warn: deltaUHi }">{{
+                        Number(section.cable.deltaU.toFixed(1)).toString().replace('.', ',') }}%</span>
             </div>
             <div class="line" :class="{ hover_bg: hover }" />
-            <div class="text_rigth" :class="{ hover_text: hover, color_text_warn: squareHi }">
-                {{ section.cable.mark }}-{{ section.cable.colCores }}x{{ section.cable.square.toString().replace('.', ',') }}-{{ section.pipe.mark }}.{{
-                    section.pipe.diametr }}-{{ section.pipe.length }}
+            <div class="text_rigth" :class="{ hover_text: hover }">
+                {{ section.cable.mark }}-<span :class="{ color_text_warn: squareHi }">{{ section.cable.colCores }}x{{
+                    section.cable.square.toString().replace('.', ',') }}</span>-{{ section.pipe.mark }}.{{
+        section.pipe.diametr }}-{{ section.pipe.length }}
             </div>
             <div class="section" :class="{ hover_border: hover }">
 
@@ -18,7 +22,7 @@
 
             <div class="label" :class="{ label_hover: labelHover }" @mouseenter="labelHover = true"
                 @mouseleave="labelHover = false" v-if="labelShow" @click="showPopup($event)">
-                <span class="material-symbols-outlined">
+                <span class="material-symbols-outlined span-plus">
                     add
                 </span>
 
@@ -34,6 +38,7 @@
         <ConsV :consumer="consumer" v-if="consumerShow" />
         <ContactorV :contactor="contactor" v-if="contactorShow" />
     </div>
+    
 </template>
 
 <script setup lang="ts">
@@ -86,6 +91,8 @@ const props = defineProps({
         required: true
     }
 })
+
+//#region ApparatShow
 
 const noApparateShow = computed(() => {
     if (props.section.startContact != null) {
@@ -150,8 +157,9 @@ const consumerShow = computed(() => {
         } else return false
     } else return false
 })
-
+//#endregion
 const squareHi = ref(false)
+const deltaUHi = ref(false)
 watchEffect(() => {
     if (store.selectedObject === props.section) {
         hover.value = true
@@ -164,20 +172,26 @@ watchEffect(() => {
         hover.value = false
         labelShow.value = false
     }
-    if((props.section.cable.maxCurrent / props.section.modeMax.current) > 1.3 && props.section.cable.square > 2.5){
+    if ((props.section.cable.maxCurrent / props.section.modeMax.current) > 1.5 && props.section.cable.square > 2.5
+    && props.section.cable.deltaU < 2) {
         squareHi.value = true
-    }else{
+    } else {
         squareHi.value = false
     }
+    if (props.section.cable.deltaU > 5) deltaUHi.value = true
+    else deltaUHi.value = false
 })
 
 </script>
 
 <style scoped>
-.color_text_warn{
-    color: red;
+
+.color_text_warn {
+    color: red !important;
+    ;
     font-weight: bold;
 }
+
 .s {
     display: flex;
     flex-direction: column;
@@ -206,7 +220,7 @@ watchEffect(() => {
 
 
 
-span {
+.span-plus {
     font-size: 18px;
     color: var(--scheme-line-hover-color);
 }
@@ -264,7 +278,7 @@ span {
 }
 
 .hover_text {
-    color: var(--scheme-line-hover-color) !important;
+    color: var(--scheme-line-hover-color);
 }
 
 .hover_bg {
@@ -273,5 +287,4 @@ span {
 
 .hover_border {
     border-color: var(--scheme-line-hover-color) !important;
-}
-</style>
+}</style>

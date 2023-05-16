@@ -2,6 +2,8 @@ import { CalculationModesNames, TypesBySP } from './normativs';
 
 import { Device } from "./device";
 import { calcCurrentByInstallPower, calcQPower, calcSPower } from './formuls/calcpowers';
+import { Panel } from './panel';
+import { SectionLine } from './sectionline';
 
 
 
@@ -14,6 +16,7 @@ export class Consumer extends Device{
         this._groupNameBySP = 'не указано'
         this.nameOfPlane = 'cons'
         this.inContact.nameOfPlane = 'ConsumerInContact'
+        this.allowDeltaU = 5
     }
 
     //#region calculationModes
@@ -58,6 +61,7 @@ export class Consumer extends Device{
      }
     //#endregion
 
+   
     //#region ratedPower
     private _ratedPower: number = 0;
     public get ratedPower(): number { return this._ratedPower; }
@@ -139,6 +143,29 @@ export class Consumer extends Device{
 
         this.ratedQPower = calcQPower(this.ratedPower, this.tgf)
         this.ratedSPower = calcSPower(this.ratedPower, this.ratedQPower)
+
+        this.calcDeltaU()
+    }
+
+    public calcDeltaU(){
+        let panel: Panel = this.getSupplyPanels()[0]
+        const sections = new Array<SectionLine>()
+        panel.outContact.getSlaveSections().forEach(s=>{
+            if(s.subConsumers.includes(this)){
+                s.subSections.forEach(sec=>{
+                    if(!sec.isInPanel) sections.push(sec)
+                })
+                
+            }
+        })
+
+        let du = 0;
+        sections.forEach(s=>{
+            du += s.cable.deltaU
+        })
+        this.deltaU = du
+        
+        
     }
 
 
@@ -149,7 +176,8 @@ export class Consumer extends Device{
             installPower: this.installPower,
             cosf: this.cosf,
             current: this.current,
-            type: 'Consumer'
+            type: 'Consumer',
+            isReserve: this.isReserve
         })
     }
 }

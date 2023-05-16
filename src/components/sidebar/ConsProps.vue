@@ -57,6 +57,25 @@
         </tr>
         <tr>
             <td>
+                <div class="name-prop">Потеря напряжеия</div>
+            </td>
+            <td>
+                <div class="prop-value" :class="{ color_text_warn: deltaUHi }">{{ consumer.deltaU.toFixed(3) }}</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="name-prop">Допустимая потеря</div>
+            </td>
+            <td>
+                <div class="prop-value-input">
+                    <NumberInput :input-value="consumer.allowDeltaU" @focusout="setAllowDeltaU($event.target.value)"
+                        :can-edite="true" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
                 <div class="name-prop">Назначение</div>
             </td>
             <td>
@@ -77,7 +96,8 @@
                 <div class="name-prop">Подключен к</div>
             </td>
             <td>
-                <div class="prop-value">{{consumer.getSupplyPanels().length > 0 ? consumer.getSupplyPanels()[0].nameOfPlane : '' }}</div>
+                <div class="prop-value">{{ consumer.getSupplyPanels().length > 0 ? consumer.getSupplyPanels()[0].nameOfPlane
+                    : '' }}</div>
             </td>
         </tr>
         <tr>
@@ -97,11 +117,12 @@
                 <div class="name-prop">Резервный</div>
             </td>
             <td>
-                <div class="prop-value-input"><Select :selected-value="isReserve" :display-path="'0'"
-                        :options="booleans" @change="setIsReserve" /></div>
+                <div class="prop-value-input"><Select :selected-value="isReserve" :display-path="'0'" :options="booleans"
+                        @change="setIsReserve" /></div>
             </td>
         </tr>
     </table>
+   
 </template>
 
 <script setup lang="ts">
@@ -120,14 +141,17 @@ const store = useStore().state as IState
 //#region isReserve
 const booleans = ['Да', 'Нет']
 const isReserve = ref('Нет')
+const deltaUHi = ref(false)
 watchEffect(() => {
-    if(props.consumer.isReserve == true) isReserve.value = 'Да'
+    if (props.consumer.isReserve == true) isReserve.value = 'Да'
     else isReserve.value = 'Нет'
+    if (props.consumer.deltaU > props.consumer.allowDeltaU) deltaUHi.value = true
+    else deltaUHi.value = false
 })
-function setIsReserve(opt: any){
-    if(opt == 'Да') props.consumer.isReserve = true
+function setIsReserve(opt: any) {
+    if (opt == 'Да') props.consumer.isReserve = true
     else props.consumer.isReserve = false
-    store.panels.forEach(p=>p.calc())
+    store.panels.forEach(p => p.calc())
 }
 //#endregion
 
@@ -143,6 +167,12 @@ function setTypeBySP(t: string) {
         p.calc()
 
     })
+}
+
+function setAllowDeltaU(n: any) {
+    props.consumer.allowDeltaU = parseFloat(n)
+    props.consumer.getSupplyPanels().forEach(p => p.calc())
+
 }
 function setColPhase(n: number) {
     props.consumer.colPhase = n
@@ -165,6 +195,12 @@ function setCosf(n: any) {
 <style scoped>
 * {
     font-family: Arial, Helvetica, sans-serif
+}
+
+.color_text_warn {
+    color: red !important;
+    ;
+    font-weight: bold;
 }
 
 table {
@@ -211,4 +247,5 @@ td {
     border-left: 1px solid var(--main-border-color);
 
 }
+
 </style>

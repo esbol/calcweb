@@ -1,15 +1,15 @@
 <template>
-    <div @click="store.selectedObject = consumer" class="cons-container" :class="{ hover_border: hover }">
-        <div class="frame-name" :class="{ hover_text: hover, hover_border: hover }">
+    <div @click="store.selectedObject = consumer" class="cons-container" :class="{ hover_border: hover, warn_border: deltaUHi }">
+        <div class="frame-name" :class="{ hover_text: hover, hover_border: hover, warn_border: deltaUHi }">
             {{ consumer.nameOfPlane }}
         </div>
-        <div class="frame-power" :class="{ hover_text: hover, hover_border: hover  }">
+        <div class="frame-power" :class="{ hover_text: hover, hover_border: hover, warn_border: deltaUHi  }">
             {{ Number(consumer.installPower.toFixed(2)).toString().replace('.', ',') }}
         </div>
-        <div class="frame-current" :class="{ hover_text: hover, hover_border: hover  }">
+        <div class="frame-current" :class="{ hover_text: hover, hover_border: hover, warn_border: deltaUHi  }">
             {{ Number(consumer.current.toFixed(2)).toString().replace('.', ',') }}
         </div>
-        <div class="frame-description" :class="{ hover_border: hover }" >
+        <div class="frame-description" :class="{ hover_border: hover, warn_border: deltaUHi }" >
             <div class="descr_text" :class="{ hover_text: hover }">{{ consumer.description }}</div>
         </div>
     </div>
@@ -29,7 +29,7 @@ const props = defineProps({
     }
 })
 const hover = ref(false)
-
+const deltaUHi = ref(false)
 watchEffect(() => {
 
     if (store.selectedObject === props.consumer) {
@@ -38,6 +38,8 @@ watchEffect(() => {
     } else {
         hover.value = false
     }
+    if(props.consumer.deltaU > props.consumer.allowDeltaU) deltaUHi.value = true
+    else deltaUHi.value = false
 })
 
 
@@ -104,7 +106,11 @@ watchEffect(() => {
 
 
 .hover_border {
-    border-color: var(--scheme-line-hover-color) !important;
+    border-color: var(--scheme-line-hover-color);
+    z-index: 1000 !important;
+}
+.warn_border {
+    border-color: red !important;
     z-index: 1000 !important;
 }
 
