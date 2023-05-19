@@ -79,15 +79,7 @@ export abstract class Device extends ELObject {
     }
     //#endregion
 
-    //#region specData
-    private _specData: SpecData = new SpecData('', '', '', '', '', '', '', '');
-    public get specData(): SpecData {
-        return this._specData;
-    }
-    public set specData(v: SpecData) {
-        this._specData = v;
-    }
-    //#endregion
+  
 
     toJSON() {
         return Object.assign(super.toJSON(), {

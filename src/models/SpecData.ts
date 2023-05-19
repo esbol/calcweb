@@ -18,4 +18,5 @@ export class SpecData {
     public count: string = ''
     public mass: string = ''
     public note: string = ''
+    id: number = Math.random()
 }

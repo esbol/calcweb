@@ -1,4 +1,5 @@
 <template>
+    <div class="browser-container">
     <div  class="row-panel no-select" :class="{ selected: store.selectedPanel.id == panel.id }"
         v-for="panel in store.panels" :key="panel.id">
         <div class="name-panel" @click="clickPanel(panel)">{{ panel.nameOfPlane }}-{{ Number(panel.uniteSection.modeMax.ratedPower.toFixed(2)) }}кВт</div>
@@ -14,7 +15,7 @@
     <div class="btns">
         <button class="btn_add" @click="addNewPanel">+ Добавить панель</button>
     </div>
-   
+</div>
 </template>
 
 <script setup lang="ts">
@@ -59,6 +60,11 @@ function removePanel(panel: Panel) {
 </script>
 
 <style scoped>
+.browser-container{
+    max-height: 200px;
+    width: 100%;
+    overflow-x: auto;
+}
 .btns{
     width: 100%;
     border: 0px solid red;

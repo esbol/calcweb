@@ -42,6 +42,8 @@ export class Panel extends Device {
         this.s1Section.description = 's1Section'
         this.s1Section.isInPanel = true
   
+        this.specData.description = "Шкаф распределительный"
+        this.specData.units = "компл."
     }
     outContact: Contact
     

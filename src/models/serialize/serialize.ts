@@ -18,6 +18,7 @@ import { Pipes } from "../bd/pipes";
 import { Format } from "../settings/format";
 import { GroupBySP } from "../groupbysp";
 import { CalculationMode } from "../calculationmode";
+import { SpecData } from "../SpecData";
 
 
 
@@ -25,7 +26,7 @@ import { CalculationMode } from "../calculationmode";
 export function getJSON(panels: Array<Panel>) {
 
     //#region jsons Array Init
-
+   
     //#region BD data
     const jsonBDBreakers: Array<string> = []
     const jsonBDBreakersPower: Array<string> = []
@@ -45,6 +46,7 @@ export function getJSON(panels: Array<Panel>) {
     const jsonFormats: Array<string> = []
     const jsonGroupsBySP: Array<string> = []
     const jsonCalculationModes: Array<string> = []
+    const jsonSpecDatas: Array<string> = []
     //#endregion
 
     //#region Elements Array init 
@@ -56,6 +58,8 @@ export function getJSON(panels: Array<Panel>) {
     const formats: Array<Format> = []
     const groupsBySP: Array<GroupBySP> = []
     const calculationModes: Array<CalculationMode> = []
+    const specDatas: Array<SpecData> = []
+
     //#endregion
 
 
@@ -78,7 +82,8 @@ export function getJSON(panels: Array<Panel>) {
         jsonPipes: jsonPipes,
         jsonFormats: jsonFormats,
         jsonGroupsBySP: jsonGroupsBySP,
-        jsonCalculationModes: jsonCalculationModes
+        jsonCalculationModes: jsonCalculationModes,
+        jsonSpecDatas: jsonSpecDatas
     })
 
 
@@ -155,6 +160,12 @@ export function getJSON(panels: Array<Panel>) {
         })
         //#endregion
 
+        //#region Convert SpecDatas to JSON
+        specDatas.forEach(m => {
+            const mJSON = JSON.stringify(m)
+            jsonSpecDatas.push(mJSON)
+        })
+        //#endregion
 
     }
 
@@ -174,9 +185,18 @@ export function getJSON(panels: Array<Panel>) {
 
         //#region set Sections and Cables & Pipes
         panels.forEach(p => {
+
+            p.s1Section.subDevices.forEach(dev=> specDatas.push(dev.specData))
+            if(!specDatas.includes(p.specData)) specDatas.push(p.specData)
             sections.push(p.s1Section)
-            p.cables.forEach(c=> cables.push(c))
-            p.pipes.forEach(c=> pipes.push(c))
+            p.cables.forEach(c => {
+                cables.push(c)
+                specDatas.push(c.specData)
+            })
+            p.pipes.forEach(c => {
+                pipes.push(c)
+                specDatas.push(c.specData)
+            })
             const sects = p.s1Section.subSections
             sects.forEach(s => {
                 if (!sections.includes(s)) {

@@ -113,15 +113,7 @@ export class Cable extends ELObject {
         this._deltaU = v;
     }
     //#endregion
-    //#region specData
-    private _specData: SpecData = new SpecData('', '', '', '', '', '', '', '');
-    public get specData(): SpecData {
-        return this._specData;
-    }
-    public set specData(v: SpecData) {
-        this._specData = v;
-    }
-    //#endregion
+ 
 
     public calc() {
 
@@ -281,7 +273,7 @@ export class Cable extends ELObject {
 
     toJSON() {
         return Object.assign(super.toJSON(), {
-
+           
             mark: this.mark,
             colCores: this.colCores,
             square: this.square,

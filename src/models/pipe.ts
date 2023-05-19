@@ -78,15 +78,7 @@ export class Pipe extends ELObject {
     //#endregion
 
 
-    //#region specData
-    private _specData: SpecData = new SpecData('', '', '', '', '', '', '', '');
-    public get specData(): SpecData {
-        return this._specData;
-    }
-    public set specData(v: SpecData) {
-        this._specData = v;
-    }
-    //#endregion
+   
 
     //#region length
     private _length: number = 0;

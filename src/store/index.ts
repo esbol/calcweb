@@ -51,9 +51,9 @@ export default createStore<IState>({
     setPanels(state, panels: Array<Panel>) {
       state.panels = panels
       state.selectedPanel = panels[0]
-      console.log(panels);
+      //console.log(panels);
 
-      panels.forEach(p => p.calc())
+     // panels.forEach(p => p.calc())
 
     },
     addPanel(state, panel: Panel) {

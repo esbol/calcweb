@@ -49,6 +49,9 @@ interface IJSON {
 export function getPanels(jsonString: string):Array<Panel> {
 
 
+   
+    
+
     //#region Elements Array init
     const devices: Array<Device> = []
     const sections: Array<SectionLine> = []
