@@ -62,17 +62,17 @@ export class Contact extends ELObject{
             this.sectionLines.indexOf(section), 1
         )
     }
-    toJSON(){
-        let supplySectionsIds = new Array<string>()
-        this.getSupplySections().forEach(m=>supplySectionsIds.push(m.id.toString()))
-        let slaveSectionsIds = new Array<string>()
-        this.getSlaveSections().forEach(m=>slaveSectionsIds.push(m.id.toString()))
-        return Object.assign(super.toJSON(), {
-            ownDeviceId: this.ownDevice?.id,
-            supplySectionsIds: supplySectionsIds,
-            slaveSectionsIds: slaveSectionsIds
+    // toJSON(){
+    //     let supplySectionsIds = new Array<string>()
+    //     this.getSupplySections().forEach(m=>supplySectionsIds.push(m.id.toString()))
+    //     let slaveSectionsIds = new Array<string>()
+    //     this.getSlaveSections().forEach(m=>slaveSectionsIds.push(m.id.toString()))
+    //     return Object.assign(super.toJSON(), {
+    //         ownDeviceId: this.ownDevice?.id,
+    //         supplySectionsIds: supplySectionsIds,
+    //         slaveSectionsIds: slaveSectionsIds
 
-        })
-    }
+    //     })
+    // }
     
 }

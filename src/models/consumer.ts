@@ -169,15 +169,15 @@ export class Consumer extends Device{
     }
 
 
-    toJSON(){
-        return Object.assign(super.toJSON(), {
-            groupNameBySP: this.groupNameBySP,
-            count: this.count,
-            installPower: this.installPower,
-            cosf: this.cosf,
-            current: this.current,
-            type: 'Consumer',
-            isReserve: this.isReserve
-        })
-    }
+    // toJSON(){
+    //     return Object.assign(super.toJSON(), {
+    //         groupNameBySP: this.groupNameBySP,
+    //         count: this.count,
+    //         installPower: this.installPower,
+    //         cosf: this.cosf,
+    //         current: this.current,
+    //         type: 'Consumer',
+    //         isReserve: this.isReserve
+    //     })
+    // }
 }

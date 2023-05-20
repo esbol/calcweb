@@ -50,11 +50,11 @@ export class DiffBreaker extends CommutateApparate {
     }
     //#endregion
 
-    toJSON() {
-        return Object.assign(super.toJSON(), {
-            type: 'DiffBreaker',
-            currentCharacter: this.currentCharacter,
-            deltaI: this.deltaI
-        })
-    }
+    // toJSON() {
+    //     return Object.assign(super.toJSON(), {
+    //         type: 'DiffBreaker',
+    //         currentCharacter: this.currentCharacter,
+    //         deltaI: this.deltaI
+    //     })
+    // }
 }

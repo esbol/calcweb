@@ -14,9 +14,10 @@ import { Cables } from './bd/cables';
 import { Contactor } from './contactor';
 import { Contactors } from './bd/contactors';
 import { Pipe } from './pipe';
+import { HasId } from './hasid';
 
 
-export class SectionLine {
+export class SectionLine extends HasId {
 
     //#region supplyPanels
 
@@ -43,9 +44,9 @@ export class SectionLine {
 
 
     constructor() {
-        
+        super()
     }
-    id: number = Math.random()
+ 
 
 
     //#region isInPanel
@@ -274,27 +275,27 @@ export class SectionLine {
         this.endContact = contact
     }
 
-    toJSON(){
-        let ids = new Array<string>()
-        this.calculationModes.forEach(m=>ids.push(m.id.toString()))
-        let subConsumersIds = new Array<string>()
-        this.subConsumers.forEach(m=>subConsumersIds.push(m.id.toString()))
-        return {
-            id: this.id,
-            calculationModesIds: ids,
-            isInPanel: this.isInPanel,
-            colPhase: this.colPhase,
-            length: this.length,
-            nameOfPlane: this.nameOfPlane,
-            description: this.description,
-            startContactId: this.startContact?.id,
-            endContactId: this.endContact?.id,
-            cableId: this.cable.id,
-            pipeId: this.pipe.id,
-            enviroment: this.enviroment,
-            modeMaxId:this.modeMax.id,
-            subConsumersIds: subConsumersIds
-        }
-    }
+    // toJSON(){
+    //     let ids = new Array<string>()
+    //     this.calculationModes.forEach(m=>ids.push(m.id.toString()))
+    //     let subConsumersIds = new Array<string>()
+    //     this.subConsumers.forEach(m=>subConsumersIds.push(m.id.toString()))
+    //     return {
+    //         id: this.id,
+    //         calculationModesIds: ids,
+    //         isInPanel: this.isInPanel,
+    //         colPhase: this.colPhase,
+    //         length: this.length,
+    //         nameOfPlane: this.nameOfPlane,
+    //         description: this.description,
+    //         startContactId: this.startContact?.id,
+    //         endContactId: this.endContact?.id,
+    //         cableId: this.cable.id,
+    //         pipeId: this.pipe.id,
+    //         enviroment: this.enviroment,
+    //         modeMaxId:this.modeMax.id,
+    //         subConsumersIds: subConsumersIds
+    //     }
+    // }
 
 }

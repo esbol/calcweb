@@ -247,20 +247,20 @@ export class Panel extends Device {
     }
     //#endregion 
 
-    toJSON() {
-        let pipesIds = new Array<string>()
-        this.pipes.forEach(g=>pipesIds.push(g.id.toString()))
-        let cablesIds = new Array<string>()
-        this.cables.forEach(g=>cablesIds.push(g.id.toString()))
-        return Object.assign(super.toJSON(), {
-            outContactId: this.outContact.id,
-            s1SectionId: this.s1Section.id,
-            uniteSectionId: this.uniteSection.id,
-            type: 'Panel',
-            formatId: this.format.id,
-            inApparateId: this.inApparate?.id,
-            cablesIds: cablesIds,
-            pipesIds: pipesIds
-        })
-    }
+    // toJSON() {
+    //     let pipesIds = new Array<string>()
+    //     this.pipes.forEach(g=>pipesIds.push(g.id.toString()))
+    //     let cablesIds = new Array<string>()
+    //     this.cables.forEach(g=>cablesIds.push(g.id.toString()))
+    //     return Object.assign(super.toJSON(), {
+    //         outContactId: this.outContact.id,
+    //         s1SectionId: this.s1Section.id,
+    //         uniteSectionId: this.uniteSection.id,
+    //         type: 'Panel',
+    //         formatId: this.format.id,
+    //         inApparateId: this.inApparate?.id,
+    //         cablesIds: cablesIds,
+    //         pipesIds: pipesIds
+    //     })
+    // }
 }

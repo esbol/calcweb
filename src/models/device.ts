@@ -78,27 +78,35 @@ export abstract class Device extends ELObject {
         return spanels
     }
     //#endregion
-
-  
-
-    toJSON() {
-        return Object.assign(super.toJSON(), {
-            inContactId: this.inContact.id,
-            mark: this.mark,
-            deltaU: this.deltaU,
-            allowDeltaU: this.allowDeltaU,
-            specData: {
-                factory: this.specData.factory,
-                position: this.specData.position,
-                description: this.specData.description,
-                mark: this.specData.mark,
-                code: this.specData.code,
-                units: this.specData.units,
-                count: this.specData.count,
-                mass: this.specData.mass,
-                note: this.specData.note,
-            }
-        })
+    //#region specData
+    private _specData: SpecData = new SpecData('', '', '', '', '', '', '', '');
+    public get specData(): SpecData {
+        return this._specData;
     }
+    public set specData(v: SpecData) {
+        this._specData = v;
+    }
+    //#endregion
+
+
+    // toJSON() {
+    //     return Object.assign(super.toJSON(), {
+    //         inContactId: this.inContact.id,
+    //         mark: this.mark,
+    //         deltaU: this.deltaU,
+    //         allowDeltaU: this.allowDeltaU,
+    //         specData: {
+    //             factory: this.specData.factory,
+    //             position: this.specData.position,
+    //             description: this.specData.description,
+    //             mark: this.specData.mark,
+    //             code: this.specData.code,
+    //             units: this.specData.units,
+    //             count: this.specData.count,
+    //             mass: this.specData.mass,
+    //             note: this.specData.note,
+    //         }
+    //     })
+    // }
 
 }

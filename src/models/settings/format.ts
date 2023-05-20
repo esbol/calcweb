@@ -1,3 +1,4 @@
+import { HasId } from "../hasid";
 import { SideStamp } from "./sidestamp";
 import { Stamp } from "./stamp";
 
@@ -14,14 +15,14 @@ export const Orientations: Array<string> = [
     'Книжный'
 ]
 
-export class Format {
+export class Format extends HasId  {
     constructor() {
+        super()
         this._stamp = new Stamp()
         this._sideStamp = new SideStamp()
     }
 
-    id: number = Math.random()
-
+    
   
 
 
@@ -71,21 +72,21 @@ export class Format {
     public set sideStamp(v: SideStamp) {
         this._sideStamp = v;
     }
-    toJSON() {
-        return {
-            width: this.width,
-            stamp: {
-                authors: this.stamp.authors,
-                buildingName: this.stamp.buildingName,
-                companyName: this.stamp.companyName,
-                projectName: this.stamp.projectName,
-                sheetName: this.stamp.sheetName,
-                sheetNumber: this.stamp.sheetNumber,
-                shifr: this.stamp.shifr,
-                stadiya: this.stamp.stadiya,
-                totalSheets: this.stamp.totalSheets,
-            },
-            id: this.id,
-        }
-    }
+    // toJSON() {
+    //     return {
+    //         width: this.width,
+    //         stamp: {
+    //             authors: this.stamp.authors,
+    //             buildingName: this.stamp.buildingName,
+    //             companyName: this.stamp.companyName,
+    //             projectName: this.stamp.projectName,
+    //             sheetName: this.stamp.sheetName,
+    //             sheetNumber: this.stamp.sheetNumber,
+    //             shifr: this.stamp.shifr,
+    //             stadiya: this.stamp.stadiya,
+    //             totalSheets: this.stamp.totalSheets,
+    //         },
+    //         id: this.id,
+    //     }
+    // }
 }

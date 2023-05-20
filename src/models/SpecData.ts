@@ -1,5 +1,9 @@
-export class SpecData {
-    constructor(description:string, mark:string, code:string, factory:string, units:string, count:string, mass:string, note:string){
+import { HasId } from "./hasid"
+
+export class SpecData extends HasId {
+    
+    constructor(description:string = '', mark:string = '', code:string = '', factory:string = '', units:string = '', count:string = '', mass:string = '', note:string = ''){
+        super()
         this.description = description
         this.mark = mark
         this.code = code
@@ -18,5 +22,5 @@ export class SpecData {
     public count: string = ''
     public mass: string = ''
     public note: string = ''
-    id: number = Math.random()
+   
 }

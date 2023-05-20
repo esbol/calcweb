@@ -3,7 +3,8 @@
 <template>
     <div class="side-container" :class="{ show: show }">
         <div class="wrapper" v-if="show">
-
+            <Logo />
+            <Settings />
             <!-- <PropsContainer title="Проекты">
                 <ProjectsBrowser />
             </PropsContainer> -->
@@ -62,6 +63,8 @@
 
 <script setup lang="ts">
 
+import Logo from "./Logo.vue";
+import Settings from "./Settings.vue";
 import Tools from "./Tools.vue";
 import ProjectsBrowser from "./ProjectsBrowser.vue";
 import BreakerPowerProps from "./BreakerPowerProps.vue";
@@ -105,14 +108,17 @@ const props = defineProps({
 
 
 <style scoped>
-.tools{
-    width: 280px;
-    margin-left: 5px;
-    position: absolute;
-    bottom: 20px;
+.tools {
+    width: 100%;
+    
+    grid-row: 2;
+    grid-column: 1;
+    
 }
+
 .wrapper {
-    position: relative;
+    grid-row: 1;
+    grid-column: 1;
     height: 100%;
 }
 
@@ -127,6 +133,8 @@ const props = defineProps({
     vertical-align: center;
     flex-direction: column;
     align-items: center;
+    grid-row: 1 / span 2;
+    grid-column: 2;
 }
 
 .spl_btn {
@@ -144,6 +152,7 @@ const props = defineProps({
 .side-container {
     display: grid;
     grid-template-columns: auto 8px;
+    grid-template-rows: 1fr auto;
     width: 50px;
     height: 100%;
     color: var(--sidebar-text-color);

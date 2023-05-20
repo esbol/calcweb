@@ -19,21 +19,29 @@ export class Pipe extends ELObject {
         } else return false
     }
 
-    constructor(section: SectionLine) {
+    constructor(section?: SectionLine) {
         super()
-        this._sectionLine = section
+        if (section != undefined) this._sectionLine = section
     }
 
     //#region sectionLine
-    private _sectionLine: SectionLine
-    public get sectionLine(): SectionLine {
+    private _sectionLine: SectionLine | null = null
+    public get sectionLine(): SectionLine | null {
         return this._sectionLine;
     }
-    public set sectionLine(v: SectionLine) {
+    public set sectionLine(v: SectionLine | null) {
         this._sectionLine = v;
     }
     //#endregion
-
+    //#region specData
+    private _specData: SpecData = new SpecData('', '', '', '', '', '', '', '');
+    public get specData(): SpecData {
+        return this._specData;
+    }
+    public set specData(v: SpecData) {
+        this._specData = v;
+    }
+    //#endregion
     //#region diametr
     private _diametr: number = 1.5;
     public get diametr(): number {
@@ -44,7 +52,7 @@ export class Pipe extends ELObject {
     }
     //#endregion
 
- 
+
 
     //#region mark
     private _mark: string = Pipes[0].mark;
@@ -52,8 +60,8 @@ export class Pipe extends ELObject {
         return this._mark;
     }
     public set mark(v: string) {
-        if(this.setDataFromDB(v))
-        this._mark = v;
+        if (this.setDataFromDB(v))
+            this._mark = v;
     }
     //#endregion
 
@@ -78,7 +86,7 @@ export class Pipe extends ELObject {
     //#endregion
 
 
-   
+
 
     //#region length
     private _length: number = 0;
@@ -91,26 +99,26 @@ export class Pipe extends ELObject {
     //#endregion
 
     public calc() {
-
+        if (this.sectionLine == null) return
         if (this.sectionLine.isInPanel) return
-        
+
         const cable = this.sectionLine.cable
 
-        const ipipe: IPipeDiametr| undefined = PipeDiametrs.find(p=>p.cableColCores == cable.colCores && p.cableSquare == cable.square)
+        const ipipe: IPipeDiametr | undefined = PipeDiametrs.find(p => p.cableColCores == cable.colCores && p.cableSquare == cable.square)
 
-        if(ipipe != undefined) this.diametr = ipipe.diametr
+        if (ipipe != undefined) this.diametr = ipipe.diametr
 
 
     }
 
-    toJSON(){
-        return Object.assign(super.toJSON(), {
-            
-            mark: this.mark,
-            diametr: this.diametr,
-            length: this.length,
-         
-        })
-    }
+    // toJSON() {
+    //     return Object.assign(super.toJSON(), {
+
+    //         mark: this.mark,
+    //         diametr: this.diametr,
+    //         length: this.length,
+
+    //     })
+    // }
 
 }

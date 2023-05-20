@@ -1,5 +1,6 @@
 import { SpecData } from "./SpecData";
 import { CommutateApparate } from "./commutateApparate";
+import { HasId } from "./hasid";
 
 
 
@@ -10,8 +11,8 @@ export enum Phase {
     ABC
 }
 
-export abstract class ELObject {
-    id: number = Math.random()
+export abstract class ELObject extends HasId {
+   
     nameOfPlane: string = 'a'
 
 
@@ -38,27 +39,19 @@ export abstract class ELObject {
 
     description: string = ''
 
-    constructor() { }
-    //#region specData
-    private _specData: SpecData = new SpecData('', '', '', '', '', '', '', '');
-    public get specData(): SpecData {
-        return this._specData;
-    }
-    public set specData(v: SpecData) {
-        this._specData = v;
-    }
-    //#endregion
+    constructor() { super() }
+    
     abstract setDataFromDB(mark: string): boolean
 
-    toJSON() {
-        return {
-            id: this.id,
-            specDataId: this.specData.id,
-            colPhase: this.colPhase,
-            nameOfPlane: this.nameOfPlane,
-            description: this.description
-        }
-    }
+    // toJSON() {
+    //     return {
+    //         id: this.id,
+    //         specDataId: this.specData.id,
+    //         colPhase: this.colPhase,
+    //         nameOfPlane: this.nameOfPlane,
+    //         description: this.description
+    //     }
+    // }
 }
 
 

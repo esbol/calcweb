@@ -3,21 +3,23 @@ import { SectionLine } from './sectionline';
 import { Consumer } from './consumer';
 import { GroupBySP } from './groupbysp';
 import { calcCurrentBySPower } from './formuls/calcpowers'
+import { HasId } from './hasid';
 
-export class CalculationMode {
-    constructor(name: string, section: SectionLine) {
+export class CalculationMode extends HasId {
+    constructor(name: string = '', section?: SectionLine) {
+        super()
         this.name = name
-        this._section = section
+        if(section != undefined) this._section = section
 
     }
-    id: number = Math.random()
+
 
     //#region section
-    private _section: SectionLine;
-    public get section(): SectionLine {
+    private _section: SectionLine | null = null;
+    public get section(): SectionLine | null {
         return this._section;
     }
-    public set section(v: SectionLine) {
+    public set section(v: SectionLine | null) {
         this._section = v;
     }
     //#endregion
@@ -155,6 +157,7 @@ export class CalculationMode {
     }
 
     private calcPowers() {
+        if(this.section == null) return
         this.installPower = 0
         this.ratedPower = 0
         this.ratedQPower = 0
@@ -175,23 +178,23 @@ export class CalculationMode {
         }
     }
 
-    toJSON() {
-        let ids = new Array<string>()
-        this.groupsBySPList.forEach(g=>ids.push(g.id.toString()))
-        return {
-            id: this.id,
-            sectionId: this.section.id,
-            name: this.name,
-            groupsBySPListIds: ids,
-            installPower: this.installPower,
-            ratedPower: this.ratedPower,
-            ratedQPower: this.ratedQPower,
-            ratedSPower: this.ratedSPower,
-            cosf: this.cosf,
-            current: this.current,
-            currentA: this.currentA,
-            currentB: this.currentB,
-            currentC: this.currentC,
-        }
-    }
+    // toJSON() {
+    //     let ids = new Array<string>()
+    //     this.groupsBySPList.forEach(g=>ids.push(g.id.toString()))
+    //     return {
+    //         id: this.id,
+    //         sectionId: this.section?.id,
+    //         name: this.name,
+    //         groupsBySPListIds: ids,
+    //         installPower: this.installPower,
+    //         ratedPower: this.ratedPower,
+    //         ratedQPower: this.ratedQPower,
+    //         ratedSPower: this.ratedSPower,
+    //         cosf: this.cosf,
+    //         current: this.current,
+    //         currentA: this.currentA,
+    //         currentB: this.currentB,
+    //         currentC: this.currentC,
+    //     }
+    // }
 }

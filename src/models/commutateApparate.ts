@@ -80,11 +80,11 @@ export abstract class CommutateApparate extends Device {
        
     }
 
-    toJSON(){
-        return Object.assign(super.toJSON(), {
-            outContactId: this.outContact.id,
-            nominalCurrent: this.nominalCurrent,
-            innerSectionId: this.innerSection.id
-        })
-    }
+    // toJSON(){
+    //     return Object.assign(super.toJSON(), {
+    //         outContactId: this.outContact.id,
+    //         nominalCurrent: this.nominalCurrent,
+    //         innerSectionId: this.innerSection.id
+    //     })
+    // }
 }

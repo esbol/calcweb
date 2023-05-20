@@ -1,8 +1,12 @@
 import { Consumer } from "./consumer";
+import { HasId } from "./hasid";
 
-export class GroupBySP {
-    constructor(groupName: string){ this.groupName = groupName}
-    
+export class GroupBySP extends HasId {
+    constructor(groupName: string = '') {
+        super()
+        this.groupName = groupName
+    }
+
     id: number = Math.random()
 
     //#region groupName
@@ -13,7 +17,7 @@ export class GroupBySP {
 
     //#region consumers
     public readonly consumers: Array<Consumer> = new Array<Consumer>();
-    
+
     //#endregion
 
     //#region consumersCount
@@ -53,33 +57,33 @@ export class GroupBySP {
     //#endregion
 
 
-    public setConsumers(val: Array<Consumer>){
-        val.forEach(c=>{
-            if(this.consumers.includes(c)===false){
+    public setConsumers(val: Array<Consumer>) {
+        val.forEach(c => {
+            if (this.consumers.includes(c) === false) {
                 this.consumers.push(c)
             }
         })
         const forDel = new Array<Consumer>()
-        this.consumers.forEach(cons=>{
-            if(val.includes(cons)===false){
+        this.consumers.forEach(cons => {
+            if (val.includes(cons) === false) {
                 forDel.push(cons)
             }
         })
 
-        forDel.forEach(f=> this.consumers.splice(
+        forDel.forEach(f => this.consumers.splice(
             this.consumers.indexOf(f), 1
         ))
     }
 
-    public calc():void {
-        
+    public calc(): void {
+
         this.consumersCount = 0
         let i = 0
         let r = 0
         let q = 0
         let s = 0
-        this.consumers.forEach(c => { 
-            if(c.isReserve == false){
+        this.consumers.forEach(c => {
+            if (c.isReserve == false) {
                 c.calc()
                 i += c.installPower
                 r += c.ratedPower
@@ -87,23 +91,23 @@ export class GroupBySP {
                 s += c.ratedSPower
                 this.consumersCount += c.count
             }
-            
+
         });
         this.installPower = i
         this.ratedPower = r * this.kSprosa
         this.ratedQPower = q * this.kSprosa
         this.ratedSPower = s * this.kSprosa
     }
-    toJSON(){
-        return {
-            id: this.id,
-            groupName: this.groupName,
-            consumersCount: this.consumersCount,
-            kSprosa: this.kSprosa,
-            installPower: this.installPower,
-            ratedPower: this.ratedPower,
-            ratedQPower: this.ratedQPower,
-            ratedSPower: this.ratedSPower,
-        }
-    }
+    // toJSON() {
+    //     return {
+    //         id: this.id,
+    //         groupName: this.groupName,
+    //         consumersCount: this.consumersCount,
+    //         kSprosa: this.kSprosa,
+    //         installPower: this.installPower,
+    //         ratedPower: this.ratedPower,
+    //         ratedQPower: this.ratedQPower,
+    //         ratedSPower: this.ratedSPower,
+    //     }
+    // }
 }

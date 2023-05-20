@@ -26,9 +26,9 @@ export class Fuse extends CommutateApparate {
         this.outContact.nameOfPlane = 'FuseOutContact'
     }
     
-    toJSON(){
-        return Object.assign(super.toJSON(), {
-            type: 'Fuse'
-        })
-    }
+    // toJSON(){
+    //     return Object.assign(super.toJSON(), {
+    //         type: 'Fuse'
+    //     })
+    // }
 }

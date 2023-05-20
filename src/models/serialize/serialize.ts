@@ -19,14 +19,17 @@ import { Format } from "../settings/format";
 import { GroupBySP } from "../groupbysp";
 import { CalculationMode } from "../calculationmode";
 import { SpecData } from "../SpecData";
+import { HasId } from "../hasid";
+import { Breaker } from "../breaker";
+import { BreakerPower } from "../breakerPower";
 
 
 
-
+//#region old
 export function getJSON(panels: Array<Panel>) {
 
     //#region jsons Array Init
-   
+
     //#region BD data
     const jsonBDBreakers: Array<string> = []
     const jsonBDBreakersPower: Array<string> = []
@@ -186,8 +189,8 @@ export function getJSON(panels: Array<Panel>) {
         //#region set Sections and Cables & Pipes
         panels.forEach(p => {
 
-            p.s1Section.subDevices.forEach(dev=> specDatas.push(dev.specData))
-            if(!specDatas.includes(p.specData)) specDatas.push(p.specData)
+            p.s1Section.subDevices.forEach(dev => specDatas.push(dev.specData))
+            if (!specDatas.includes(p.specData)) specDatas.push(p.specData)
             sections.push(p.s1Section)
             p.cables.forEach(c => {
                 cables.push(c)
@@ -234,3 +237,105 @@ export function getJSON(panels: Array<Panel>) {
 
     }
 }
+//#endregion
+
+
+export function getJSONRecurcy(panels: Array<Panel>): string {
+    let finalJSON: string = ''
+
+    const allObjects: Array<HasId> = []
+    const allReplacedObjects: Array<HasId> = []
+    const allObjectsString: Array<string> = []
+
+
+
+
+    panels.forEach(p => recurcySetAllObjects(p))
+
+    // console.log(allObjects);
+
+    allObjects.forEach(o => allReplacedObjects.push(replaceObject(o) as HasId))
+    console.log(allReplacedObjects);
+
+    allReplacedObjects.forEach(o => {
+        allObjectsString.push(JSON.stringify(o))
+    })
+
+
+    finalJSON = JSON.stringify(allObjectsString)
+
+
+
+
+    function recurcySetAllObjects(objClass: any) {
+        if (typeof objClass != 'object') return
+        const jsonTobj = allObjects.find(o => o.id == objClass.id)
+        if (jsonTobj == undefined) {
+
+            const hasidobj = objClass
+            hasidobj['type'] = objClass.constructor.name
+            allObjects.push(hasidobj)
+        }
+        for (let key in objClass) {
+            const k = key as keyof typeof objClass
+
+            if (objClass[k] instanceof HasId) {
+                const jsonObj = allObjects.find(o => o.id == objClass[k].id)
+                if (jsonObj == undefined) {
+                    const hasidobj = objClass[k]
+                    hasidobj['type'] = objClass[k].constructor.name
+                    allObjects.push(hasidobj)
+                    recurcySetAllObjects(objClass[k])
+                }
+            } else if (Array.isArray(objClass[k])) {
+
+                const arr = objClass[k] as []
+
+                arr.forEach(element => {
+                    if (typeof element == 'object')
+                        recurcySetAllObjects(element)
+                });
+            }
+
+        }
+    }
+
+
+
+    function replaceObject(object: any): object {
+        let replObj = Object.assign({}, object)
+
+        for (let key in object) {
+            const k = key as keyof typeof object
+            if (object[k] instanceof HasId) {
+
+                //заменим название поля добавим _T_
+                const newKey = k.toString() + '_T_'
+                replObj[newKey] = object[k].id
+                replObj[k] = null
+
+            } else if (Array.isArray(object[k])) {
+                const arr = object[k] as Array<any>
+                if (arr.length > 0 && arr[0] instanceof HasId) {
+                    const ids = new Array<string>()
+
+                    arr.forEach(obj => {
+                        if (obj instanceof HasId) ids.push(obj.id.toString())
+                    })
+
+                    const newKey = k.toString() + '_T_'
+                    replObj[newKey] = ids
+                    replObj[k] = null
+                }
+
+            }
+
+        }
+
+        return replObj;
+    };
+
+    return finalJSON
+
+}
+

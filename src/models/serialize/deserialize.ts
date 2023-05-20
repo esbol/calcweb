@@ -25,9 +25,12 @@ import { Format } from "../settings/format";
 import { Stamp } from "../settings/stamp";
 import { CalculationMode } from "../calculationmode";
 import { GroupBySP } from "../groupbysp";
+import { ELObject } from "../elobject";
+import { HasId } from "../hasid";
+import { SideStamp } from "../settings/sidestamp";
 
 
-
+//#region old
 interface IJSON {
     jsonBDBreakers: Array<string>,
     jsonBDBreakersPower: Array<string>,
@@ -412,15 +415,124 @@ export function getPanels(jsonString: string):Array<Panel> {
     return panels
 
 }
-
-
-
-
-
-
-
-
 function setSpecDataToDevice(text: string, device: Device) {
     const sp = JSON.parse(text).specData
     device.specData = new SpecData(sp.description, sp.mark, sp.code, sp.factory, sp.units, sp.count, sp.mass, sp.note)
+}
+//#endregion
+
+export function getPanelsRecurcy(finalJSON: string):Array<Panel>{
+    const panels = new Array<Panel>()
+    const returnedClasses = new Array<any>()
+    
+    const classes = {
+        Breaker,
+        BreakerPower,
+        Cable,
+        CalculationMode,
+        CommutateApparate,
+        Consumer,
+        Contact,
+        Contactor,
+        Device,
+        DiffBreaker,
+        ELObject,
+        Fuse,
+        GroupBySP,
+        HasId,
+        Panel,
+        Pipe,
+        SectionLine,
+        SpecData,
+        Format,
+        SideStamp,
+        Stamp
+    }
+
+    getObjects()
+
+
+
+    function getObjects() {
+        let strings: Array<string> = JSON.parse(finalJSON)
+    
+        strings.forEach(str => {
+    
+            const obj = JSON.parse(str)
+            const className: string = obj['type']
+    
+            createInstance(className, obj)
+        })
+    
+        function createInstance(className: string, objectassign: any) {
+            const classConstructor = classes[className as keyof typeof classes];
+    
+    
+            if (classConstructor) {
+                const obj = Reflect.construct(classConstructor, []);
+                const obj1 = Object.assign(obj, objectassign)
+                returnedClasses.push(obj1)
+            }
+        };
+    
+        setValues()
+    
+    
+    }
+    function setValues() {
+        let strings: Array<string> = JSON.parse(finalJSON)
+        console.log(returnedClasses);
+        strings.forEach(str => {
+    
+    
+            const obj = JSON.parse(str)
+            const objClass = returnedClasses.find(c => c.id == obj.id)
+    
+           
+    
+            for (let key in obj) {
+                if (key.toString().includes('_T_')) {
+                    const prop: string = key.toString().replace('_T_', '')
+    
+                    if (Array.isArray(obj[key])) {
+                        const arr = obj[key] as Array<any>
+    
+    
+                        if (arr.length > 0) {
+    
+    
+                            const objts = new Array<any>()
+                            arr.forEach(ar => {
+                                const findObj = returnedClasses.find(c => c.id == Number.parseFloat(ar.toString()))
+                                if (findObj != undefined) objts.push(findObj)
+                            })
+    
+                            objClass[prop] = objts
+                            
+    
+                        }
+    
+                    } else {
+                        const findObj = returnedClasses.find(c => c.id == Number.parseFloat(obj[key].toString()))
+    
+                       
+                        
+                        if (findObj != undefined) objClass[prop] = findObj
+                    }
+    
+    
+                }
+            }
+    
+        })
+    
+    
+    
+    }
+
+    returnedClasses.forEach(c=>{
+        if(c instanceof Panel) panels.push(c)
+    })
+
+    return panels
 }

@@ -13,21 +13,22 @@ export class Cable extends ELObject {
         if (cab != undefined) {
             this.possibleSquares = cab.possibleSquares
             this.material = cab.material
+            this.specData = cab.specData
             return true
         } else return false
     }
 
-    constructor(section: SectionLine) {
+    constructor(section?: SectionLine) {
         super()
-        this._sectionLine = section
+        if (section != undefined) this._sectionLine = section
     }
 
     //#region sectionLine
-    private _sectionLine: SectionLine
-    public get sectionLine(): SectionLine {
+    private _sectionLine: SectionLine | null = null
+    public get sectionLine(): SectionLine | null {
         return this._sectionLine;
     }
-    public set sectionLine(v: SectionLine) {
+    public set sectionLine(v: SectionLine | null) {
         this._sectionLine = v;
     }
     //#endregion
@@ -113,10 +114,10 @@ export class Cable extends ELObject {
         this._deltaU = v;
     }
     //#endregion
- 
+
 
     public calc() {
-
+        if (this.sectionLine == null) return
         if (this.sectionLine.isInPanel) return
         this.setColCores()
 
@@ -163,6 +164,7 @@ export class Cable extends ELObject {
     }
 
     private getPUEMaxCurrent(square: number): ICableCurrentPUE | null {
+        if (this.sectionLine == null) return null
         let cableData: ICableCurrentPUE | null = null
 
 
@@ -196,6 +198,7 @@ export class Cable extends ELObject {
     }
 
     private getPUESquare(current: number, env: CableEnviroment): ICableCurrentPUE | null {
+        if (this.sectionLine == null) return null
         let cableData: ICableCurrentPUE | null = null
 
 
@@ -230,10 +233,12 @@ export class Cable extends ELObject {
     }
 
     private setColCores() {
+        if (this.sectionLine == null) return 1
         this.sectionLine.colPhase === 1 ? this._colCores = 3 : this._colCores = 5
     }
 
     private getSaftyApparate(): CommutateApparate | null {
+        if (this.sectionLine == null) return null
         let br = null
         if (this.sectionLine.endContact != null) recurcy(this.sectionLine.endContact)
         function recurcy(contact: Contact) {
@@ -252,6 +257,7 @@ export class Cable extends ELObject {
     }
 
     private calcDeltaU(): number {
+        if (this.sectionLine == null) return 0
         const CuActiveResistance = 0.0181
         let dU = 0;
         const section = this.sectionLine
@@ -270,17 +276,25 @@ export class Cable extends ELObject {
 
         return dU;
     }
-
-    toJSON() {
-        return Object.assign(super.toJSON(), {
-           
-            mark: this.mark,
-            colCores: this.colCores,
-            square: this.square,
-            length: this.length,
-            material: this.material,
-            maxCurrent: this.maxCurrent,
-            deltaU: this.deltaU
-        })
+    //#region specData
+    private _specData: SpecData = new SpecData('', '', '', '', '', '', '', '');
+    public get specData(): SpecData {
+        return this._specData;
     }
+    public set specData(v: SpecData) {
+        this._specData = v;
+    }
+    //#endregion
+    // toJSON() {
+    //     return Object.assign(super.toJSON(), {
+
+    //         mark: this.mark,
+    //         colCores: this.colCores,
+    //         square: this.square,
+    //         length: this.length,
+    //         material: this.material,
+    //         maxCurrent: this.maxCurrent,
+    //         deltaU: this.deltaU
+    //     })
+    // }
 }

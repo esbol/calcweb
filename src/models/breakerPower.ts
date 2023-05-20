@@ -28,9 +28,9 @@ export class BreakerPower extends CommutateApparate {
         this.outContact.nameOfPlane = 'BreakerOutContact'
     }
 
-    toJSON() {
-        return Object.assign(super.toJSON(), {
-            type: 'BreakerPower'
-        })
-    }
+    // toJSON() {
+    //     return Object.assign(super.toJSON(), {
+    //         type: 'BreakerPower'
+    //     })
+    // }
 }

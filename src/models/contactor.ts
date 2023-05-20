@@ -20,9 +20,9 @@ export class Contactor extends CommutateApparate {
         
     }
 
-    toJSON(){
-        return Object.assign(super.toJSON(), {
-            type: 'Contactor'
-        })
-    }
+    // toJSON(){
+    //     return Object.assign(super.toJSON(), {
+    //         type: 'Contactor'
+    //     })
+    // }
 }
