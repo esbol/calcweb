@@ -1,5 +1,5 @@
 export abstract class HasId {
-    public id: number = Math.random()
+    public id: string = Math.random().toFixed(10)
     constructor() { }
 
 }

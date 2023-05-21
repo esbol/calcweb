@@ -151,6 +151,7 @@ export class SectionLine extends HasId {
     //#endregion
 
     //#region subConsumers
+    private _subConsumers:Array<Consumer> = []
     public get subConsumers(): Array<Consumer> {
 
         
@@ -162,13 +163,13 @@ export class SectionLine extends HasId {
             }
 
         })
-
+        this._subConsumers = conslist
         return conslist
     }
     //#endregion
 
     //#region subDevices
-
+    
     public get subDevices(): Array<Device> {
 
 

@@ -7,7 +7,7 @@ export class GroupBySP extends HasId {
         this.groupName = groupName
     }
 
-    id: number = Math.random()
+
 
     //#region groupName
     private _groupName: string = '';

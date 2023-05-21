@@ -50,16 +50,20 @@ export class Panel extends Device {
     s1Section: SectionLine;
 
      //#region uniteSection
+     private _uniteSection:SectionLine = new SectionLine()
      public get uniteSection(): SectionLine{
+        this._uniteSection = this.outContact.getSupplySections()[0]
         return this.outContact.getSupplySections()[0]
     }
     //#endregion
 
     //#region inApparate
-
+    private _inApparate:CommutateApparate | null = null
     public get inApparate(): CommutateApparate | null {
         const app = this.outContact.getSupplySections()[0].startContact?.ownDevice
+        
         if (app != null) {
+            this._inApparate = app as CommutateApparate
             if (app instanceof CommutateApparate) {
                 return app as CommutateApparate
             } else return null

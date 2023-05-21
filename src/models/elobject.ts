@@ -43,15 +43,7 @@ export abstract class ELObject extends HasId {
     
     abstract setDataFromDB(mark: string): boolean
 
-    // toJSON() {
-    //     return {
-    //         id: this.id,
-    //         specDataId: this.specData.id,
-    //         colPhase: this.colPhase,
-    //         nameOfPlane: this.nameOfPlane,
-    //         description: this.description
-    //     }
-    // }
+    
 }
 
 

@@ -200,7 +200,7 @@ export function getPanels(jsonString: string):Array<Panel> {
 
         
         calcIds.forEach(i => {
-            const mode = calculationModes.find(c => c.id == Number(i))
+            const mode = calculationModes.find(c => c.id == i)
 
             if (mode != undefined) section.calculationModes.push(mode)
         })
