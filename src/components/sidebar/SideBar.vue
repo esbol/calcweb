@@ -63,6 +63,7 @@
 
 <script setup lang="ts">
 
+import { Log, LogType } from "@/firebase/Logger"
 import Logo from "./Logo.vue";
 import Settings from "./Settings.vue";
 import Tools from "./Tools.vue";
@@ -92,6 +93,7 @@ import { Panel } from "@/models/panel";
 import { Format } from "@/models/settings/format";
 
 
+
 const store = useStore().state
 
 
@@ -110,10 +112,10 @@ const props = defineProps({
 <style scoped>
 .tools {
     width: 100%;
-    
+
     grid-row: 2;
     grid-column: 1;
-    
+
 }
 
 .wrapper {

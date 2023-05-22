@@ -88,6 +88,7 @@ import html2canvas from "html2canvas";
 import { DiffBreaker } from '@/models/diffBreaker'
 import { BreakerPower } from '@/models/breakerPower'
 import { IState } from '@/store'
+import { Log } from '@/firebase/Logger'
 
 //#endregion
 
@@ -97,13 +98,14 @@ const cables = new Array<Cable>()
 
 
 function handleKeyDown(event: KeyboardEvent) {
-    console.log(event.code);
+    
 
     if (event.code === "Delete" || event.keyCode === 46) {
         if (store.selectedPanel != null) {
             if (store.selectedPanel.outContact.getSlaveSections().length < 2) return
         }
         deleteObject(store.selectedObject)
+        Log(1, "Delete key")
     }
     // printToPDF()
 }

@@ -7,6 +7,7 @@ import { getJSON } from '@/models/serialize/serialize';
 import { getPanels } from '@/models/serialize/deserialize';
 
 
+
 export interface IState {
   panels: Array<Panel>
   selectedPanel: Panel | null

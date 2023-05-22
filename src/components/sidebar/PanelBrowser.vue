@@ -21,6 +21,7 @@
 <script setup lang="ts">
 
 
+import { Log } from "@/firebase/Logger";
 import { Panel } from "@/models/panel";
 import { ref, watchEffect } from "vue";
 import { useStore } from "vuex";
@@ -37,6 +38,7 @@ function clickPanel(panel: Panel) {
 }
 
 function addNewPanel() {
+    Log(1, 'addNewPanel')
     const panel1 = new Panel()
     panel1.addFeeder()
     store.panels.push(panel1)
@@ -44,7 +46,7 @@ function addNewPanel() {
     panel1.nameOfPlane = 'ШР' + store.panels.length
 }
 function removePanel(panel: Panel) {
-    
+    Log(1, 'removePanel')
     if(store.panels.length < 2) return
   
     const indx = store.panels.indexOf(panel)

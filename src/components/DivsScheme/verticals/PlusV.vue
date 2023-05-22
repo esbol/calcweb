@@ -21,12 +21,14 @@
 
 import { useStore } from 'vuex';
 import { ref } from 'vue';
+import { Log } from '@/firebase/Logger';
 
 const hover = ref(false)
 
 const store = useStore()
 
 function addFeeder() {
+    Log(1, "Button addFeeder")
     store.state.selectedPanel.addFeeder();
 }
 

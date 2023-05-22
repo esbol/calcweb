@@ -23,12 +23,15 @@ import { Breakers } from '@/models/bd/breakers';
 
 import { useStore } from 'vuex';
 import { IProject, IState } from '@/store';
+import { Log, SendLeave, SendOnline } from '@/firebase/Logger';
 
 const store = useStore().state as IState
 const st = useStore()
 
 const onBeforeUnload = (event: BeforeUnloadEvent) => {
   // localStorage.setItem('myData', myData.value);
+  Log(1, "Выход onBeforeUnload")
+  SendLeave()
   st.dispatch('savePanels', store.panels);
 };
 
@@ -43,6 +46,8 @@ onBeforeUnmount(() => {
 
 onMounted(() => {
   st.dispatch('fetchPanels');
+  Log(1, "Загрузился onMounted")
+  SendOnline()
 })
 
 if(store.projects.length == 0){

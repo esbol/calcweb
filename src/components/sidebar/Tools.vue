@@ -22,7 +22,7 @@
                     <img src="@/assets/icons8-pdf-2-50.png" alt="" class="pdf">
                     
                 </button>
-                <button class="btn" @click="savePanelsToFile">
+                <button class="btn" @click="clickDWG">
                     <img src="@/assets/icons8-dwg-50.png" alt="" class="dwg">
                     
                 </button>
@@ -45,6 +45,7 @@ import { Contact } from '@/models/contact';
 import 'reflect-metadata'
 import { HasId } from '@/models/hasid';
 import { getPanelsRecurcy } from '@/models/serialize/deserialize';
+import { Log } from '@/firebase/Logger';
 
 const state = useStore().state as IState
 const store = useStore()
@@ -59,9 +60,6 @@ const color = computed(() => {
 //#region open and save
 const fileInput = ref<HTMLInputElement | null>(null)
 
-function openFileDialog() {
-    fileInput.value?.click()
-}
 
 
 function handleFileChange(event: Event) {
@@ -79,23 +77,10 @@ function handleFileChange(event: Event) {
         reader.readAsText(file)
     }
 }
+function clickDWG(){
+    Log(1, "clickDWG")
+}
 
-const savePanelsToFile = () => {
-    const data = getJSONRecurcy(state.panels)
-
-    const blob = new Blob([data], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'panels.json';
-    link.click();
-
-    // Освобождение памяти, используемой URL
-    URL.revokeObjectURL(url);
-    console.log(data);
-
-};
 //#endregion
 
 const savePanels = () => {
@@ -111,8 +96,8 @@ const getPanels = () => {
 
 
 async function print() {
-
-
+    Log(1, "print")
+    state.selectedObject = null
     state.isModePrint = true
     state.showGrid = false
 

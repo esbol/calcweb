@@ -95,6 +95,7 @@ export class Panel extends Device {
 
     public calc() {
 
+
         this.s1Section.calc()
 
         const sections = this.s1Section.subSections

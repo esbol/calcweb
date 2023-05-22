@@ -11,6 +11,7 @@
     "class-transformer": "^0.5.1",
     "core-js": "^3.8.3",
     "file-saver": "^2.0.5",
+    "firebase": "^9.22.0",
     "flatbuffers": "^23.3.3",
     "flatted": "^3.2.7",
     "html2canvas": "^1.4.1",

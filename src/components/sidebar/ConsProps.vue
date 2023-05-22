@@ -17,7 +17,7 @@
 
         <tr>
             <td>
-                <div class="name-prop">Руст.</div>
+                <div class="name-prop"><strong>Руст.</strong></div>
             </td>
             <td>
                 <div class="prop-value-input">
@@ -136,6 +136,7 @@ import NumberInput from "./UI/NumberInput.vue";
 import { ref, watchEffect } from 'vue';
 import { useStore } from 'vuex';
 import { IState } from '@/store';
+import { Log } from '@/firebase/Logger';
 
 const store = useStore().state as IState
 //#region isReserve
@@ -181,10 +182,12 @@ function setColPhase(n: number) {
 }
 
 function setInstallPower(n: any) {
+    Log(1, 'setInstallPower')
     props.consumer.installPower = parseFloat(n)
     props.consumer.getSupplyPanels().forEach(p => p.calc())
 }
 function setCosf(n: any) {
+    Log(1, 'setCosf')
     props.consumer.cosf = parseFloat(n)
     props.consumer.getSupplyPanels().forEach(p => p.calc())
 }

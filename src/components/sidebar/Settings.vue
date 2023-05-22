@@ -24,6 +24,7 @@
 </template>
 
 <script setup lang="ts">
+import { Log } from '@/firebase/Logger';
 import { getPanelsRecurcy } from '@/models/serialize/deserialize';
 import { getJSONRecurcy } from '@/models/serialize/serialize';
 import { IState } from '@/store';
@@ -39,6 +40,7 @@ const show = ref(true)
 const fileInput = ref<HTMLInputElement | null>(null)
 
 function openFileDialog() {
+    Log(1, "openFileDialog")
     fileInput.value?.click()
 }
 
@@ -60,6 +62,8 @@ function handleFileChange(event: Event) {
 }
 
 const savePanelsToFile = () => {
+    Log(1, "savePanelsToFile")
+    
     const data = getJSONRecurcy(state.panels)
 
     const blob = new Blob([data], { type: "text/plain;charset=utf-8" });
