@@ -1,4 +1,5 @@
 
+import { IState } from "@/store";
 import { SpecData } from "./SpecData";
 import { Breaker } from "./breaker";
 import { Contact } from "./contact";
@@ -14,7 +15,7 @@ export abstract class Device extends ELObject {
 
     constructor() {
         super()
-
+        this.type = 'Device'
     }
     //#endregion
 
@@ -56,16 +57,21 @@ export abstract class Device extends ELObject {
     }
     //#endregion
 
+
     //#region getSupplyPanels
 
     public getSupplyPanels(): Array<Panel> {
         const spanels: Array<Panel> = new Array<Panel>()
+      
         recurcy(this.inContact)
         function recurcy(contact: Contact) {
             contact.getSupplySections().forEach(s => {
                 if (s.startContact != null) {
                     if (s.startContact.ownDevice != null)
-                        if (s.startContact.ownDevice.constructor.name == "Panel") {
+                        if (s.startContact.ownDevice.type == "Panel") {
+                        //    const isTypePanel =  s.startContact.ownDevice instanceof Panel
+                        //    console.log(isTypePanel);
+                           
                             if (!spanels.includes(s.startContact.ownDevice as Panel)) {
                                 spanels.push(s.startContact.ownDevice as Panel)
                             }

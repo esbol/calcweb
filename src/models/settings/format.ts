@@ -20,6 +20,7 @@ export class Format extends HasId  {
         super()
         this._stamp = new Stamp()
         this._sideStamp = new SideStamp()
+        this.type = "Format"
     }
 
     

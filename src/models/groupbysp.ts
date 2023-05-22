@@ -5,6 +5,7 @@ export class GroupBySP extends HasId {
     constructor(groupName: string = '') {
         super()
         this.groupName = groupName
+        this.type = 'GroupBySP'
     }
 
 

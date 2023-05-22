@@ -34,6 +34,7 @@ export class Breaker extends CommutateApparate {
         
         this.inContact.nameOfPlane = 'BreakerInContact'
         this.outContact.nameOfPlane = 'BreakerOutContact'
+        this.type = 'Breaker'
     }
     
     // toJSON(){

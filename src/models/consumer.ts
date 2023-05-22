@@ -17,6 +17,7 @@ export class Consumer extends Device{
         this.nameOfPlane = 'cons'
         this.inContact.nameOfPlane = 'ConsumerInContact'
         this.allowDeltaU = 5
+        this.type = 'Consumer'
     }
 
     //#region calculationModes
@@ -148,7 +149,9 @@ export class Consumer extends Device{
     }
 
     public calcDeltaU(){
+       
         let panel: Panel = this.getSupplyPanels()[0]
+  
         const sections = new Array<SectionLine>()
         panel.outContact.getSlaveSections().forEach(s=>{
             if(s.subConsumers.includes(this)){

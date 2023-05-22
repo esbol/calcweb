@@ -23,7 +23,7 @@ export class BreakerPower extends CommutateApparate {
         super(mark)
         this.description = 'breaker'
         this.innerSection.nameOfPlane = 'innerBreaker'
-
+        this.type = 'BreakerPower'
         this.inContact.nameOfPlane = 'BreakerInContact'
         this.outContact.nameOfPlane = 'BreakerOutContact'
     }

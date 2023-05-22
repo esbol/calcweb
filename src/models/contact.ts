@@ -19,6 +19,7 @@ export class Contact extends ELObject{
     
     constructor(device?: Device){
         super()
+        this.type = 'Contact'
         if(device != undefined) this._ownDevice = device
     }
 

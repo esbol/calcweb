@@ -24,6 +24,7 @@ export class Fuse extends CommutateApparate {
         this.innerSection.description = 'innerFuse'
         this.inContact.nameOfPlane = 'FuseInContact'
         this.outContact.nameOfPlane = 'FuseOutContact'
+        this.type = 'Fuse'
     }
     
     // toJSON(){

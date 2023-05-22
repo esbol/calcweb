@@ -39,7 +39,10 @@ export abstract class ELObject extends HasId {
 
     description: string = ''
 
-    constructor() { super() }
+    constructor() { 
+        super()
+        this.type = 'ELObject'
+     }
     
     abstract setDataFromDB(mark: string): boolean
 

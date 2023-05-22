@@ -20,6 +20,7 @@ export class Cable extends ELObject {
 
     constructor(section?: SectionLine) {
         super()
+        this.type = 'Cable'
         if (section != undefined) this._sectionLine = section
     }
 

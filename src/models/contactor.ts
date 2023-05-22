@@ -17,7 +17,7 @@ export class Contactor extends CommutateApparate {
     constructor(mark?: string) {
         super(mark)
         this.innerSection.nameOfPlane = 'innerContactor'
-        
+        this.type = 'Contactor'
     }
 
     // toJSON(){

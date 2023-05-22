@@ -54,8 +54,9 @@ if(store.projects.length == 0){
 
 if (store.panels.length == 0) {
   const panel1 = new Panel()
-  panel1.addFeeder()
   store.panels.push(panel1)
+  panel1.addFeeder()
+
   
   
   panel1.nameOfPlane = 'ШР1'

@@ -3,7 +3,10 @@ import { Author } from "./stamp";
 
 
 export class SideStamp extends HasId {
-    constructor() { super() }
+    constructor() { 
+        super()
+        this.type = 'SideStamp'
+     }
 
     
 

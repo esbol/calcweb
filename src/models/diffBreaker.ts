@@ -28,6 +28,7 @@ export class DiffBreaker extends CommutateApparate {
 
         this.inContact.nameOfPlane = 'DiffBreakerInContact'
         this.outContact.nameOfPlane = 'DiffBreakerOutContact'
+        this.type = 'DiffBreaker'
     }
 
     //#region deltaI

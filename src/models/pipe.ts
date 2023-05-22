@@ -21,6 +21,7 @@ export class Pipe extends ELObject {
 
     constructor(section?: SectionLine) {
         super()
+        this.type = 'Pipe'
         if (section != undefined) this._sectionLine = section
     }
 

@@ -12,6 +12,7 @@ export class SpecData extends HasId {
         this.count = count
         this.mass = mass
         this.note = note
+        this.type = 'SpecData'
     }
     public position: string = ''
     public description: string = ''

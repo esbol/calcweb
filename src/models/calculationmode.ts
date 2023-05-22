@@ -9,6 +9,7 @@ export class CalculationMode extends HasId {
     constructor(name: string = '', section?: SectionLine) {
         super()
         this.name = name
+        this.type = 'CalculationMode'
         if(section != undefined) this._section = section
 
     }

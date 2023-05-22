@@ -10,6 +10,7 @@ export abstract class CommutateApparate extends Device {
         inner.description = 'inner'
         inner.setStartContact(this.inContact)
         inner.setEndContact(this.outContact)
+        this.type = 'CommutateApparate'
         if(mark != undefined) this.mark = mark
     }
 

@@ -72,7 +72,7 @@ const savePanelsToFile = () => {
 
     // Освобождение памяти, используемой URL
     URL.revokeObjectURL(url);
-    console.log(data);
+ 
 
 };
 //#endregion

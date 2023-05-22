@@ -28,7 +28,7 @@ export class SectionLine extends HasId {
             contact.getSupplySections().forEach(s => {
                 if (s.startContact != null) {
                     if(s.startContact.ownDevice != null)
-                    if (s.startContact.ownDevice.constructor.name == 'Panel') {
+                    if (s.startContact.ownDevice.type == 'Panel') {
                         if (!spanels.includes(s.startContact.ownDevice as Panel)) {
                             spanels.push(s.startContact.ownDevice as Panel)
                         }
@@ -45,6 +45,7 @@ export class SectionLine extends HasId {
 
     constructor() {
         super()
+        this.type = 'SectionLine'
     }
  
 

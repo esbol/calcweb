@@ -13,7 +13,10 @@ export class Author extends HasId {
     public date: string
 }
 export class Stamp extends HasId {
-    constructor() { super() }
+    constructor() { 
+        super() 
+        this.type = 'Stamp'
+    }
 
 
     private _shifr: string = StampDefaults.shifr

@@ -252,7 +252,7 @@ export function getJSONRecurcy(panels: Array<Panel>): string {
 
     panels.forEach(p => recurcySetAllObjects(p))
 
-    // console.log(allObjects);
+   
 
     allObjects.forEach(o => allReplacedObjects.push(replaceObject(o) as HasId))
     console.log(allReplacedObjects);
@@ -273,7 +273,7 @@ export function getJSONRecurcy(panels: Array<Panel>): string {
         if (jsonTobj == undefined) {
 
             const hasidobj = objClass
-            hasidobj['type'] = objClass.constructor.name
+        
             allObjects.push(hasidobj)
         }
         for (let key in objClass) {
@@ -283,7 +283,7 @@ export function getJSONRecurcy(panels: Array<Panel>): string {
                 const jsonObj = allObjects.find(o => o.id == objClass[k].id)
                 if (jsonObj == undefined) {
                     const hasidobj = objClass[k]
-                    hasidobj['type'] = objClass[k].constructor.name
+              
                     allObjects.push(hasidobj)
                     recurcySetAllObjects(objClass[k])
                 }

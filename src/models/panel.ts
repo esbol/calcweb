@@ -44,6 +44,7 @@ export class Panel extends Device {
   
         this.specData.description = "Шкаф распределительный"
         this.specData.units = "компл."
+        this.type = 'Panel'
     }
     outContact: Contact
     
